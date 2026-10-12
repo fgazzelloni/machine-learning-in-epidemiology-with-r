@@ -2,47 +2,42 @@
 
 A two-part R-Ladies Rome workshop series led by Federica Gazzelloni.
 
-| Session | Focus | Start here |
-| --- | --- | --- |
-| Part 1 — September 2026 | How a model learns, gradient descent and West Nile virus prediction | [Part 1 materials](part1/README.md) |
-| Part 2 — 23 October 2026 | Replicate the article’s heart-disease workflow | [Part 2 materials](part2/README.md) |
+## Start here
 
-## Working with the materials
+- [Part 1 README](part1/README.md)
+- [Part 2 README](part2/README.md)
+- [Part 1 project](part1/part1.Rproj)
+- [Part 2 project](part2/part2.Rproj)
 
-Download or clone this repository. Open the RStudio project for the session you
-want to use: `part1/part1.Rproj` or `part2/part2.Rproj`. Keep that session folder
-as the working directory so its relative paths resolve correctly.
+## Repository structure
 
 ```text
-part1/
-  part1.Rproj
-  ml-workflow.qmd       September teaching notebook
-  R/                   student practice
-  exercises/           participant exercise
-  solutions/           completed exercise
-  data/                frozen West Nile teaching data
-  presentation/        slide viewer and PowerPoint
-  docs/                existing rendered September notebook and slides
-  figures/             teaching figures
-  outputs/             saved results
-  references/          sources and reference article
-part2/
-  part2.Rproj
-  ml-workflow-2.qmd     article-based October workshop
-  R/                   data, trees, network, tuning and synthetic-data scripts
-  data/                frozen OpenML heart-disease snapshot
-  outputs/             observed results and validation record
-  _quarto.yml          separate Part 2 rendering configuration
+.
+├── index.qmd                     # workshop home
+├── about.qmd                    # instructor profile
+├── resources.qmd                 # source article and book
+├── part1/                       # September workshop
+│   ├── README.md
+│   ├── part1.Rproj
+│   ├── ml-workflow.qmd
+│   ├── R/
+│   ├── data/
+│   ├── presentation/
+│   ├── outputs/
+│   └── references/
+├── part2/                       # October workshop
+│   ├── README.md
+│   ├── part2.Rproj
+│   ├── ml-workflow-2.qmd
+│   ├── R/
+│   ├── data/
+│   ├── outputs/
+│   └── references/
+└── _site/                       # rendered Quarto output
 ```
 
-## Original workshop links
+## Notes
 
-The [original September repository](https://github.com/fgazzelloni/Intro-to-ml-in-epidemiology-with-r)
-and its published website remain separate. Existing attendees can continue using
-the links they saved. This repository provides the newly organized series;
-it does not replace or redirect the original repository.
-
-Part 1 was copied from original commit `67316fc`. Teaching sources, data, slides
-and saved results were preserved byte for byte. Part 2 implements the article’s published heart-disease workflow.
-Its [validation record](part2/outputs/VALIDATION.md) distinguishes completed
-runs from full-budget checks still outstanding.
+- Open the session project in RStudio and keep that folder as the working directory.
+- The original September repository and its published website remain separate.
+- Part 1 preserves the September teaching materials; Part 2 retains the article workflow and validation notes for locally observed results.

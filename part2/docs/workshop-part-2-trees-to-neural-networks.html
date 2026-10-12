@@ -71,15 +71,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="ml-workflow-2_files/libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="ml-workflow-2_files/libs/bootstrap/bootstrap.min.js"></script>
 <link href="ml-workflow-2_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="ml-workflow-2_files/libs/bootstrap/bootstrap-fc78cc84e086300a0584af8142339858.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="ml-workflow-2_files/libs/bootstrap/bootstrap-a8d03652816dd4503849db3d8bab2a35.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 
 
+<link rel="stylesheet" href="../styles.css">
 </head>
 
 <body class="quarto-light">
 
-<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
-<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article toc-left">
+<div id="quarto-sidebar-toc-left" class="sidebar toc-left">
   <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">Table of contents</h2>
    
@@ -96,6 +97,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#reproducibility" id="toc-reproducibility" class="nav-link" data-scroll-target="#reproducibility">Reproducibility</a></li>
   </ul>
 </nav>
+</div>
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
 </div>
 <main class="content" id="quarto-document-content">
 
@@ -140,6 +143,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="meet-the-data">1. Meet the data</h2>
 <p>The task is to distinguish existing heart disease from its absence using clinical measurements. This is a classification example, not a future cardiovascular risk score.</p>
 <div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Article section 1 and appendix: heart-statlog, OpenML 53, version 1.</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Run from part2/. All preprocessing choices are listed in data/README.md.</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>arff <span class="ot">&lt;-</span> <span class="fu">readLines</span>(<span class="st">"data/raw/heart-statlog.arff"</span>)</span>
@@ -168,19 +173,29 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="st">"outputs"</span>, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="st">"figures"</span>, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(heart, <span class="st">"data/processed/heart.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 </div>
 <div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(heart)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 270  14</code></pre>
 </div>
+<details class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(heart<span class="sc">$</span>heart_disease)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>
  absent present 
     150     120 </code></pre>
 </div>
+<details class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(heart)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>'data.frame':   270 obs. of  14 variables:
  $ age                    : num  70 67 57 64 74 65 56 59 60 63 ...
@@ -205,6 +220,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="fit-and-prune-a-tree-article-section-2.1.3">2. Fit and prune a tree — article section 2.1.3</h2>
 <p>The <a href="R/02-trees-and-evaluation.R">core script</a> follows the tree examples, then continues through evaluation and resampling. Read it section by section in RStudio. The first trees use the complete dataset for illustration, as in the article; their fitted accuracy would not estimate performance on new patients.</p>
 <div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Article sections 2.1, 3.1 and 3.2. Local seeds make this run reproducible.</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"R/01-data.R"</span>)</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlr3)</span>
@@ -217,27 +234,36 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="fu">png</span>(<span class="st">"figures/01-tree.png"</span>, <span class="at">width =</span> <span class="dv">1500</span>, <span class="at">height =</span> <span class="dv">1000</span>, <span class="at">res =</span> <span class="dv">150</span>)</span>
 <span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>rpart.plot<span class="sc">::</span><span class="fu">rpart.plot</span>(cart)</span>
 <span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>quartz_off_screen 
                 2 </code></pre>
 </div>
+<details class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>deep_cart <span class="ot">&lt;-</span> rpart<span class="sc">::</span><span class="fu">rpart</span>(heart_disease <span class="sc">~</span> ., <span class="at">data =</span> heart,</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>                         <span class="at">control =</span> rpart<span class="sc">::</span><span class="fu">rpart.control</span>(<span class="at">minsplit =</span> <span class="dv">2</span>))</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">png</span>(<span class="st">"figures/02-complexity.png"</span>, <span class="at">width =</span> <span class="dv">1200</span>, <span class="at">height =</span> <span class="dv">900</span>, <span class="at">res =</span> <span class="dv">150</span>)</span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>rpart<span class="sc">::</span><span class="fu">plotcp</span>(deep_cart)</span>
 <span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>quartz_off_screen 
                 2 </code></pre>
 </div>
+<details class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>pruned_cart <span class="ot">&lt;-</span> rpart<span class="sc">::</span><span class="fu">prune</span>(deep_cart, <span class="at">cp =</span> <span class="fl">0.031</span>)</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">png</span>(<span class="st">"figures/03-pruned-tree.png"</span>, <span class="at">width =</span> <span class="dv">1500</span>, <span class="at">height =</span> <span class="dv">1000</span>, <span class="at">res =</span> <span class="dv">150</span>)</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>rpart.plot<span class="sc">::</span><span class="fu">rpart.plot</span>(pruned_cart)</span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>quartz_off_screen 
                 2 </code></pre>
 </div>
+<details class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The article alternates task and heart_task; use one name consistently.</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>heart_task <span class="ot">&lt;-</span> <span class="fu">as_task_classif</span>(heart, <span class="at">target =</span> <span class="st">"heart_disease"</span>, <span class="at">positive =</span> <span class="st">"present"</span>, <span class="at">id =</span> <span class="st">"heart"</span>)</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">20261023</span>)</span>
@@ -249,17 +275,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>forest_pred <span class="ot">&lt;-</span> forest<span class="sc">$</span><span class="fu">predict</span>(heart_task, <span class="at">row_ids =</span> split<span class="sc">$</span>test)</span>
 <span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>measures <span class="ot">&lt;-</span> <span class="fu">msrs</span>(<span class="fu">c</span>(<span class="st">"classif.tpr"</span>, <span class="st">"classif.tnr"</span>, <span class="st">"classif.ppv"</span>, <span class="st">"classif.npv"</span>, <span class="st">"classif.acc"</span>))</span>
 <span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(forest_pred<span class="sc">$</span>confusion)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>         truth
 response  present absent
   present      30      8
   absent        7     45</code></pre>
 </div>
+<details class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(forest_pred<span class="sc">$</span><span class="fu">score</span>(measures))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>classif.tpr classif.tnr classif.ppv classif.npv classif.acc 
   0.8108108   0.8490566   0.7894737   0.8653846   0.8333333 </code></pre>
 </div>
+<details class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(<span class="fu">as.data.frame</span>(forest_pred<span class="sc">$</span>confusion), <span class="st">"outputs/confusion.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(<span class="fu">data.frame</span>(<span class="at">measure =</span> <span class="fu">names</span>(forest_pred<span class="sc">$</span><span class="fu">score</span>(measures)),</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">value =</span> <span class="fu">unname</span>(forest_pred<span class="sc">$</span><span class="fu">score</span>(measures))), <span class="st">"outputs/holdout-measures.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
@@ -276,21 +308,27 @@ response  present absent
 <span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>  forest100<span class="sc">$</span><span class="fu">predict</span>(heart_task, <span class="at">row_ids =</span> split<span class="sc">$</span>train)<span class="sc">$</span><span class="fu">score</span>(auc),</span>
 <span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>  forest100<span class="sc">$</span><span class="fu">predict</span>(heart_task, <span class="at">row_ids =</span> split<span class="sc">$</span>test)<span class="sc">$</span><span class="fu">score</span>(auc)))</span>
 <span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(auc_by_subset)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>  subset       auc
 1  train 0.9954043
 2   test 0.8980112</code></pre>
 </div>
+<details class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(auc_by_subset, <span class="st">"outputs/train-test-auc.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">20261025</span>)</span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>cv3 <span class="ot">&lt;-</span> <span class="fu">resample</span>(heart_task, forest100, <span class="fu">rsmp</span>(<span class="st">"cv"</span>, <span class="at">folds =</span> <span class="dv">3</span>))</span>
 <span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(cv3<span class="sc">$</span><span class="fu">score</span>(auc)[, <span class="fu">c</span>(<span class="st">"iteration"</span>, <span class="st">"classif.auc"</span>), <span class="at">with =</span> <span class="cn">FALSE</span>],</span>
 <span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"outputs/cv3.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(cv3<span class="sc">$</span><span class="fu">aggregate</span>(auc))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>classif.auc 
   0.8994852 </code></pre>
 </div>
+<details class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Same repeat counts as section 3.2; no reduced demonstration budgets.</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">20261026</span>)</span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>subsampling <span class="ot">&lt;-</span> <span class="fu">resample</span>(heart_task, forest100, <span class="fu">rsmp</span>(<span class="st">"subsampling"</span>, <span class="at">ratio =</span> <span class="dv">2</span><span class="sc">/</span><span class="dv">3</span>, <span class="at">repeats =</span> <span class="dv">100</span>))</span>
@@ -299,14 +337,18 @@ response  present absent
 <span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>resampling_scores <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">method =</span> <span class="fu">c</span>(<span class="st">"cv3"</span>, <span class="st">"subsampling100"</span>, <span class="st">"bootstrap40"</span>),</span>
 <span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">auc =</span> <span class="fu">c</span>(cv3<span class="sc">$</span><span class="fu">aggregate</span>(auc), subsampling<span class="sc">$</span><span class="fu">aggregate</span>(auc), bootstrap<span class="sc">$</span><span class="fu">aggregate</span>(auc)))</span>
 <span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(resampling_scores)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>          method       auc
 1            cv3 0.8994852
 2 subsampling100 0.9025847
 3    bootstrap40 0.9028705</code></pre>
 </div>
+<details class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(resampling_scores, <span class="st">"outputs/resampling-summary.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">capture.output</span>(<span class="fu">sessionInfo</span>(), <span class="at">file =</span> <span class="st">"outputs/session-info-core.txt"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 </div>
 <p><img src="figures/01-tree.png" class="img-fluid"></p>
 <p>Compare the default tree with the deep tree. The complexity plot connects pruning to the balance between fitting the observed sample and generalising beyond it. The article uses <code>cp = 0.031</code>; we retain that value for the replication.</p>
@@ -317,6 +359,8 @@ response  present absent
 <p>The <a href="R/03-neural-network.R">network script</a> retains the published 64/32-unit architecture, dropout of 0.4, sigmoid output, Adam learning rate of 0.002, binary cross-entropy, 50 epochs, batches of 32, 20% validation and early stopping with patience 10. The data guide explains how we construct 22 inputs.</p>
 <p>Run this after configuring Keras. It is separate from the default render because it needs a Python backend.</p>
 <div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Article section 2.2.3, using the current keras3 interface.</span></span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"R/01-data.R"</span>)</span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlr3)</span>
@@ -373,6 +417,7 @@ response  present absent
 <span id="cb25-54"><a href="#cb25-54" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topright"</span>, <span class="fu">c</span>(<span class="st">"Training"</span>, <span class="st">"Validation"</span>), <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"steelblue"</span>, <span class="st">"firebrick"</span>), <span class="at">lty =</span> <span class="dv">1</span>)</span>
 <span id="cb25-55"><a href="#cb25-55" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()</span>
 <span id="cb25-56"><a href="#cb25-56" aria-hidden="true" tabindex="-1"></a><span class="fu">capture.output</span>(<span class="fu">sessionInfo</span>(), <span class="at">file =</span> <span class="st">"outputs/session-info-neural.txt"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 </div>
 <p>The script saves training and validation loss and the observed test accuracy. The paper’s reported accuracy is not substituted for a local result. When a saved network run is available, its results appear below; these files come from the separate network script, rather than the core notebook render.</p>
 <div class="cell">
@@ -393,7 +438,10 @@ response  present absent
 <h2 class="anchored" data-anchor-id="evaluate-predictions-article-section-3.1">4. Evaluate predictions — article section 3.1</h2>
 <p>The core script has trained a probability-producing random forest on two-thirds of the observations and evaluated it on the remaining third. These are the results of our seeded run.</p>
 <div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read.csv</span>(<span class="st">"outputs/holdout-measures.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>      measure     value
 1 classif.tpr 0.8108108
@@ -402,7 +450,10 @@ response  present absent
 4 classif.npv 0.8653846
 5 classif.acc 0.8333333</code></pre>
 </div>
+<details class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read.csv</span>(<span class="st">"outputs/confusion.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>  response   truth Freq
 1  present present   30
@@ -418,20 +469,29 @@ response  present absent
 <h2 class="anchored" data-anchor-id="resample-article-section-3.2">5. Resample — article section 3.2</h2>
 <p>The next examples use a 100-tree forest, 3-fold cross-validation, 100 repeated subsamples and 40 bootstrap repetitions. The core script retains those counts.</p>
 <div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read.csv</span>(<span class="st">"outputs/train-test-auc.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>  subset       auc
 1  train 0.9954043
 2   test 0.8980112</code></pre>
 </div>
+<details class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read.csv</span>(<span class="st">"outputs/cv3.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>  iteration classif.auc
 1         1   0.8989547
 2         2   0.8931222
 3         3   0.9063786</code></pre>
 </div>
+<details class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read.csv</span>(<span class="st">"outputs/resampling-summary.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>          method       auc
 1            cv3 0.8994852
@@ -458,6 +518,8 @@ response  present absent
 <h2 class="anchored" data-anchor-id="generate-synthetic-observations-article-section-6.2.5">8. Generate synthetic observations — article section 6.2.5</h2>
 <p>The <a href="R/05-synthetic-data.R">synthetic-data script</a> follows the adversarial random forest, density estimation and sampling sequence. Its output is labelled synthetic.</p>
 <div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Article section 6.2.5: adversarial random forests.</span></span>
 <span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"R/01-data.R"</span>)</span>
 <span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(arf)</span>
@@ -468,6 +530,7 @@ response  present absent
 <span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a><span class="fu">stopifnot</span>(<span class="fu">nrow</span>(synthetic_heart) <span class="sc">==</span> <span class="fu">nrow</span>(heart))</span>
 <span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(synthetic_heart, <span class="st">"outputs/synthetic-heart.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a><span class="fu">capture.output</span>(<span class="fu">sessionInfo</span>(), <span class="at">file =</span> <span class="st">"outputs/session-info-synthetic.txt"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 </div>
 <p>Synthetic rows are generated examples, not additional observed patients.</p>
 </section>

@@ -1,0 +1,6 @@
+---
+title: "Part 1 — Session guide"
+guide-page: true
+---
+
+{{< include README.md >}}

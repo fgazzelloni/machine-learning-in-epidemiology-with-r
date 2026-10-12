@@ -1,0 +1,43 @@
+---
+title: "Resources"
+format:
+  html:
+    toc: true
+    css: styles.css
+---
+
+## References
+
+<div class="resource-grid">
+
+<div class="resource-card">
+### Machine Learning in Epidemiology
+
+**Authors:** Wright et al. (2026)
+
+This article provides the methodological foundation and heart-disease workflow used in Part 2, including the modelling choices and evaluation strategy behind the applied examples in this workshop.
+
+[Read the article](https://arxiv.org/abs/2602.16352)
+</div>
+
+<div class="resource-card">
+### Health Metrics and the Spread of Infectious Diseases
+
+**Author:** Federica Gazzelloni
+
+This book connects health metrics, infectious-disease research, machine learning and spatial modelling with R, offering a broader context for the methods used in the workshop.
+
+[Explore the book](https://federicagazzelloni.com/hmsidR/)
+</div>
+
+</div>
+
+## Workshop files
+
+- [GitHub repository](https://github.com/fgazzelloni/machine-learning-in-epidemiology-with-r)
+- [Part 1 session guide](part1/guide.qmd) · [Part 1 presentation](part1/presentation/index.html) · [PowerPoint](part1/presentation/introduction-to-ml-in-epidemiology-with-r.pptx)
+- [Part 2 session guide](part2/guide.qmd) · [Heart-disease data guide](part2/data/guide.qmd)
+- [Download the prepared heart-disease data](part2/data/processed/heart.csv) · [Original OpenML dataset](https://www.openml.org/d/53)
+- [Replication record](part2/references/replication-notes.qmd) · [Validation record](part2/outputs/validation.qmd)
+
+[Back to the workshop home](index.qmd)

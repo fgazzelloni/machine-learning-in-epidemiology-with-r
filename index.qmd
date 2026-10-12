@@ -1,0 +1,32 @@
+---
+title: "Machine Learning in Epidemiology with R"
+subtitle: "A two-part R-Ladies Rome workshop by Federica Gazzelloni"
+format:
+  html:
+    toc: false
+    css: styles.css
+---
+
+Learn machine learning through epidemiological examples, from model fundamentals to an article-based prediction workflow.
+
+<div class="card-grid">
+
+::: {.session-card}
+### Part 1 — September 2026
+
+How models learn, gradient descent, and West Nile virus prediction.
+
+[Explore Part 1](part1/guide.qmd) · [Open the notebook](part1/ml-workflow.qmd)
+:::
+
+::: {.session-card}
+### Part 2 — 23 October 2026
+
+An article-based heart-disease workflow with trees, neural networks, and model evaluation.
+
+[Explore Part 2](part2/guide.qmd) · [Open the notebook](part2/ml-workflow-2.qmd)
+:::
+
+</div>
+
+Browse the [workshop resources](resources.qmd), or start with a session above.

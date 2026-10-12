@@ -3,3 +3,8 @@ project:
   output-dir: docs
   render:
     - ml-workflow-2.qmd
+
+format:
+  html:
+    theme: flatly
+    css: ../styles.css

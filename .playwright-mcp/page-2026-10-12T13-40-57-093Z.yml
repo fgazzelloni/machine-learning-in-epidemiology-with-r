@@ -1,0 +1,129 @@
+- generic [active] [ref=f13e1]:
+  - banner [ref=f13e3]:
+    - navigation [ref=f13e4]:
+      - generic [ref=f13e5]:
+        - link "ML in Epidemiology" [ref=f13e7] [cursor=pointer]:
+          - /url: http://localhost:3916/
+        - generic "Search" [ref=f13e8]:
+          - combobox "Search" [ref=f13e9]:
+            - button "Search" [ref=f13e10] [cursor=pointer]
+        - list [ref=f13e15]:
+          - listitem [ref=f13e16]:
+            - link "Home" [ref=f13e17] [cursor=pointer]:
+              - /url: http://localhost:3916/
+          - listitem [ref=f13e18]:
+            - link "Part 1" [ref=f13e19] [cursor=pointer]:
+              - /url: http://localhost:3916/part1/ml-workflow.html
+          - listitem [ref=f13e20]:
+            - link "Part 2" [ref=f13e21] [cursor=pointer]:
+              - /url: http://localhost:3916/part2/workshop-part-2-trees-to-neural-networks.html
+          - listitem [ref=f13e22]:
+            - link "Resources" [ref=f13e23] [cursor=pointer]:
+              - /url: http://localhost:3916/resources.html
+          - listitem [ref=f13e24]:
+            - link "About" [ref=f13e25] [cursor=pointer]:
+              - /url: http://localhost:3916/about.html
+    - text:  >
+  - generic [ref=f13e26]:
+    - navigation [ref=f13e27]:
+      - list [ref=f13e29]:
+        - listitem [ref=f13e30]:
+          - generic [ref=f13e31] [cursor=pointer]:
+            - navigation [ref=f13e32]: Workshop
+            - navigation "Toggle section" [ref=f13e33]:
+              - generic [ref=f13e34]: 
+          - list [ref=f13e35]:
+            - listitem [ref=f13e36]:
+              - link "Machine Learning in Epidemiology with R" [ref=f13e38] [cursor=pointer]:
+                - /url: http://localhost:3916/
+            - listitem [ref=f13e39]:
+              - link "About" [ref=f13e41] [cursor=pointer]:
+                - /url: http://localhost:3916/about.html
+            - listitem [ref=f13e42]:
+              - link "Resources" [ref=f13e44] [cursor=pointer]:
+                - /url: http://localhost:3916/resources.html
+            - listitem [ref=f13e45]:
+              - link "How a Model Learns in Epidemiology" [ref=f13e47] [cursor=pointer]:
+                - /url: http://localhost:3916/part1/ml-workflow.html
+            - listitem [ref=f13e48]:
+              - link "Machine Learning in Epidemiology with R — Part 2" [ref=f13e50] [cursor=pointer]:
+                - /url: http://localhost:3916/part2/workshop-part-2-trees-to-neural-networks.html
+    - navigation [ref=f13e52]:
+      - heading "On this page" [level=2] [ref=f13e53]
+      - list [ref=f13e54]:
+        - listitem [ref=f13e55]:
+          - link "About the instructor" [ref=f13e56] [cursor=pointer]:
+            - /url: http://localhost:3916/about.html#about-the-instructor
+        - listitem [ref=f13e57]:
+          - link "The two-part learning journey" [ref=f13e58] [cursor=pointer]:
+            - /url: http://localhost:3916/about.html#the-two-part-learning-journey
+        - listitem [ref=f13e59]:
+          - link "Workshop materials and next steps" [ref=f13e60] [cursor=pointer]:
+            - /url: http://localhost:3916/about.html#workshop-materials-and-next-steps
+    - main [ref=f13e61]:
+      - generic [ref=f13e62]:
+        - navigation "breadcrumb" [ref=f13e63]:
+          - list [ref=f13e64]:
+            - listitem [ref=f13e65]:
+              - link "Workshop" [ref=f13e66] [cursor=pointer]:
+                - /url: http://localhost:3916/
+            - listitem [ref=f13e67]:
+              - text: ">"
+              - link "About" [ref=f13e68] [cursor=pointer]:
+                - /url: http://localhost:3916/about.html
+        - heading "About" [level=1] [ref=f13e70]
+      - generic [ref=f13e71]:
+        - heading [level=2] [ref=f13e72]:
+          - text: About the instructor
+          - link "Anchor" [ref=f13e73] [cursor=pointer]:
+            - /url: "#about-the-instructor"
+            - text: 
+        - paragraph [ref=f13e74]:
+          - text: Federica Gazzelloni is an actuary, statistician, data scientist, author and instructor whose work spans health metrics, actuarial modelling, R and Python, data visualisation and reproducible research. She leads
+          - link "R-Ladies Rome" [ref=f13e75] [cursor=pointer]:
+            - /url: https://www.meetup.com/it-IT/rladies-rome/
+          - text: and the
+          - link "Rome R Users Group" [ref=f13e76] [cursor=pointer]:
+            - /url: https://www.meetup.com/it-IT/rome-r-users-group/
+          - text: ", and she brings that practical, collaborative style to the workshop materials in this repository."
+        - paragraph [ref=f13e77]: "This experience connects directly to the workshop’s practical approach to machine learning in epidemiology: we start with a clear understanding of the modelling problem, keep the code and data workflow reproducible, and explain how model choices relate to the epidemiological question being asked."
+      - generic [ref=f13e78]:
+        - heading [level=2] [ref=f13e79]:
+          - text: The two-part learning journey
+          - link "Anchor" [ref=f13e80] [cursor=pointer]:
+            - /url: "#the-two-part-learning-journey"
+            - text: 
+        - paragraph [ref=f13e81]: "This workshop is designed as a guided progression through two connected learning experiences:"
+        - list [ref=f13e82]:
+          - listitem [ref=f13e83]:
+            - strong [ref=f13e84]: "Part 1 — September 2026:"
+            - text: foundations of machine learning, the idea of learning itself, gradient descent, and a West Nile virus prediction workflow.
+          - listitem [ref=f13e85]:
+            - strong [ref=f13e86]: "Part 2 — 23 October 2026:"
+            - text: a heart-disease workflow inspired by Wright et al., including trees, neural networks, evaluation, resampling and tuning.
+        - paragraph [ref=f13e87]: The materials are organised so that participants can move from conceptual understanding to code-based practice without losing sight of the data, the modelling assumptions and the interpretation of results.
+      - generic [ref=f13e88]:
+        - heading [level=2] [ref=f13e89]:
+          - text: Workshop materials and next steps
+          - link "Anchor" [ref=f13e90] [cursor=pointer]:
+            - /url: "#workshop-materials-and-next-steps"
+            - text: 
+        - paragraph [ref=f13e91]: The repository keeps the two session tracks easy to navigate while preserving the source files, notebook structure and project-level working directories.
+        - list [ref=f13e92]:
+          - listitem [ref=f13e93]:
+            - link "Workshop home" [ref=f13e94] [cursor=pointer]:
+              - /url: http://localhost:3916/
+          - listitem [ref=f13e95]:
+            - link "Part 1 materials" [ref=f13e96] [cursor=pointer]:
+              - /url: http://localhost:3916/part1/README.md
+          - listitem [ref=f13e97]:
+            - link "Part 2 materials" [ref=f13e98] [cursor=pointer]:
+              - /url: http://localhost:3916/part2/README.md
+          - listitem [ref=f13e99]:
+            - link "Original September workshop repository" [ref=f13e100] [cursor=pointer]:
+              - /url: https://github.com/fgazzelloni/Intro-to-ml-in-epidemiology-with-r
+        - paragraph [ref=f13e101]: This new repository is a workshop organization and teaching resource for the current series. The original September repository and published website remain separate and are not replaced by these materials.
+  - contentinfo [ref=f13e102]:
+    - generic [ref=f13e103]:
+      - paragraph [ref=f13e105]: Machine Learning in Epidemiology with R
+      - paragraph [ref=f13e108]: R-Ladies Rome • Federica Gazzelloni

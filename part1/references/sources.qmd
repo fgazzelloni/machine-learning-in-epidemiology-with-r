@@ -1,0 +1,6 @@
+---
+title: "Part 1 — Sources and further reading"
+guide-page: true
+---
+
+{{< include sources.md >}}

@@ -1,0 +1,3 @@
+[    1164ms] [LOG] Socket connection open. Listening for events. @ http://localhost:3916/part1/quarto-preview.js:1
+[    1813ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3916/favicon.ico:0
+[  120243ms] [LOG] Socket connection open. Listening for events. @ http://localhost:3916/part1/quarto-preview.js:1

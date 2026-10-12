@@ -1,0 +1,742 @@
+- generic [active] [ref=f3e1]:
+  - banner [ref=f3e3]:
+    - navigation [ref=f3e4]:
+      - generic [ref=f3e5]:
+        - link "ML in Epidemiology" [ref=f3e7] [cursor=pointer]:
+          - /url: http://localhost:3916/
+        - generic "Search" [ref=f3e8]:
+          - combobox "Search" [ref=f3e9]:
+            - button "Search" [ref=f3e10] [cursor=pointer]
+        - menu "Toggle navigation" [ref=f3e14] [cursor=pointer]
+    - navigation [ref=f3e16] [cursor=pointer]:
+      - generic [ref=f3e17]:
+        - button "Toggle sidebar navigation" [ref=f3e18]:
+          - generic [ref=f3e19]: 
+        - navigation "breadcrumb" [ref=f3e20]:
+          - list [ref=f3e21]:
+            - listitem [ref=f3e22]:
+              - link "Workshop" [ref=f3e23]:
+                - /url: http://localhost:3916/
+            - listitem [ref=f3e24]:
+              - text: ">"
+              - link "How a Model Learns in Epidemiology" [ref=f3e25]:
+                - /url: http://localhost:3916/part1/ml-workflow.html
+        - navigation "Toggle sidebar navigation"
+  - generic [ref=f3e26]:
+    - text: 
+    - main [ref=f3e28]:
+      - generic [ref=f3e29]:
+        - text: ">"
+        - generic [ref=f3e30]:
+          - generic [ref=f3e32]:
+            - heading "How a Model Learns in Epidemiology" [level=1] [ref=f3e33]
+            - button "Code" [ref=f3e34] [cursor=pointer]
+          - paragraph [ref=f3e36]: A blended teaching workflow combining the mechanics of learning with a real WNV prediction problem
+        - generic [ref=f3e37]:
+          - generic [ref=f3e38]:
+            - generic [ref=f3e39]: Author
+            - paragraph [ref=f3e41]: Federica Gazzelloni
+          - generic [ref=f3e42]:
+            - generic [ref=f3e43]: Published
+            - paragraph [ref=f3e45]: September 28, 2026
+      - generic [ref=f3e46]:
+        - heading [level=2] [ref=f3e47]:
+          - text: Workshop notebook
+          - link "Anchor" [ref=f3e48] [cursor=pointer]:
+            - /url: "#workshop-notebook"
+            - text: 
+        - paragraph [ref=f3e49]: "Perspectives:"
+        - list [ref=f3e50]:
+          - listitem [ref=f3e51]: a conceptual explanation of how machine learning models learn;
+          - listitem [ref=f3e52]: a realistic epidemiology workflow for predicting West Nile virus (WNV) activity.
+        - paragraph [ref=f3e53]: The goal is to understand both the mathematical idea of learning and the practical pipeline used in applied work.
+      - generic [ref=f3e54]:
+        - heading [level=2] [ref=f3e55]:
+          - text: Slide presentation
+          - link "Anchor" [ref=f3e56] [cursor=pointer]:
+            - /url: "#slide-presentation"
+            - text: 
+        - paragraph [ref=f3e57]:
+          - link "Open the 12-slide presentation" [ref=f3e58] [cursor=pointer]:
+            - /url: http://localhost:3916/part1/presentation/
+          - link "Download the editable PowerPoint" [ref=f3e59] [cursor=pointer]:
+            - /url: http://localhost:3916/part1/presentation/introduction-to-ml-in-epidemiology-with-r.pptx
+        - paragraph [ref=f3e60]: The slide deck introduces the broader multi-model workflow. The model-performance and variable-importance values shown in the deck are illustrative. The executable notebook below contains the observed results.
+        - paragraph [ref=f3e61]: "By the end, we should be able to answer four questions:"
+        - list [ref=f3e62]:
+          - listitem [ref=f3e63]: What is the model?
+          - listitem [ref=f3e64]: What is the loss?
+          - listitem [ref=f3e65]: What is the optimisation procedure?
+          - listitem [ref=f3e66]: What is learned?
+        - paragraph [ref=f3e67]: "The central message is:"
+        - blockquote [ref=f3e68]:
+          - paragraph [ref=f3e69]: Learning means using data to determine a model’s parameters or structure. Optimisation is the procedure used to find useful values or structures according to an objective.
+        - separator [ref=f3e70]
+      - generic [ref=f3e71]:
+        - heading "1. Model, loss, optimisation, and learning" [level=1] [ref=f3e72]
+        - paragraph [ref=f3e73]: These terms are connected, but they are not interchangeable.
+        - table [ref=f3e74]:
+          - rowgroup [ref=f3e79]:
+            - row [ref=f3e80]:
+              - columnheader "Concept" [ref=f3e81]
+              - columnheader "Question" [ref=f3e82]
+              - columnheader "Example" [ref=f3e83]
+          - rowgroup [ref=f3e84]:
+            - row [ref=f3e85]:
+              - cell "Model" [ref=f3e86]
+              - cell "How are inputs turned into predictions?" [ref=f3e87]
+              - cell [ref=f3e88]:
+                - generic [ref=f3e90]:
+                  - generic [aria-hidden] [ref=f3e91]:
+                    - generic [ref=f3e93]:
+                      - generic [ref=f3e94]: ^
+                      - generic [ref=f3e96]: "y"
+                    - generic [ref=f3e99]: =
+                    - generic [ref=f3e101]: w
+                    - generic [ref=f3e103]: x
+                    - generic [ref=f3e105]: +
+                    - generic [ref=f3e107]: b
+                  - math [ref=f3e110]:
+                    - generic [ref=f3e112]:
+                      - generic [ref=f3e113]: "y"
+                      - generic [ref=f3e114]: ^
+                    - generic [ref=f3e115]: =
+                    - generic [ref=f3e116]: w
+                    - generic [ref=f3e117]: x
+                    - generic [ref=f3e118]: +
+                    - generic [ref=f3e119]: b
+            - row [ref=f3e120]:
+              - cell "Loss" [ref=f3e121]
+              - cell "How wrong are the predictions?" [ref=f3e122]
+              - cell "Mean squared error" [ref=f3e123]
+            - row [ref=f3e124]:
+              - cell "Optimisation" [ref=f3e125]
+              - cell "How do we search for a better model?" [ref=f3e126]
+              - cell "Gradient descent" [ref=f3e127]
+            - row [ref=f3e128]:
+              - cell "Learning" [ref=f3e129]
+              - cell "What changes because of the data?" [ref=f3e130]
+              - cell [ref=f3e131]:
+                - text: Values of
+                - generic [ref=f3e133]:
+                  - generic [ref=f3e135]: w
+                  - math [ref=f3e138]:
+                    - generic [ref=f3e139]: w
+                - text: and
+                - generic [ref=f3e141]:
+                  - generic [ref=f3e143]: b
+                  - math [ref=f3e146]:
+                    - generic [ref=f3e147]: b
+        - paragraph [ref=f3e148]: "The learning cycle is:"
+        - code [ref=f3e150]: training data | v make predictions with the current model | v calculate the loss | v use an optimisation rule to update the model | +-------------------- repeat for another epoch
+        - paragraph [ref=f3e151]: Optimisation is therefore not an extra step after learning. In many models, it is the mechanism through which learning happens.
+        - separator [ref=f3e152]
+      - generic [ref=f3e153]:
+        - heading "2. A small linear-regression example" [level=1] [ref=f3e154]
+        - paragraph [ref=f3e155]: To make learning concrete, we begin with a tiny regression example.
+        - generic [ref=f3e156]:
+          - group [ref=f3e157]:
+            - generic "Code" [ref=f3e158] [cursor=pointer]
+          - code [ref=f3e161]: x y 1 1 2.9 2 2 3.4 3 3 4.5 4 4 5.0 5 5 6.3 6 6 6.7 7 7 7.8 8 8 8.1
+        - paragraph [ref=f3e162]: "The model is:"
+        - paragraph [ref=f3e163]:
+          - generic [ref=f3e165]:
+            - generic [aria-hidden] [ref=f3e166]:
+              - generic [ref=f3e167]:
+                - generic [ref=f3e169]:
+                  - generic [ref=f3e170]: ^
+                  - generic [ref=f3e172]: "y"
+                - generic [ref=f3e175]: i
+              - generic [ref=f3e178]: =
+              - generic [ref=f3e180]: w
+              - generic [ref=f3e182]:
+                - generic [ref=f3e183]: x
+                - generic [ref=f3e185]: i
+              - generic [ref=f3e188]: +
+              - generic [ref=f3e190]: b
+              - generic [ref=f3e192]: ","
+            - math [ref=f3e195]:
+              - generic [ref=f3e196]:
+                - generic [ref=f3e198]:
+                  - generic [ref=f3e199]: "y"
+                  - generic [ref=f3e200]: ^
+                - generic [ref=f3e201]: i
+              - generic [ref=f3e202]: =
+              - generic [ref=f3e203]: w
+              - generic [ref=f3e204]:
+                - generic [ref=f3e205]: x
+                - generic [ref=f3e206]: i
+              - generic [ref=f3e207]: +
+              - generic [ref=f3e208]: b
+              - generic [ref=f3e209]: ","
+        - paragraph [ref=f3e210]: "where:"
+        - list [ref=f3e211]:
+          - listitem [ref=f3e212]:
+            - generic [ref=f3e214]:
+              - generic [ref=f3e216]: w
+              - math [ref=f3e219]:
+                - generic [ref=f3e220]: w
+            - text: is the slope;
+          - listitem [ref=f3e221]:
+            - generic [ref=f3e223]:
+              - generic [ref=f3e225]: b
+              - math [ref=f3e228]:
+                - generic [ref=f3e229]: b
+            - text: is the intercept;
+          - listitem [ref=f3e230]:
+            - generic [ref=f3e232]:
+              - generic [ref=f3e234]:
+                - generic [ref=f3e236]:
+                  - generic [ref=f3e237]: ^
+                  - generic [ref=f3e239]: "y"
+                - generic [ref=f3e242]: i
+              - math [ref=f3e246]:
+                - generic [ref=f3e247]:
+                  - generic [ref=f3e249]:
+                    - generic [ref=f3e250]: "y"
+                    - generic [ref=f3e251]: ^
+                  - generic [ref=f3e252]: i
+            - text: is the prediction for observation
+            - generic [ref=f3e254]:
+              - generic [ref=f3e256]: i
+              - math [ref=f3e259]:
+                - generic [ref=f3e260]: i
+            - text: .
+        - paragraph [ref=f3e261]: At the start, both parameters are set to zero.
+        - generic [ref=f3e262]:
+          - group [ref=f3e263]:
+            - generic "Code" [ref=f3e264] [cursor=pointer]
+          - code [ref=f3e267]: x y initial_prediction 1 1 2.9 0 2 2 3.4 0 3 3 4.5 0 4 4 5.0 0 5 5 6.3 0 6 6 6.7 0 7 7 7.8 0 8 8 8.1 0
+        - separator [ref=f3e268]
+      - generic [ref=f3e269]:
+        - heading "3. The loss function" [level=1] [ref=f3e270]
+        - paragraph [ref=f3e271]: "We need a way to measure the gap between the observed values and the predictions. We use mean squared error:"
+        - paragraph [ref=f3e272]:
+          - generic [ref=f3e274]:
+            - generic [aria-hidden] [ref=f3e275]:
+              - generic [ref=f3e276]:
+                - generic [ref=f3e277]: M
+                - generic [ref=f3e278]: S
+                - generic [ref=f3e279]: E
+              - generic [ref=f3e280]: (
+              - generic [ref=f3e282]: w
+              - generic [ref=f3e284]: ","
+              - generic [ref=f3e286]: b
+              - generic [ref=f3e288]: )
+              - generic [ref=f3e290]: =
+              - generic [ref=f3e293]:
+                - generic [ref=f3e294]: "1"
+                - generic [ref=f3e297]: "n"
+              - generic [ref=f3e304]:
+                - generic [ref=f3e305]: "n"
+                - generic [ref=f3e310]:
+                  - generic [ref=f3e311]: ∑
+                  - generic [ref=f3e317]:
+                    - generic [ref=f3e318]: i
+                    - generic [ref=f3e320]: =
+                    - generic [ref=f3e322]: "1"
+              - generic [ref=f3e324]:
+                - generic [ref=f3e325]:
+                  - generic [ref=f3e326]: (
+                  - generic [ref=f3e328]:
+                    - generic [ref=f3e330]:
+                      - generic [ref=f3e331]: ^
+                      - generic [ref=f3e333]: "y"
+                    - generic [ref=f3e336]: i
+                  - generic [ref=f3e339]: −
+                  - generic [ref=f3e341]:
+                    - generic [ref=f3e342]: "y"
+                    - generic [ref=f3e344]: i
+                  - generic [ref=f3e347]: )
+                - generic [ref=f3e349]: "2"
+              - generic [ref=f3e352]: .
+            - math [ref=f3e355]:
+              - generic [ref=f3e356]: MSE
+              - generic [ref=f3e357]: (
+              - generic [ref=f3e358]: w
+              - generic [ref=f3e359]: ","
+              - generic [ref=f3e360]: b
+              - generic [ref=f3e361]: )
+              - generic [ref=f3e362]: =
+              - generic [ref=f3e363]:
+                - generic [ref=f3e364]: "1"
+                - generic [ref=f3e365]: "n"
+              - generic [ref=f3e366]:
+                - generic [ref=f3e367]: ∑
+                - generic [ref=f3e368]:
+                  - generic [ref=f3e369]: i
+                  - generic [ref=f3e370]: =
+                  - generic [ref=f3e371]: "1"
+                - generic [ref=f3e372]: "n"
+              - generic [ref=f3e374]:
+                - generic [ref=f3e375]:
+                  - generic [ref=f3e376]: (
+                  - generic [ref=f3e377]:
+                    - generic [ref=f3e379]:
+                      - generic [ref=f3e380]: "y"
+                      - generic [ref=f3e381]: ^
+                    - generic [ref=f3e382]: i
+                  - generic [ref=f3e383]: −
+                  - generic [ref=f3e384]:
+                    - generic [ref=f3e385]: "y"
+                    - generic [ref=f3e386]: i
+                  - generic [ref=f3e387]: )
+                - generic [ref=f3e388]: "2"
+              - generic [ref=f3e389]: .
+        - generic [ref=f3e390]:
+          - group [ref=f3e391]:
+            - generic "Code" [ref=f3e392] [cursor=pointer]
+          - code [ref=f3e395]: "[1] 34.53125"
+        - paragraph [ref=f3e396]: A loss value tells us how well the current parameters fit the training data. It does not update the parameters by itself.
+        - separator [ref=f3e397]
+      - generic [ref=f3e398]:
+        - heading "4. Batch gradient descent from scratch" [level=1] [ref=f3e399]
+        - paragraph [ref=f3e400]:
+          - text: "Example from the article:"
+          - link "ml-in-epidemiology-article" [ref=f3e401] [cursor=pointer]:
+            - /url: https://arxiv.org/abs/2602.16352
+        - paragraph [ref=f3e402]: "Gradient descent asks: in which direction should each parameter move to reduce the loss?"
+        - paragraph [ref=f3e403]: "For MSE, the gradients are:"
+        - paragraph [ref=f3e404]:
+          - generic [ref=f3e406]:
+            - generic [aria-hidden] [ref=f3e407]:
+              - generic [ref=f3e409]:
+                - generic [ref=f3e411]:
+                  - generic [ref=f3e412]: ∂
+                  - generic [ref=f3e414]:
+                    - generic [ref=f3e415]: M
+                    - generic [ref=f3e416]: S
+                    - generic [ref=f3e417]: E
+                - generic [ref=f3e423]:
+                  - generic [ref=f3e424]: ∂
+                  - generic [ref=f3e426]: w
+              - generic [ref=f3e428]: =
+              - generic [ref=f3e431]:
+                - generic [ref=f3e432]: "2"
+                - generic [ref=f3e435]: "n"
+              - generic [ref=f3e442]:
+                - generic [ref=f3e443]: "n"
+                - generic [ref=f3e448]:
+                  - generic [ref=f3e449]: ∑
+                  - generic [ref=f3e455]:
+                    - generic [ref=f3e456]: i
+                    - generic [ref=f3e458]: =
+                    - generic [ref=f3e460]: "1"
+              - generic [ref=f3e462]: (
+              - generic [ref=f3e464]:
+                - generic [ref=f3e466]:
+                  - generic [ref=f3e467]: ^
+                  - generic [ref=f3e469]: "y"
+                - generic [ref=f3e472]: i
+              - generic [ref=f3e475]: −
+              - generic [ref=f3e477]:
+                - generic [ref=f3e478]: "y"
+                - generic [ref=f3e480]: i
+              - generic [ref=f3e483]: )
+              - generic [ref=f3e485]:
+                - generic [ref=f3e486]: x
+                - generic [ref=f3e488]: i
+            - math [ref=f3e492]:
+              - generic [ref=f3e493]:
+                - generic [ref=f3e494]:
+                  - generic [ref=f3e495]: ∂
+                  - generic [ref=f3e496]: MSE
+                - generic [ref=f3e497]:
+                  - generic [ref=f3e498]: ∂
+                  - generic [ref=f3e499]: w
+              - generic [ref=f3e500]: =
+              - generic [ref=f3e501]:
+                - generic [ref=f3e502]: "2"
+                - generic [ref=f3e503]: "n"
+              - generic [ref=f3e504]:
+                - generic [ref=f3e505]: ∑
+                - generic [ref=f3e506]:
+                  - generic [ref=f3e507]: i
+                  - generic [ref=f3e508]: =
+                  - generic [ref=f3e509]: "1"
+                - generic [ref=f3e510]: "n"
+              - generic [ref=f3e512]: (
+              - generic [ref=f3e513]:
+                - generic [ref=f3e515]:
+                  - generic [ref=f3e516]: "y"
+                  - generic [ref=f3e517]: ^
+                - generic [ref=f3e518]: i
+              - generic [ref=f3e519]: −
+              - generic [ref=f3e520]:
+                - generic [ref=f3e521]: "y"
+                - generic [ref=f3e522]: i
+              - generic [ref=f3e523]: )
+              - generic [ref=f3e524]:
+                - generic [ref=f3e525]: x
+                - generic [ref=f3e526]: i
+        - paragraph [ref=f3e527]: and
+        - paragraph [ref=f3e528]:
+          - generic [ref=f3e530]:
+            - generic [aria-hidden] [ref=f3e531]:
+              - generic [ref=f3e533]:
+                - generic [ref=f3e535]:
+                  - generic [ref=f3e536]: ∂
+                  - generic [ref=f3e538]:
+                    - generic [ref=f3e539]: M
+                    - generic [ref=f3e540]: S
+                    - generic [ref=f3e541]: E
+                - generic [ref=f3e547]:
+                  - generic [ref=f3e548]: ∂
+                  - generic [ref=f3e550]: b
+              - generic [ref=f3e552]: =
+              - generic [ref=f3e555]:
+                - generic [ref=f3e556]: "2"
+                - generic [ref=f3e559]: "n"
+              - generic [ref=f3e566]:
+                - generic [ref=f3e567]: "n"
+                - generic [ref=f3e572]:
+                  - generic [ref=f3e573]: ∑
+                  - generic [ref=f3e579]:
+                    - generic [ref=f3e580]: i
+                    - generic [ref=f3e582]: =
+                    - generic [ref=f3e584]: "1"
+              - generic [ref=f3e586]: (
+              - generic [ref=f3e588]:
+                - generic [ref=f3e590]:
+                  - generic [ref=f3e591]: ^
+                  - generic [ref=f3e593]: "y"
+                - generic [ref=f3e596]: i
+              - generic [ref=f3e599]: −
+              - generic [ref=f3e601]:
+                - generic [ref=f3e602]: "y"
+                - generic [ref=f3e604]: i
+              - generic [ref=f3e607]: )
+              - generic [ref=f3e609]: .
+            - math [ref=f3e612]:
+              - generic [ref=f3e613]:
+                - generic [ref=f3e614]:
+                  - generic [ref=f3e615]: ∂
+                  - generic [ref=f3e616]: MSE
+                - generic [ref=f3e617]:
+                  - generic [ref=f3e618]: ∂
+                  - generic [ref=f3e619]: b
+              - generic [ref=f3e620]: =
+              - generic [ref=f3e621]:
+                - generic [ref=f3e622]: "2"
+                - generic [ref=f3e623]: "n"
+              - generic [ref=f3e624]:
+                - generic [ref=f3e625]: ∑
+                - generic [ref=f3e626]:
+                  - generic [ref=f3e627]: i
+                  - generic [ref=f3e628]: =
+                  - generic [ref=f3e629]: "1"
+                - generic [ref=f3e630]: "n"
+              - generic [ref=f3e632]: (
+              - generic [ref=f3e633]:
+                - generic [ref=f3e635]:
+                  - generic [ref=f3e636]: "y"
+                  - generic [ref=f3e637]: ^
+                - generic [ref=f3e638]: i
+              - generic [ref=f3e639]: −
+              - generic [ref=f3e640]:
+                - generic [ref=f3e641]: "y"
+                - generic [ref=f3e642]: i
+              - generic [ref=f3e643]: )
+              - generic [ref=f3e644]: .
+        - paragraph [ref=f3e645]: "The update rule is:"
+        - paragraph [ref=f3e646]:
+          - generic [ref=f3e648]:
+            - generic [aria-hidden] [ref=f3e649]:
+              - generic [ref=f3e650]:
+                - generic [ref=f3e651]: w
+                - generic [ref=f3e654]:
+                  - generic [ref=f3e655]: t
+                  - generic [ref=f3e657]: +
+                  - generic [ref=f3e659]: "1"
+              - generic [ref=f3e661]: =
+              - generic [ref=f3e663]:
+                - generic [ref=f3e664]: w
+                - generic [ref=f3e666]: t
+              - generic [ref=f3e669]: −
+              - generic [ref=f3e671]: η
+              - generic [ref=f3e674]:
+                - generic [ref=f3e676]:
+                  - generic [ref=f3e677]: ∂
+                  - generic [ref=f3e679]:
+                    - generic [ref=f3e680]: M
+                    - generic [ref=f3e681]: S
+                    - generic [ref=f3e682]: E
+                - generic [ref=f3e688]:
+                  - generic [ref=f3e689]: ∂
+                  - generic [ref=f3e691]: w
+              - generic [ref=f3e693]: ","
+              - generic [ref=f3e695]:
+                - generic [ref=f3e696]: b
+                - generic [ref=f3e699]:
+                  - generic [ref=f3e700]: t
+                  - generic [ref=f3e702]: +
+                  - generic [ref=f3e704]: "1"
+              - generic [ref=f3e706]: =
+              - generic [ref=f3e708]:
+                - generic [ref=f3e709]: b
+                - generic [ref=f3e711]: t
+              - generic [ref=f3e714]: −
+              - generic [ref=f3e716]: η
+              - generic [ref=f3e719]:
+                - generic [ref=f3e721]:
+                  - generic [ref=f3e722]: ∂
+                  - generic [ref=f3e724]:
+                    - generic [ref=f3e725]: M
+                    - generic [ref=f3e726]: S
+                    - generic [ref=f3e727]: E
+                - generic [ref=f3e733]:
+                  - generic [ref=f3e734]: ∂
+                  - generic [ref=f3e736]: b
+              - generic [ref=f3e738]: ","
+            - math [ref=f3e741]:
+              - generic [ref=f3e742]:
+                - generic [ref=f3e743]: w
+                - generic [ref=f3e744]:
+                  - generic [ref=f3e745]: t
+                  - generic [ref=f3e746]: +
+                  - generic [ref=f3e747]: "1"
+              - generic [ref=f3e748]: =
+              - generic [ref=f3e749]:
+                - generic [ref=f3e750]: w
+                - generic [ref=f3e751]: t
+              - generic [ref=f3e752]: −
+              - generic [ref=f3e753]: η
+              - generic [ref=f3e754]:
+                - generic [ref=f3e755]:
+                  - generic [ref=f3e756]: ∂
+                  - generic [ref=f3e757]: MSE
+                - generic [ref=f3e758]:
+                  - generic [ref=f3e759]: ∂
+                  - generic [ref=f3e760]: w
+              - generic [ref=f3e761]: ","
+              - generic [ref=f3e762]:
+                - generic [ref=f3e763]: b
+                - generic [ref=f3e764]:
+                  - generic [ref=f3e765]: t
+                  - generic [ref=f3e766]: +
+                  - generic [ref=f3e767]: "1"
+              - generic [ref=f3e768]: =
+              - generic [ref=f3e769]:
+                - generic [ref=f3e770]: b
+                - generic [ref=f3e771]: t
+              - generic [ref=f3e772]: −
+              - generic [ref=f3e773]: η
+              - generic [ref=f3e774]:
+                - generic [ref=f3e775]:
+                  - generic [ref=f3e776]: ∂
+                  - generic [ref=f3e777]: MSE
+                - generic [ref=f3e778]:
+                  - generic [ref=f3e779]: ∂
+                  - generic [ref=f3e780]: b
+              - generic [ref=f3e781]: ","
+        - paragraph [ref=f3e782]:
+          - text: where
+          - generic [ref=f3e784]:
+            - generic [ref=f3e786]: η
+            - math [ref=f3e789]:
+              - generic [ref=f3e790]: η
+          - text: is the learning rate.
+        - paragraph [ref=f3e791]: This is batch gradient descent because every update uses all observations.
+        - generic [ref=f3e792]:
+          - group [ref=f3e793]:
+            - generic "Code" [ref=f3e794] [cursor=pointer]
+          - code [ref=f3e797]: parameter learned_value 1 intercept b 2.0357143 2 slope w 0.7892857
+        - paragraph [ref=f3e798]: "The code follows the repeated pattern:"
+        - code [ref=f3e800]: predict -> calculate loss-related gradients -> update w and b -> repeat
+        - paragraph [ref=f3e801]: "This is the essence of the learning procedure:"
+        - group [ref=f3e803]:
+          - generic "Code" [ref=f3e804] [cursor=pointer]
+        - separator [ref=f3e805]
+      - generic [ref=f3e806]:
+        - heading "5. Compare the result with lm()" [level=1] [ref=f3e807]
+        - paragraph [ref=f3e808]: Base R can fit the same linear model directly.
+        - generic [ref=f3e809]:
+          - group [ref=f3e810]:
+            - generic "Code" [ref=f3e811] [cursor=pointer]
+          - code [ref=f3e814]: parameter gradient_descent lm difference 1 intercept b 2.0357143 2.0357143 -3.780563e-09 2 slope w 0.7892857 0.7892857 6.724220e-10
+        - group [ref=f3e816]:
+          - generic "Code" [ref=f3e817] [cursor=pointer]
+        - paragraph [ref=f3e818]: This shows that different numerical routes can produce the same fitted model.
+        - separator [ref=f3e819]
+      - generic [ref=f3e820]:
+        - heading "6. Why this matters for epidemiology" [level=1] [ref=f3e821]
+        - paragraph [ref=f3e822]: The same general ideas appear in real public-health prediction tasks.
+        - paragraph [ref=f3e823]: "The central question is:"
+        - blockquote [ref=f3e824]:
+          - paragraph [ref=f3e825]:
+            - text: Can state-level surveillance information predict whether
+            - strong [ref=f3e826]: West Nile virus
+            - text: activity will be observed in the next four weeks?
+        - paragraph [ref=f3e827]: The goal is not causation. The goal is to learn a pattern from historical data and check whether that pattern generalizes to new observations.
+        - paragraph [ref=f3e828]:
+          - text: In supervised learning, the model learns a mapping from features
+          - generic [ref=f3e830]:
+            - generic [ref=f3e832]: x
+            - math [ref=f3e835]:
+              - generic [ref=f3e836]: x
+          - text: to an outcome
+          - generic [ref=f3e838]:
+            - generic [ref=f3e840]: "y"
+            - math [ref=f3e843]:
+              - generic [ref=f3e844]: "y"
+          - text: ":"
+        - paragraph [ref=f3e845]:
+          - generic [ref=f3e847]:
+            - generic [aria-hidden] [ref=f3e848]:
+              - generic [ref=f3e850]:
+                - generic [ref=f3e851]: ^
+                - generic [ref=f3e853]: f
+              - generic [ref=f3e856]: ":"
+              - generic [ref=f3e858]: X
+              - generic [ref=f3e860]: →
+              - generic [ref=f3e862]: "Y"
+              - generic [ref=f3e864]: .
+            - math [ref=f3e867]:
+              - generic [ref=f3e869]:
+                - generic [ref=f3e870]: f
+                - generic [ref=f3e871]: ^
+              - generic [ref=f3e872]: ":"
+              - generic [ref=f3e873]: X
+              - generic [ref=f3e874]: →
+              - generic [ref=f3e875]: "Y"
+              - generic [ref=f3e876]: .
+        - list [ref=f3e877]:
+          - listitem [ref=f3e878]:
+            - text: Features (
+            - generic [ref=f3e880]:
+              - generic [ref=f3e882]: x
+              - math [ref=f3e885]:
+                - generic [ref=f3e886]: x
+            - text: "): recent reported cases, recent weeks active, region, and calendar timing."
+          - listitem [ref=f3e887]:
+            - text: Outcome (
+            - generic [ref=f3e889]:
+              - generic [ref=f3e891]: "y"
+              - math [ref=f3e894]:
+                - generic [ref=f3e895]: "y"
+            - text: "): whether WNV activity occurs in the next four weeks."
+          - listitem [ref=f3e896]: "Training data: historical data used to learn the pattern."
+          - listitem [ref=f3e897]: "Test data: unseen data used to evaluate generalization."
+        - separator [ref=f3e898]
+      - generic [ref=f3e899]:
+        - 'heading "7. WNV workflow: data, features, and prediction task" [level=1] [ref=f3e900]'
+        - paragraph [ref=f3e901]: We now move from the abstract learning example to a real epidemiology workflow.
+        - group [ref=f3e903]:
+          - generic "Code" [ref=f3e904] [cursor=pointer]
+        - group [ref=f3e906]:
+          - generic "Code" [ref=f3e907] [cursor=pointer]
+        - generic [ref=f3e908]:
+          - group [ref=f3e909]:
+            - generic "Code" [ref=f3e910] [cursor=pointer]
+          - code [ref=f3e913]: no yes 4936 572
+          - group [ref=f3e914]:
+            - generic "Code" [ref=f3e915] [cursor=pointer]
+          - code [ref=f3e918]: no yes 0.896 0.104
+        - paragraph [ref=f3e919]: We split the data into training and holdout test periods.
+        - group [ref=f3e921]:
+          - generic "Code" [ref=f3e922] [cursor=pointer]
+        - separator [ref=f3e923]
+      - generic [ref=f3e924]:
+        - heading "8. A simple logistic-regression model" [level=1] [ref=f3e925]
+        - paragraph [ref=f3e926]: "This is a classic supervised learning setup: a model learns from historical state-week observations and predicts future activity."
+        - generic [ref=f3e927]:
+          - group [ref=f3e928]:
+            - generic "Code" [ref=f3e929] [cursor=pointer]
+          - code [ref=f3e932]: "Call: glm(formula = outcome ~ week + recent_cases + recent_active_weeks + region, family = binomial, data = train) Coefficients: Estimate Std. Error z value Pr(>|z|) (Intercept) -3.120715 0.282813 -11.035 < 2e-16 *** week 0.009273 0.007968 1.164 0.244515 recent_cases 0.278467 0.066101 4.213 2.52e-05 *** recent_active_weeks 0.478830 0.080663 5.936 2.92e-09 *** regionNortheast -0.311733 0.224622 -1.388 0.165195 regionSouth 0.614242 0.161219 3.810 0.000139 *** regionWest 0.107259 0.181644 0.590 0.554862 --- Signif. codes: 0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 (Dispersion parameter for binomial family taken to be 1) Null deviance: 2685.4 on 4130 degrees of freedom Residual deviance: 2209.2 on 4124 degrees of freedom AIC: 2223.2 Number of Fisher Scoring iterations: 6"
+        - generic [ref=f3e933]:
+          - group [ref=f3e934]:
+            - generic "Code" [ref=f3e935] [cursor=pointer]
+          - code [ref=f3e938]: Predicted Actual no yes no 1206 12 yes 112 47
+          - group [ref=f3e939]:
+            - generic "Code" [ref=f3e940] [cursor=pointer]
+          - code [ref=f3e943]: "Accuracy: 0.91"
+        - paragraph [ref=f3e944]: "This workflow shows the classic machine-learning cycle:"
+        - list [ref=f3e945]:
+          - listitem [ref=f3e946]: learn on training data;
+          - listitem [ref=f3e947]: predict on unseen data;
+          - listitem [ref=f3e948]: compare predictions to observed outcomes;
+          - listitem [ref=f3e949]: evaluate generalisation, not just fit.
+        - separator [ref=f3e950]
+      - generic [ref=f3e951]:
+        - heading "9. Model comparison in the modern workflow" [level=1] [ref=f3e952]
+        - paragraph [ref=f3e953]: The more modern workflow compares multiple learners and uses probabilities directly.
+        - group [ref=f3e955]:
+          - generic "Code" [ref=f3e956] [cursor=pointer]
+        - group [ref=f3e958]:
+          - generic "Code" [ref=f3e959] [cursor=pointer]
+        - group [ref=f3e961]:
+          - generic "Code" [ref=f3e962] [cursor=pointer]
+        - generic [ref=f3e963]:
+          - group [ref=f3e964]:
+            - generic "Code" [ref=f3e965] [cursor=pointer]
+          - code [ref=f3e968]: "model state year week truth probability <char> <char> <int> <int> <fctr> <num> 1: logistic ALABAMA 2025 18 no 0.009258751 2: logistic ALABAMA 2025 19 no 0.047667738 3: logistic ALABAMA 2025 20 no 0.047859948 4: logistic ALABAMA 2025 21 no 0.060949608 5: logistic ALABAMA 2025 22 no 0.061731995 --- 4127: forest WYOMING 2025 40 no 0.039651107 4128: forest WYOMING 2025 41 no 0.040403288 4129: forest WYOMING 2025 42 no 0.048072318 4130: forest WYOMING 2025 43 no 0.052365987 4131: forest WYOMING 2025 44 no 0.044181855"
+        - group [ref=f3e970]:
+          - generic "Code" [ref=f3e971] [cursor=pointer]
+        - generic [ref=f3e972]:
+          - group [ref=f3e973]:
+            - generic "Code" [ref=f3e974] [cursor=pointer]
+          - code [ref=f3e977]: "model threshold sensitivity specificity accuracy balanced_accuracy tp <char> <num> <num> <num> <num> <num> <int> 1: logistic 0.5 0.2893082 0.9876847 0.9070443 0.6384965 46 2: tree 0.5 0.3144654 0.9860427 0.9084967 0.6502541 50 3: forest 0.5 0.3459119 0.9827586 0.9092229 0.6643353 55 fp tn fn <int> <int> <int> 1: 15 1203 113 2: 17 1201 109 3: 21 1197 104"
+        - paragraph [ref=f3e978]: "This is framing of supervised learning and model evaluation: compare models, use probabilities, and evaluate generalization on unseen data."
+        - separator [ref=f3e979]
+      - generic [ref=f3e980]:
+        - heading "10. Visualization" [level=1] [ref=f3e981]
+        - generic [ref=f3e982]:
+          - heading [level=3] [ref=f3e983]:
+            - text: ROC curve
+            - link "Anchor" [ref=f3e984] [cursor=pointer]:
+              - /url: "#roc-curve"
+              - text: 
+          - group [ref=f3e986]:
+            - generic "Code" [ref=f3e987] [cursor=pointer]
+          - generic [ref=f3e988]:
+            - group [ref=f3e989]:
+              - generic "Code" [ref=f3e990] [cursor=pointer]
+            - figure "ROC curves for the candidate WNV prediction models on the 2025 holdout set." [ref=f3e993]:
+              - paragraph [ref=f3e994]
+        - generic [ref=f3e997]:
+          - heading [level=3] [ref=f3e998]:
+            - text: Confusion matrix plot
+            - link "Anchor" [ref=f3e999] [cursor=pointer]:
+              - /url: "#confusion-matrix-plot"
+              - text: 
+          - generic [ref=f3e1000]:
+            - group [ref=f3e1001]:
+              - generic "Code" [ref=f3e1002] [cursor=pointer]
+            - figure "Confusion matrices for the candidate models on the 2025 holdout set at a 0.5 probability threshold." [ref=f3e1005]:
+              - paragraph [ref=f3e1006]
+        - generic [ref=f3e1009]:
+          - heading [level=3] [ref=f3e1010]:
+            - text: Geographic map of predictions
+            - link "Anchor" [ref=f3e1011] [cursor=pointer]:
+              - /url: "#geographic-map-of-predictions"
+              - text: 
+          - generic [ref=f3e1012]:
+            - group [ref=f3e1013]:
+              - generic "Code" [ref=f3e1014] [cursor=pointer]
+            - figure "Mean predicted probability of WNV activity by state in the 2025 holdout data." [ref=f3e1017]:
+              - paragraph [ref=f3e1018]
+          - separator [ref=f3e1021]
+      - generic [ref=f3e1022]:
+        - heading "11. What the results mean" [level=1] [ref=f3e1023]
+        - paragraph [ref=f3e1024]: The point of the workflow is not only to fit a model but to explain how machine learning works in practice.
+        - paragraph [ref=f3e1025]: "A typical sequence is:"
+        - list [ref=f3e1026]:
+          - listitem [ref=f3e1027]: Use historical data to learn patterns.
+          - listitem [ref=f3e1028]: Choose a model and specify the outcome.
+          - listitem [ref=f3e1029]: Train the model on observed labels.
+          - listitem [ref=f3e1030]: Predict on unseen data.
+          - listitem [ref=f3e1031]: Evaluate the output with appropriate metrics.
+          - listitem [ref=f3e1032]: Interpret the model in context.
+        - paragraph [ref=f3e1033]: This is the bridge between the abstract learning cycle and applied epidemiology.
+        - separator [ref=f3e1034]
+      - generic [ref=f3e1035]:
+        - heading "12. Final takeaway" [level=1] [ref=f3e1036]
+        - paragraph [ref=f3e1037]: The conceptual notebook shows that learning is about using data to update model parameters or structure according to a loss function and an optimization scheme.
+        - paragraph [ref=f3e1038]: "The epidemiology workflow shows how the same logic is used in a real decision problem: predict whether WNV activity will be observed in future weeks using information available at the current time."
+        - paragraph [ref=f3e1039]: "The same essential pattern appears in both:"
+        - code [ref=f3e1041]: data -> model -> predictions -> loss -> update -> repeat -> evaluation
+        - paragraph [ref=f3e1042]: That is the heart of machine learning.
+  - contentinfo [ref=f3e1043]:
+    - generic [ref=f3e1044]:
+      - paragraph [ref=f3e1046]: Machine Learning in Epidemiology with R
+      - paragraph [ref=f3e1049]: R-Ladies Rome • Federica Gazzelloni

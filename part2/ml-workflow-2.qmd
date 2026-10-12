@@ -6,13 +6,24 @@ date: "2026-10-23"
 format:
   html:
     toc: true
+    toc-depth: 3
+    toc-location: left
+    code-fold: true
     code-copy: true
+    code-overflow: wrap
+    page-layout: article
+    css: ../styles.css
 output-file: workshop-part-2-trees-to-neural-networks.html
 execute:
   echo: true
   warning: false
   message: false
 ---
+
+```{r}
+#| include: false
+knitr::read_chunk("R/02-trees-and-evaluation.R")
+```
 
 ## From the September introduction to the article workflow
 
@@ -23,8 +34,8 @@ published examples. Open `part2.Rproj` and keep this folder as the working direc
 
 The authors' companion repository is currently unavailable. This workshop
 implements the published examples and documents the missing setup choices in
-[the replication record](references/replication-notes.md).
-The frozen data and transformation details are in [the data guide](data/README.md).
+[the replication record](references/replication-notes.qmd).
+The frozen data and transformation details are in [the data guide](data/guide.qmd).
 
 ## 1. Meet the data
 
@@ -51,17 +62,18 @@ continues through evaluation and resampling. Read it section by section in RStud
 The first trees use the complete dataset for illustration, as in the article;
 their fitted accuracy would not estimate performance on new patients.
 
-```{r, code=readLines("R/02-trees-and-evaluation.R")}
+```{r article-trees}
 ```
 
-![](figures/01-tree.png)
+![Default classification tree fitted to the complete heart-disease dataset.](figures/01-tree.png){fig-align="center"}
 
 Compare the default tree with the deep tree. The complexity plot connects pruning
 to the balance between fitting the observed sample and generalising beyond it.
 The article uses `cp = 0.031`; we retain that value for the replication.
 
-![](figures/02-complexity.png)
-![](figures/03-pruned-tree.png)
+![Cross-validated relative error across candidate complexity parameter values.](figures/02-complexity.png){fig-align="center"}
+
+![Classification tree pruned using cp = 0.031.](figures/03-pruned-tree.png){fig-align="center"}
 
 ## 3. Train a neural network — article section 2.2.3
 
@@ -83,6 +95,8 @@ come from the separate network script, rather than the core notebook render.
 
 ```{r}
 #| echo: false
+#| fig-cap: "Training and validation binary cross-entropy across 27 training epochs."
+#| fig-align: center
 if (file.exists("outputs/neural-accuracy.csv")) {
   print(read.csv("outputs/neural-accuracy.csv"))
   knitr::include_graphics("figures/05-neural-loss.png")
@@ -91,18 +105,18 @@ if (file.exists("outputs/neural-accuracy.csv")) {
 
 ## 4. Evaluate predictions — article section 3.1
 
-The core script has trained a probability-producing random forest on two-thirds
-of the observations and evaluated it on the remaining third. These are the
-results of our seeded run.
+We now train a probability-producing random forest on two-thirds of the
+observations and evaluate it on the remaining third. These are the results
+of our seeded run.
 
-```{r}
-read.csv("outputs/holdout-measures.csv")
-read.csv("outputs/confusion.csv")
+```{r article-evaluation}
 ```
 
-![](figures/04-roc.png)
-![](figures/04-threshold.png)
-![](figures/04-prc.png)
+![ROC curve for the random-forest holdout predictions.](figures/04-roc.png){fig-align="center"}
+
+![Classification error across probability thresholds on the holdout set.](figures/04-threshold.png){fig-align="center"}
+
+![Precision-recall curve for the random-forest holdout predictions.](figures/04-prc.png){fig-align="center"}
 
 Discuss sensitivity, specificity, positive and negative predictive value, accuracy
 and the consequences of choosing a threshold. A good score does not establish causation.
@@ -112,10 +126,7 @@ and the consequences of choosing a threshold. A good score does not establish ca
 The next examples use a 100-tree forest, 3-fold cross-validation, 100 repeated
 subsamples and 40 bootstrap repetitions. The core script retains those counts.
 
-```{r}
-read.csv("outputs/train-test-auc.csv")
-read.csv("outputs/cv3.csv")
-read.csv("outputs/resampling-summary.csv")
+```{r article-resampling}
 ```
 
 Training and test AUC answer different questions. Resampling estimates how
@@ -161,6 +172,6 @@ Synthetic rows are generated examples, not additional observed patients.
 
 Observed results, seeds, split membership and package versions are saved in
 `outputs/`. The raw data remain unchanged. See the
-[replication record](references/replication-notes.md) and
-[validation results](outputs/VALIDATION.md) for differences from the
+[replication record](references/replication-notes.qmd) and
+[validation results](outputs/validation.qmd) for differences from the
 published snippets and validation status.

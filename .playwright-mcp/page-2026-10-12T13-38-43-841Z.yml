@@ -1,0 +1,85 @@
+- generic [active] [ref=f7e1]:
+  - banner [ref=f7e3]:
+    - navigation [ref=f7e4]:
+      - generic [ref=f7e5]:
+        - link "ML in Epidemiology" [ref=f7e7] [cursor=pointer]:
+          - /url: http://localhost:3916/
+        - generic "Search" [ref=f7e8]:
+          - combobox "Search" [ref=f7e9]:
+            - button "Search" [ref=f7e10] [cursor=pointer]
+        - menu "Toggle navigation" [ref=f7e14] [cursor=pointer]
+    - navigation [ref=f7e16] [cursor=pointer]:
+      - generic [ref=f7e17]:
+        - button "Toggle sidebar navigation" [ref=f7e18]:
+          - generic [ref=f7e19]: 
+        - navigation "breadcrumb" [ref=f7e20]:
+          - list [ref=f7e21]:
+            - listitem [ref=f7e22]:
+              - link "Workshop" [ref=f7e23]:
+                - /url: http://localhost:3916/
+            - listitem [ref=f7e24]:
+              - text: ">"
+              - link "About" [ref=f7e25]:
+                - /url: http://localhost:3916/about.html
+        - navigation "Toggle sidebar navigation" [ref=f7e26]
+  - generic [ref=f7e27]:
+    - text: 
+    - main [ref=f7e29]:
+      - generic [ref=f7e30]:
+        - text: ">"
+        - heading "About" [level=1] [ref=f7e32]
+      - generic [ref=f7e33]:
+        - heading [level=2] [ref=f7e34]:
+          - text: About the instructor
+          - link "Anchor" [ref=f7e35] [cursor=pointer]:
+            - /url: "#about-the-instructor"
+            - text: 
+        - paragraph [ref=f7e36]:
+          - text: Federica Gazzelloni is an actuary, statistician, data scientist, author and instructor whose work spans health metrics, actuarial modelling, R and Python, data visualisation and reproducible research. She leads
+          - link "R-Ladies Rome" [ref=f7e37] [cursor=pointer]:
+            - /url: https://www.meetup.com/it-IT/rladies-rome/
+          - text: and the
+          - link "Rome R Users Group" [ref=f7e38] [cursor=pointer]:
+            - /url: https://www.meetup.com/it-IT/rome-r-users-group/
+          - text: ", and she brings that practical, collaborative style to the workshop materials in this repository."
+        - paragraph [ref=f7e39]: "This experience connects directly to the workshop’s practical approach to machine learning in epidemiology: we start with a clear understanding of the modelling problem, keep the code and data workflow reproducible, and explain how model choices relate to the epidemiological question being asked."
+      - generic [ref=f7e40]:
+        - heading [level=2] [ref=f7e41]:
+          - text: The two-part learning journey
+          - link "Anchor" [ref=f7e42] [cursor=pointer]:
+            - /url: "#the-two-part-learning-journey"
+            - text: 
+        - paragraph [ref=f7e43]: "This workshop is designed as a guided progression through two connected learning experiences:"
+        - list [ref=f7e44]:
+          - listitem [ref=f7e45]:
+            - strong [ref=f7e46]: "Part 1 — September 2026:"
+            - text: foundations of machine learning, the idea of learning itself, gradient descent, and a West Nile virus prediction workflow.
+          - listitem [ref=f7e47]:
+            - strong [ref=f7e48]: "Part 2 — 23 October 2026:"
+            - text: a heart-disease workflow inspired by Wright et al., including trees, neural networks, evaluation, resampling and tuning.
+        - paragraph [ref=f7e49]: The materials are organised so that participants can move from conceptual understanding to code-based practice without losing sight of the data, the modelling assumptions and the interpretation of results.
+      - generic [ref=f7e50]:
+        - heading [level=2] [ref=f7e51]:
+          - text: Workshop materials and next steps
+          - link "Anchor" [ref=f7e52] [cursor=pointer]:
+            - /url: "#workshop-materials-and-next-steps"
+            - text: 
+        - paragraph [ref=f7e53]: The repository keeps the two session tracks easy to navigate while preserving the source files, notebook structure and project-level working directories.
+        - list [ref=f7e54]:
+          - listitem [ref=f7e55]:
+            - link "Workshop home" [ref=f7e56] [cursor=pointer]:
+              - /url: http://localhost:3916/
+          - listitem [ref=f7e57]:
+            - link "Part 1 materials" [ref=f7e58] [cursor=pointer]:
+              - /url: http://localhost:3916/part1/README.md
+          - listitem [ref=f7e59]:
+            - link "Part 2 materials" [ref=f7e60] [cursor=pointer]:
+              - /url: http://localhost:3916/part2/README.md
+          - listitem [ref=f7e61]:
+            - link "Original September workshop repository" [ref=f7e62] [cursor=pointer]:
+              - /url: https://github.com/fgazzelloni/Intro-to-ml-in-epidemiology-with-r
+        - paragraph [ref=f7e63]: This new repository is a workshop organization and teaching resource for the current series. The original September repository and published website remain separate and are not replaced by these materials.
+  - contentinfo [ref=f7e64]:
+    - generic [ref=f7e65]:
+      - paragraph [ref=f7e67]: Machine Learning in Epidemiology with R
+      - paragraph [ref=f7e70]: R-Ladies Rome • Federica Gazzelloni

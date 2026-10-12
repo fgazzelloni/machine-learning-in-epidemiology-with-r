@@ -1,0 +1,6 @@
+---
+title: "Series guide"
+guide-page: true
+---
+
+{{< include README.md >}}

@@ -1,8 +1,8 @@
 :root {
-  color-scheme: dark;
-  font-family: "Avenir Next", Avenir, system-ui, sans-serif;
-  background: #111827;
-  color: #f8fafc;
+  color-scheme: light;
+  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  background: #ffffff;
+  color: #102845;
 }
 
 * {
@@ -12,7 +12,7 @@
 body {
   min-height: 100vh;
   margin: 0;
-  background: radial-gradient(circle at top, #24324a 0, #111827 48%, #090f1c 100%);
+  background: #f8fafc;
 }
 
 .presentation {
@@ -41,7 +41,7 @@ body {
 }
 
 .presentation__header a {
-  color: #f9a8d4;
+  color: #1f3a5f;
 }
 
 .presentation__links {
@@ -70,7 +70,7 @@ figure {
 
 #slide {
   display: block;
-  width: min(100%, calc((100vh - 10rem) * 16 / 9));
+  width: min(90%, calc((100vh - 10rem) * 16 / 9));
   max-height: calc(100vh - 10rem);
   aspect-ratio: 16 / 9;
   object-fit: contain;
@@ -81,24 +81,24 @@ figure {
 figcaption,
 .presentation__footer p {
   margin: 0;
-  color: #cbd5e1;
+  color: #5f6f82;
   font-size: 0.9rem;
 }
 
 button {
   border: 1px solid #64748b;
   border-radius: 0.5rem;
-  background: #1e293b;
-  color: #f8fafc;
+  background: #eef3f8;
+  color: #102845;
   font: inherit;
   cursor: pointer;
 }
 
 button:hover,
 button:focus-visible {
-  border-color: #f9a8d4;
+  border-color: #1f3a5f;
   outline: 2px solid transparent;
-  background: #334155;
+  background: #dfe7ef;
 }
 
 .nav-button {
@@ -170,5 +170,12 @@ button:focus-visible {
   bottom: 0.75rem;
   padding: 0.25rem 0.5rem;
   border-radius: 0.3rem;
-  background: rgb(15 23 42 / 80%);
+  background: #eef3f8;
+}
+
+@media (max-width: 720px) {
+  .presentation__header, .presentation__footer { flex-wrap: wrap; }
+  .presentation__header h1, .presentation__footer p { max-width: 100%; }
+  .stage { grid-template-columns: 2rem minmax(0, 1fr) 2rem; }
+  #slide { width: 90%; }
 }

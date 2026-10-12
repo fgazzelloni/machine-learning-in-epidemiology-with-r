@@ -1,0 +1,101 @@
+- generic [active] [ref=f12e1]:
+  - banner [ref=f12e3]:
+    - navigation [ref=f12e4]:
+      - generic [ref=f12e5]:
+        - link "ML in Epidemiology" [ref=f12e7] [cursor=pointer]:
+          - /url: http://localhost:3916/
+        - generic "Search" [ref=f12e8]:
+          - combobox "Search" [ref=f12e9]:
+            - button "Search" [ref=f12e10] [cursor=pointer]
+        - list [ref=f12e15]:
+          - listitem [ref=f12e16]:
+            - link "Home" [ref=f12e17] [cursor=pointer]:
+              - /url: http://localhost:3916/
+          - listitem [ref=f12e18]:
+            - link "Part 1" [ref=f12e19] [cursor=pointer]:
+              - /url: http://localhost:3916/part1/ml-workflow.html
+          - listitem [ref=f12e20]:
+            - link "Part 2" [ref=f12e21] [cursor=pointer]:
+              - /url: http://localhost:3916/part2/workshop-part-2-trees-to-neural-networks.html
+          - listitem [ref=f12e22]:
+            - link "Resources" [ref=f12e23] [cursor=pointer]:
+              - /url: http://localhost:3916/resources.html
+          - listitem [ref=f12e24]:
+            - link "About" [ref=f12e25] [cursor=pointer]:
+              - /url: http://localhost:3916/about.html
+    - text:  >
+  - generic [ref=f12e26]:
+    - navigation [ref=f12e27]:
+      - list [ref=f12e29]:
+        - listitem [ref=f12e30]:
+          - generic [ref=f12e31] [cursor=pointer]:
+            - navigation [ref=f12e32]: Workshop
+            - navigation "Toggle section" [ref=f12e33]:
+              - generic [ref=f12e34]: 
+          - list [ref=f12e35]:
+            - listitem [ref=f12e36]:
+              - link "Machine Learning in Epidemiology with R" [ref=f12e38] [cursor=pointer]:
+                - /url: http://localhost:3916/
+            - listitem [ref=f12e39]:
+              - link "About" [ref=f12e41] [cursor=pointer]:
+                - /url: http://localhost:3916/about.html
+            - listitem [ref=f12e42]:
+              - link "Resources" [ref=f12e44] [cursor=pointer]:
+                - /url: http://localhost:3916/resources.html
+            - listitem [ref=f12e45]:
+              - link "How a Model Learns in Epidemiology" [ref=f12e47] [cursor=pointer]:
+                - /url: http://localhost:3916/part1/ml-workflow.html
+            - listitem [ref=f12e48]:
+              - link "Machine Learning in Epidemiology with R — Part 2" [ref=f12e50] [cursor=pointer]:
+                - /url: http://localhost:3916/part2/workshop-part-2-trees-to-neural-networks.html
+    - main [ref=f12e51]:
+      - generic [ref=f12e52]:
+        - navigation "breadcrumb" [ref=f12e53]:
+          - list [ref=f12e54]:
+            - listitem [ref=f12e55]:
+              - link "Workshop" [ref=f12e56] [cursor=pointer]:
+                - /url: http://localhost:3916/
+            - listitem [ref=f12e57]:
+              - text: ">"
+              - link "Machine Learning in Epidemiology with R" [ref=f12e58] [cursor=pointer]:
+                - /url: http://localhost:3916/
+        - generic [ref=f12e59]:
+          - heading "Machine Learning in Epidemiology with R" [level=1] [ref=f12e60]
+          - paragraph [ref=f12e61]: A two-part R-Ladies Rome workshop by Federica Gazzelloni
+      - paragraph [ref=f12e62]: Learn machine learning through epidemiological examples, from model fundamentals to an article-based prediction workflow.
+      - generic [ref=f12e63]:
+        - generic [ref=f12e64]:
+          - heading [level=3] [ref=f12e65]:
+            - text: Part 1 — September 2026
+            - link "Anchor" [ref=f12e66] [cursor=pointer]:
+              - /url: "#part-1-september-2026"
+              - text: 
+          - paragraph [ref=f12e67]: How models learn, gradient descent, and West Nile virus prediction.
+          - paragraph [ref=f12e68]:
+            - link "Explore Part 1" [ref=f12e69] [cursor=pointer]:
+              - /url: http://localhost:3916/part1/README.md
+            - text: ·
+            - link "Open the notebook" [ref=f12e70] [cursor=pointer]:
+              - /url: http://localhost:3916/part1/ml-workflow.html
+        - generic [ref=f12e71]:
+          - heading [level=3] [ref=f12e72]:
+            - text: Part 2 — 23 October 2026
+            - link "Anchor" [ref=f12e73] [cursor=pointer]:
+              - /url: "#part-2-23-october-2026"
+              - text: 
+          - paragraph [ref=f12e74]: An article-based heart-disease workflow with trees, neural networks, and model evaluation.
+          - paragraph [ref=f12e75]:
+            - link "Explore Part 2" [ref=f12e76] [cursor=pointer]:
+              - /url: http://localhost:3916/part2/README.md
+            - text: ·
+            - link "Open the notebook" [ref=f12e77] [cursor=pointer]:
+              - /url: http://localhost:3916/part2/workshop-part-2-trees-to-neural-networks.html
+      - paragraph [ref=f12e78]:
+        - text: Browse the
+        - link "workshop resources" [ref=f12e79] [cursor=pointer]:
+          - /url: http://localhost:3916/resources.html
+        - text: ", or start with a session above."
+  - contentinfo [ref=f12e80]:
+    - generic [ref=f12e81]:
+      - paragraph [ref=f12e83]: Machine Learning in Epidemiology with R
+      - paragraph [ref=f12e86]: R-Ladies Rome • Federica Gazzelloni

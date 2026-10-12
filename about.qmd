@@ -1,0 +1,33 @@
+---
+title: "About"
+format:
+  html:
+    toc: true
+    css: styles.css
+---
+
+## About the instructor
+
+Federica Gazzelloni is an actuary, statistician, data scientist, author and instructor whose work spans health metrics, actuarial modelling, R and Python, data visualisation and reproducible research. She leads [R-Ladies Rome](https://www.meetup.com/it-IT/rladies-rome/) and the [Rome R Users Group](https://www.meetup.com/it-IT/rome-r-users-group/), and she brings that practical, collaborative style to the workshop materials in this repository.
+
+This experience connects directly to the workshop’s practical approach to machine learning in epidemiology: we start with a clear understanding of the modelling problem, keep the code and data workflow reproducible, and explain how model choices relate to the epidemiological question being asked.
+
+## The two-part learning journey
+
+This workshop is designed as a guided progression through two connected learning experiences:
+
+- **Part 1 — September 2026:** foundations of machine learning, the idea of learning itself, gradient descent, and a West Nile virus prediction workflow.
+- **Part 2 — 23 October 2026:** a heart-disease workflow inspired by Wright et al., including trees, neural networks, evaluation, resampling and tuning.
+
+The materials are organised so that participants can move from conceptual understanding to code-based practice without losing sight of the data, the modelling assumptions and the interpretation of results.
+
+## Workshop materials and next steps
+
+The repository keeps the two session tracks easy to navigate while preserving the source files, notebook structure and project-level working directories.
+
+- [Workshop home](index.qmd)
+- [Part 1 materials](part1/guide.qmd)
+- [Part 2 materials](part2/guide.qmd)
+- [Original September workshop repository](https://github.com/fgazzelloni/Intro-to-ml-in-epidemiology-with-r)
+
+This new repository is a workshop organization and teaching resource for the current series. The original September repository and published website remain separate and are not replaced by these materials.

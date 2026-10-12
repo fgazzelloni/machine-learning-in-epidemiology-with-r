@@ -1,0 +1,316 @@
+- generic [active] [ref=f2e1]:
+  - banner [ref=f2e3]:
+    - navigation [ref=f2e4]:
+      - generic [ref=f2e5]:
+        - link "ML in Epidemiology" [ref=f2e7] [cursor=pointer]:
+          - /url: http://localhost:3916/
+        - generic "Search" [ref=f2e8]:
+          - combobox "Search" [ref=f2e9]:
+            - button "Search" [ref=f2e10] [cursor=pointer]
+        - list [ref=f2e15]:
+          - listitem [ref=f2e16]:
+            - link "Home" [ref=f2e17] [cursor=pointer]:
+              - /url: http://localhost:3916/
+          - listitem [ref=f2e18]:
+            - link "Part 1" [ref=f2e19] [cursor=pointer]:
+              - /url: http://localhost:3916/part1/ml-workflow.html
+          - listitem [ref=f2e20]:
+            - link "Part 2" [ref=f2e21] [cursor=pointer]:
+              - /url: http://localhost:3916/part2/workshop-part-2-trees-to-neural-networks.html
+          - listitem [ref=f2e22]:
+            - link "Resources" [ref=f2e23] [cursor=pointer]:
+              - /url: http://localhost:3916/resources.html
+          - listitem [ref=f2e24]:
+            - link "About" [ref=f2e25] [cursor=pointer]:
+              - /url: http://localhost:3916/about.html
+    - text:  >
+  - generic [ref=f2e26]:
+    - navigation [ref=f2e27]:
+      - list [ref=f2e29]:
+        - listitem [ref=f2e30]:
+          - generic [ref=f2e31] [cursor=pointer]:
+            - navigation [ref=f2e32]: Workshop
+            - navigation "Toggle section" [ref=f2e33]:
+              - generic [ref=f2e34]: 
+          - list [ref=f2e35]:
+            - listitem [ref=f2e36]:
+              - link "Machine Learning in Epidemiology with R" [ref=f2e38] [cursor=pointer]:
+                - /url: http://localhost:3916/
+            - listitem [ref=f2e39]:
+              - link "About" [ref=f2e41] [cursor=pointer]:
+                - /url: http://localhost:3916/about.html
+            - listitem [ref=f2e42]:
+              - link "Resources" [ref=f2e44] [cursor=pointer]:
+                - /url: http://localhost:3916/resources.html
+            - listitem [ref=f2e45]:
+              - link "How a Model Learns in Epidemiology" [ref=f2e47] [cursor=pointer]:
+                - /url: http://localhost:3916/part1/ml-workflow.html
+            - listitem [ref=f2e48]:
+              - link "Machine Learning in Epidemiology with R — Part 2" [ref=f2e50] [cursor=pointer]:
+                - /url: http://localhost:3916/part2/workshop-part-2-trees-to-neural-networks.html
+      - navigation [ref=f2e51]:
+        - heading "On this page" [level=2] [ref=f2e52]
+        - list [ref=f2e53]:
+          - listitem [ref=f2e54]:
+            - link "From the September introduction to the article workflow" [ref=f2e55] [cursor=pointer]:
+              - /url: http://localhost:3916/part2/workshop-part-2-trees-to-neural-networks.html#from-the-september-introduction-to-the-article-workflow
+          - listitem [ref=f2e56]:
+            - link "1. Meet the data" [ref=f2e57] [cursor=pointer]:
+              - /url: http://localhost:3916/part2/workshop-part-2-trees-to-neural-networks.html#meet-the-data
+          - listitem [ref=f2e58]:
+            - link "2. Fit and prune a tree — article section 2.1.3" [ref=f2e59] [cursor=pointer]:
+              - /url: http://localhost:3916/part2/workshop-part-2-trees-to-neural-networks.html#fit-and-prune-a-tree-article-section-2.1.3
+          - listitem [ref=f2e60]:
+            - link "3. Train a neural network — article section 2.2.3" [ref=f2e61] [cursor=pointer]:
+              - /url: http://localhost:3916/part2/workshop-part-2-trees-to-neural-networks.html#train-a-neural-network-article-section-2.2.3
+          - listitem [ref=f2e62]:
+            - link "4. Evaluate predictions — article section 3.1" [ref=f2e63] [cursor=pointer]:
+              - /url: http://localhost:3916/part2/workshop-part-2-trees-to-neural-networks.html#evaluate-predictions-article-section-3.1
+          - listitem [ref=f2e64]:
+            - link "5. Resample — article section 3.2" [ref=f2e65] [cursor=pointer]:
+              - /url: http://localhost:3916/part2/workshop-part-2-trees-to-neural-networks.html#resample-article-section-3.2
+          - listitem [ref=f2e66]:
+            - link "6. Tune within the training data — article section 4" [ref=f2e67] [cursor=pointer]:
+              - /url: http://localhost:3916/part2/workshop-part-2-trees-to-neural-networks.html#tune-within-the-training-data-article-section-4
+          - listitem [ref=f2e68]:
+            - link "7. Interpret — article section 5" [ref=f2e69] [cursor=pointer]:
+              - /url: http://localhost:3916/part2/workshop-part-2-trees-to-neural-networks.html#interpret-article-section-5
+          - listitem [ref=f2e70]:
+            - link "8. Generate synthetic observations — article section 6.2.5" [ref=f2e71] [cursor=pointer]:
+              - /url: http://localhost:3916/part2/workshop-part-2-trees-to-neural-networks.html#generate-synthetic-observations-article-section-6.2.5
+          - listitem [ref=f2e72]:
+            - link "Reproducibility" [ref=f2e73] [cursor=pointer]:
+              - /url: http://localhost:3916/part2/workshop-part-2-trees-to-neural-networks.html#reproducibility
+    - main [ref=f2e75]:
+      - generic [ref=f2e76]:
+        - navigation "breadcrumb" [ref=f2e77]:
+          - list [ref=f2e78]:
+            - listitem [ref=f2e79]:
+              - link "Workshop" [ref=f2e80] [cursor=pointer]:
+                - /url: http://localhost:3916/
+            - listitem [ref=f2e81]:
+              - text: ">"
+              - link "Machine Learning in Epidemiology with R — Part 2" [ref=f2e82] [cursor=pointer]:
+                - /url: http://localhost:3916/part2/workshop-part-2-trees-to-neural-networks.html
+        - generic [ref=f2e83]:
+          - heading "Machine Learning in Epidemiology with R — Part 2" [level=1] [ref=f2e84]
+          - paragraph [ref=f2e85]: Replicating the heart-disease workflow in Wright et al. (2026)
+        - generic [ref=f2e86]:
+          - generic [ref=f2e87]:
+            - generic [ref=f2e88]: Author
+            - paragraph [ref=f2e90]: Federica Gazzelloni
+          - generic [ref=f2e91]:
+            - generic [ref=f2e92]: Published
+            - paragraph [ref=f2e94]: October 23, 2026
+      - generic [ref=f2e95]:
+        - heading [level=2] [ref=f2e96]:
+          - text: From the September introduction to the article workflow
+          - link "Anchor" [ref=f2e97] [cursor=pointer]:
+            - /url: "#from-the-september-introduction-to-the-article-workflow"
+            - text: 
+        - paragraph [ref=f2e98]:
+          - text: In Part 1, we explored how learning works and applied it to West Nile surveillance. In this session, we use the heart-disease data from
+          - link "Wright et al." [ref=f2e99] [cursor=pointer]:
+            - /url: https://arxiv.org/html/2602.16352v1
+          - text: and follow the order of their published examples. Open
+          - code [ref=f2e100]: part2.Rproj
+          - text: and keep this folder as the working directory.
+        - paragraph [ref=f2e101]:
+          - text: The authors’ companion repository is currently unavailable. This workshop implements the published examples and documents the missing setup choices in
+          - link "the replication record" [ref=f2e102] [cursor=pointer]:
+            - /url: http://localhost:3916/part2/references/replication-notes.md
+          - text: . The frozen data and transformation details are in
+          - link "the data guide" [ref=f2e103] [cursor=pointer]:
+            - /url: http://localhost:3916/part2/data/README.md
+          - text: .
+      - generic [ref=f2e104]:
+        - heading [level=2] [ref=f2e105]:
+          - text: 1. Meet the data
+          - link "Anchor" [ref=f2e106] [cursor=pointer]:
+            - /url: "#meet-the-data"
+            - text: 
+        - paragraph [ref=f2e107]: The task is to distinguish existing heart disease from its absence using clinical measurements. This is a classification example, not a future cardiovascular risk score.
+        - group [ref=f2e109]:
+          - generic "Code" [ref=f2e110] [cursor=pointer]
+        - generic [ref=f2e111]:
+          - group [ref=f2e112]:
+            - generic "Code" [ref=f2e113] [cursor=pointer]
+          - code [ref=f2e116]: "[1] 270 14"
+          - group [ref=f2e117]:
+            - generic "Code" [ref=f2e118] [cursor=pointer]
+          - code [ref=f2e121]: absent present 150 120
+          - group [ref=f2e122]:
+            - generic "Code" [ref=f2e123] [cursor=pointer]
+          - code [ref=f2e126]: "'data.frame': 270 obs. of 14 variables: $ age : num 70 67 57 64 74 65 56 59 60 63 ... $ sex : Factor w/ 2 levels \"female\",\"male\": 2 1 2 2 1 2 2 2 2 1 ... $ chest_pain : Factor w/ 4 levels \"typical angina\",..: 4 3 2 4 2 4 3 4 4 4 ... $ resting_blood_pressure : num 130 115 124 128 120 120 130 110 140 150 ... $ serum_cholesterol : num 322 564 261 263 269 177 256 239 293 407 ... $ fasting_blood_sugar : Factor w/ 2 levels \"false\",\"true\": 1 1 1 1 1 1 2 1 1 1 ... $ resting_ecg : Factor w/ 3 levels \"normal\",\"ST-T wave abnormality\",..: 3 3 1 1 3 1 3 3 3 3 ... $ max_heart_rate : num 109 160 141 105 121 140 142 142 170 154 ... $ exercise_induced_angina: Factor w/ 2 levels \"no\",\"yes\": 1 1 1 2 2 1 2 2 1 1 ... $ ST_depression : num 2.4 1.6 0.3 0.2 0.2 0.4 0.6 1.2 1.2 4 ... $ ST_slope : Factor w/ 3 levels \"upsloping\",\"flat\",..: 2 2 1 2 1 1 2 2 2 2 ... $ num_major_vessels : num 3 0 0 1 1 0 1 1 2 3 ... $ thal : Factor w/ 3 levels \"normal\",\"fixed defect\",..: 1 3 3 3 1 3 2 3 3 3 ... $ heart_disease : Factor w/ 2 levels \"absent\",\"present\": 2 1 2 1 1 1 2 2 2 2 ..."
+        - paragraph [ref=f2e127]:
+          - text: There are 270 patients and 13 predictors. The outcome is
+          - code [ref=f2e128]: heart_disease
+          - text: ", and"
+          - code [ref=f2e129]: present
+          - text: is the positive class. Examine age, chest pain, cholesterol and exercise measurements before discussing what information a learner receives.
+      - generic [ref=f2e130]:
+        - heading [level=2] [ref=f2e131]:
+          - text: 2. Fit and prune a tree — article section 2.1.3
+          - link "Anchor" [ref=f2e132] [cursor=pointer]:
+            - /url: "#fit-and-prune-a-tree-article-section-2.1.3"
+            - text: 
+        - paragraph [ref=f2e133]:
+          - text: The
+          - link "core script" [ref=f2e134] [cursor=pointer]:
+            - /url: http://localhost:3916/part2/R/02-trees-and-evaluation.R
+          - text: follows the tree examples, then continues through evaluation and resampling. Read it section by section in RStudio. The first trees use the complete dataset for illustration, as in the article; their fitted accuracy would not estimate performance on new patients.
+        - generic [ref=f2e135]:
+          - group [ref=f2e136]:
+            - generic "Code" [ref=f2e137] [cursor=pointer]
+          - code [ref=f2e140]: quartz_off_screen 2
+          - group [ref=f2e141]:
+            - generic "Code" [ref=f2e142] [cursor=pointer]
+          - code [ref=f2e145]: quartz_off_screen 2
+          - group [ref=f2e146]:
+            - generic "Code" [ref=f2e147] [cursor=pointer]
+          - code [ref=f2e150]: quartz_off_screen 2
+          - group [ref=f2e151]:
+            - generic "Code" [ref=f2e152] [cursor=pointer]
+          - code [ref=f2e155]: truth response present absent present 30 8 absent 7 45
+          - group [ref=f2e156]:
+            - generic "Code" [ref=f2e157] [cursor=pointer]
+          - code [ref=f2e160]: classif.tpr classif.tnr classif.ppv classif.npv classif.acc 0.8108108 0.8490566 0.7894737 0.8653846 0.8333333
+          - group [ref=f2e161]:
+            - generic "Code" [ref=f2e162] [cursor=pointer]
+          - code [ref=f2e165]: subset auc 1 train 0.9954043 2 test 0.8980112
+          - group [ref=f2e166]:
+            - generic "Code" [ref=f2e167] [cursor=pointer]
+          - code [ref=f2e170]: classif.auc 0.8994852
+          - group [ref=f2e171]:
+            - generic "Code" [ref=f2e172] [cursor=pointer]
+          - code [ref=f2e175]: method auc 1 cv3 0.8994852 2 subsampling100 0.9025847 3 bootstrap40 0.9028705
+          - group [ref=f2e176]:
+            - generic "Code" [ref=f2e177] [cursor=pointer]
+        - figure "Default classification tree fitted to the complete heart-disease dataset." [ref=f2e179]:
+          - paragraph [ref=f2e180]
+        - paragraph [ref=f2e183]:
+          - text: Compare the default tree with the deep tree. The complexity plot connects pruning to the balance between fitting the observed sample and generalising beyond it. The article uses
+          - code [ref=f2e184]: cp = 0.031
+          - text: ; we retain that value for the replication.
+        - figure "Cross-validated relative error across candidate complexity parameter values." [ref=f2e186]:
+          - paragraph [ref=f2e187]
+        - figure "Classification tree pruned using cp = 0.031." [ref=f2e191]:
+          - paragraph [ref=f2e192]
+      - generic [ref=f2e195]:
+        - heading [level=2] [ref=f2e196]:
+          - text: 3. Train a neural network — article section 2.2.3
+          - link "Anchor" [ref=f2e197] [cursor=pointer]:
+            - /url: "#train-a-neural-network-article-section-2.2.3"
+            - text: 
+        - paragraph [ref=f2e198]:
+          - text: The
+          - link "network script" [ref=f2e199] [cursor=pointer]:
+            - /url: http://localhost:3916/part2/R/03-neural-network.R
+          - text: retains the published 64/32-unit architecture, dropout of 0.4, sigmoid output, Adam learning rate of 0.002, binary cross-entropy, 50 epochs, batches of 32, 20% validation and early stopping with patience 10. The data guide explains how we construct 22 inputs.
+        - paragraph [ref=f2e200]: Run this after configuring Keras. It is separate from the default render because it needs a Python backend.
+        - group [ref=f2e202]:
+          - generic "Code" [ref=f2e203] [cursor=pointer]
+        - paragraph [ref=f2e204]: The script saves training and validation loss and the observed test accuracy. The paper’s reported accuracy is not substituted for a local result. When a saved network run is available, its results appear below; these files come from the separate network script, rather than the core notebook render.
+        - generic [ref=f2e205]:
+          - code [ref=f2e208]: accuracy 1 0.8555556
+          - figure "Training and validation binary cross-entropy across 27 training epochs." [ref=f2e211]:
+            - paragraph [ref=f2e212]
+      - generic [ref=f2e215]:
+        - heading [level=2] [ref=f2e216]:
+          - text: 4. Evaluate predictions — article section 3.1
+          - link "Anchor" [ref=f2e217] [cursor=pointer]:
+            - /url: "#evaluate-predictions-article-section-3.1"
+            - text: 
+        - paragraph [ref=f2e218]: The core script has trained a probability-producing random forest on two-thirds of the observations and evaluated it on the remaining third. These are the results of our seeded run.
+        - generic [ref=f2e219]:
+          - group [ref=f2e220]:
+            - generic "Code" [ref=f2e221] [cursor=pointer]
+          - code [ref=f2e224]: measure value 1 classif.tpr 0.8108108 2 classif.tnr 0.8490566 3 classif.ppv 0.7894737 4 classif.npv 0.8653846 5 classif.acc 0.8333333
+          - group [ref=f2e225]:
+            - generic "Code" [ref=f2e226] [cursor=pointer]
+          - code [ref=f2e229]: response truth Freq 1 present present 30 2 absent present 7 3 present absent 8 4 absent absent 45
+        - figure "ROC curve for the random-forest holdout predictions." [ref=f2e231]:
+          - paragraph [ref=f2e232]
+        - figure "Classification error across probability thresholds on the holdout set." [ref=f2e236]:
+          - paragraph [ref=f2e237]
+        - figure "Precision-recall curve for the random-forest holdout predictions." [ref=f2e241]:
+          - paragraph [ref=f2e242]
+        - paragraph [ref=f2e245]: Discuss sensitivity, specificity, positive and negative predictive value, accuracy and the consequences of choosing a threshold. A good score does not establish causation.
+      - generic [ref=f2e246]:
+        - heading [level=2] [ref=f2e247]:
+          - text: 5. Resample — article section 3.2
+          - link "Anchor" [ref=f2e248] [cursor=pointer]:
+            - /url: "#resample-article-section-3.2"
+            - text: 
+        - paragraph [ref=f2e249]: The next examples use a 100-tree forest, 3-fold cross-validation, 100 repeated subsamples and 40 bootstrap repetitions. The core script retains those counts.
+        - generic [ref=f2e250]:
+          - group [ref=f2e251]:
+            - generic "Code" [ref=f2e252] [cursor=pointer]
+          - code [ref=f2e255]: subset auc 1 train 0.9954043 2 test 0.8980112
+          - group [ref=f2e256]:
+            - generic "Code" [ref=f2e257] [cursor=pointer]
+          - code [ref=f2e260]: iteration classif.auc 1 1 0.8989547 2 2 0.8931222 3 3 0.9063786
+          - group [ref=f2e261]:
+            - generic "Code" [ref=f2e262] [cursor=pointer]
+          - code [ref=f2e265]: method auc 1 cv3 0.8994852 2 subsampling100 0.9025847 3 bootstrap40 0.9028705
+        - paragraph [ref=f2e266]: Training and test AUC answer different questions. Resampling estimates how performance changes when the training sample changes.
+      - generic [ref=f2e267]:
+        - heading [level=2] [ref=f2e268]:
+          - text: 6. Tune within the training data — article section 4
+          - link "Anchor" [ref=f2e269] [cursor=pointer]:
+            - /url: "#tune-within-the-training-data-article-section-4"
+            - text: 
+        - paragraph [ref=f2e270]:
+          - text: The
+          - link "tuning script" [ref=f2e271] [cursor=pointer]:
+            - /url: http://localhost:3916/part2/R/04-tuning.R
+          - text: "supplies the missing objects in the published snippets and retains their search ranges and budgets. Run one method at a time from a terminal in this folder:"
+        - generic [ref=f2e272]:
+          - code [ref=f2e275]:
+            - generic [ref=f2e276]: Rscript R/04-tuning.R grid_search
+            - generic [ref=f2e277]: Rscript R/04-tuning.R random_search
+            - generic [ref=f2e278]: Rscript R/04-tuning.R mbo
+            - generic [ref=f2e279]: Rscript R/04-tuning.R nested
+          - button "Copy to Clipboard" [ref=f2e280] [cursor=pointer]
+        - paragraph [ref=f2e282]: The grid uses resolution 10; random search evaluates 500 configurations; MBO evaluates 30. Nested tuning uses 100 configurations per inner search, 10 inner folds and 10 outer folds. These are substantial runs, so the workshop can inspect the code before running the full searches outside the live session. The test set is excluded from search selection.
+      - generic [ref=f2e283]:
+        - heading [level=2] [ref=f2e284]:
+          - text: 7. Interpret — article section 5
+          - link "Anchor" [ref=f2e285] [cursor=pointer]:
+            - /url: "#interpret-article-section-5"
+            - text: 
+        - paragraph [ref=f2e286]: Discuss local explanations, feature effects and feature importance. The article explains these methods but prints no executable interpretation example. We do not introduce a different analysis and label it as replicated article code. Predictive importance describes a fitted model; it does not identify a causal effect.
+      - generic [ref=f2e287]:
+        - heading [level=2] [ref=f2e288]:
+          - text: 8. Generate synthetic observations — article section 6.2.5
+          - link "Anchor" [ref=f2e289] [cursor=pointer]:
+            - /url: "#generate-synthetic-observations-article-section-6.2.5"
+            - text: 
+        - paragraph [ref=f2e290]:
+          - text: The
+          - link "synthetic-data script" [ref=f2e291] [cursor=pointer]:
+            - /url: http://localhost:3916/part2/R/05-synthetic-data.R
+          - text: follows the adversarial random forest, density estimation and sampling sequence. Its output is labelled synthetic.
+        - group [ref=f2e293]:
+          - generic "Code" [ref=f2e294] [cursor=pointer]
+        - paragraph [ref=f2e295]: Synthetic rows are generated examples, not additional observed patients.
+      - generic [ref=f2e296]:
+        - heading [level=2] [ref=f2e297]:
+          - text: Reproducibility
+          - link "Anchor" [ref=f2e298] [cursor=pointer]:
+            - /url: "#reproducibility"
+            - text: 
+        - paragraph [ref=f2e299]:
+          - text: Observed results, seeds, split membership and package versions are saved in
+          - code [ref=f2e300]: outputs/
+          - text: . The raw data remain unchanged. See the
+          - link "replication record" [ref=f2e301] [cursor=pointer]:
+            - /url: http://localhost:3916/part2/references/replication-notes.md
+          - text: and
+          - link "validation results" [ref=f2e302] [cursor=pointer]:
+            - /url: http://localhost:3916/part2/outputs/VALIDATION.md
+          - text: for differences from the published snippets and validation status.
+  - contentinfo [ref=f2e303]:
+    - generic [ref=f2e304]:
+      - paragraph [ref=f2e306]: Machine Learning in Epidemiology with R
+      - paragraph [ref=f2e309]: R-Ladies Rome • Federica Gazzelloni

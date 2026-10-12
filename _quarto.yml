@@ -1,0 +1,103 @@
+project:
+  type: website
+  output-dir: _site
+  render:
+    - index.qmd
+    - about.qmd
+    - resources.qmd
+    - guide.qmd
+    - part1/guide.qmd
+    - part1/data/guide.qmd
+    - part1/references/sources.qmd
+    - part2/guide.qmd
+    - part2/data/guide.qmd
+    - part2/references/replication-notes.qmd
+    - part2/outputs/validation.qmd
+    - part1/ml-workflow.qmd
+    - part2/ml-workflow-2.qmd
+
+  resources:
+    - part1/presentation/**
+    - part1/R/**
+    - part1/exercises/**
+    - part1/solutions/**
+    - part1/app.R
+    - part1/*.Rproj
+    - part1/install-packages.R
+    - part1/check-setup.R
+    - part1/data/raw/**
+    - part1/data/processed/**
+    - part2/R/**
+    - part2/*.Rproj
+    - part2/install-packages.R
+    - part2/check-setup.R
+    - part2/data/raw/**
+    - part2/data/processed/**
+
+filters:
+  - website-links.lua
+
+website:
+  title: "Machine Learning in Epidemiology with R"
+  description: "Two-part workshop series in R for epidemiology and machine learning."
+  search:
+    location: navbar
+    type: overlay
+  navbar:
+    title: "ML in Epidemiology"
+    background: light
+    foreground: "#102845"
+    left:
+      - text: "Home"
+        href: index.qmd
+      - text: "Part 1"
+        href: part1/ml-workflow.qmd
+      - text: "Part 2"
+        href: part2/ml-workflow-2.qmd
+      - text: "Resources"
+        href: resources.qmd
+      - text: "About"
+        href: about.qmd
+  sidebar:
+    style: floating
+    contents:
+      - text: Home
+        href: index.qmd
+      - section: Part 1
+        contents:
+          - text: Session guide
+            href: part1/guide.qmd
+          - text: Teaching notebook
+            href: part1/ml-workflow.qmd
+          - text: Data and sources
+            href: part1/data/guide.qmd
+      - section: Part 2
+        contents:
+          - text: Session guide
+            href: part2/guide.qmd
+          - text: Teaching notebook
+            href: part2/ml-workflow-2.qmd
+          - text: Data guide
+            href: part2/data/guide.qmd
+          - text: Replication record
+            href: part2/references/replication-notes.qmd
+          - text: Validation
+            href: part2/outputs/validation.qmd
+      - text: Resources
+        href: resources.qmd
+      - text: About
+        href: about.qmd
+  page-footer:
+    left: "Machine Learning in Epidemiology with R"
+    right: "R-Ladies Rome • Federica Gazzelloni"
+
+format:
+  html:
+    theme: flatly
+    css: styles.css
+    toc: true
+    toc-depth: 3
+    page-layout: article
+    code-copy: true
+    code-overflow: wrap
+    code-fold: true

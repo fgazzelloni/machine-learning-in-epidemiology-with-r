@@ -7,9 +7,14 @@ format:
   html:
     toc: true
     toc-depth: 3
-    code-fold: false
+    toc-location: left
+    code-fold: true
     code-tools: true
-    theme: cosmo
+    code-copy: true
+    code-overflow: wrap
+    page-layout: article
+    css: ../styles.css
+output-file: index.html
 execute:
   echo: true
   warning: false
@@ -27,7 +32,7 @@ The goal is to understand both the mathematical idea of learning and the practic
 
 ## Slide presentation
 
-[Open the 12-slide presentation](presentation/){.btn .btn-primary}
+[Open the 12-slide presentation](presentation/index.html){.btn .btn-primary}
 [Download the editable PowerPoint](presentation/introduction-to-ml-in-epidemiology-with-r.pptx){.btn .btn-outline-primary}
 
 The slide deck introduces the broader multi-model workflow. The model-performance and variable-importance values shown in the deck are illustrative. The executable notebook below contains the observed results.
@@ -240,7 +245,7 @@ predict -> calculate loss-related gradients -> update w and b -> repeat
 This is the essence of the learning procedure:
 
 ```{r}
-#| evaluate: false
+#| eval: false
 source("app.R")
 shinyApp(
   ui = ui,
@@ -556,6 +561,8 @@ library(pROC)
 ```
 
 ```{r}
+#| fig-cap: "ROC curves for the candidate WNV prediction models on the 2025 holdout set."
+#| fig-align: center
 roc_data <- rbindlist(lapply(unique(holdout_predictions$model), 
                              function(m) {
   pred <- holdout_predictions[model == m]
@@ -584,6 +591,8 @@ ggplot(roc_data, aes(x = 1 - fpr, y = tpr, colour = model)) +
 ### Confusion matrix plot
 
 ```{r}
+#| fig-cap: "Confusion matrices for the candidate models on the 2025 holdout set at a 0.5 probability threshold."
+#| fig-align: center
 confusion_data <- rbindlist(lapply(unique(holdout_predictions$model), function(m) {
   pred <- holdout_predictions[model == m]
   pred$response <- ifelse(pred$probability >= 0.5, "yes", "no")
@@ -613,6 +622,8 @@ ggplot(confusion_data, aes(response, truth, fill = count)) +
 ### Geographic map of predictions
 
 ```{r}
+#| fig-cap: "Mean predicted probability of WNV activity by state in the 2025 holdout data."
+#| fig-align: center
 state_predictions <- holdout_predictions |> 
   group_by(state) |>
   summarise(predicted_probability = mean(probability), .groups = "drop")
