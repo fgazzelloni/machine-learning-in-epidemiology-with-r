@@ -7,6 +7,8 @@ format:
     css: styles.css
 ---
 
+Visit the live site: https://fgazzelloni.github.io/machine-learning-in-epidemiology-with-r/
+
 Learn machine learning through epidemiological examples, from model fundamentals to an article-based prediction workflow.
 
 <div class="card-grid">
