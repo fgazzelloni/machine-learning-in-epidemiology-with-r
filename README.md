@@ -5,7 +5,7 @@ A two-part R-Ladies Rome workshop series led by Federica Gazzelloni.
 | Session | Focus | Start here |
 | --- | --- | --- |
 | Part 1 — September 2026 | How a model learns, gradient descent and West Nile virus prediction | [Part 1 materials](part1/README.md) |
-| Part 2 — 23 October 2026 | From trees to neural networks with `mlr3` and Keras | [Part 2 materials](part2/README.md) — in preparation |
+| Part 2 — 23 October 2026 | Replicate the article’s heart-disease workflow | [Part 2 materials](part2/README.md) |
 
 ## Working with the materials
 
@@ -28,7 +28,10 @@ part1/
   references/          sources and reference article
 part2/
   part2.Rproj
-  ml-workflow-2.qmd     October workshop draft
+  ml-workflow-2.qmd     article-based October workshop
+  R/                   data, trees, network, tuning and synthetic-data scripts
+  data/                frozen OpenML heart-disease snapshot
+  outputs/             observed results and validation record
   _quarto.yml          separate Part 2 rendering configuration
 ```
 
@@ -40,5 +43,6 @@ the links they saved. This repository provides the newly organized series;
 it does not replace or redirect the original repository.
 
 Part 1 was copied from original commit `67316fc`. Teaching sources, data, slides
-and saved results were preserved byte for byte. Part 2 is the current local
-draft and is not yet an executable, complete workshop.
+and saved results were preserved byte for byte. Part 2 implements the article’s published heart-disease workflow.
+Its [validation record](part2/outputs/VALIDATION.md) distinguishes completed
+runs from full-budget checks still outstanding.

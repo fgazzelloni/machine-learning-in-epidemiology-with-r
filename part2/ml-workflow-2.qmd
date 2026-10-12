@@ -1,460 +1,166 @@
 ---
-title: "Machine Learning in Epidemiology with R — Part II: From Trees to Neural Networks"
+title: "Machine Learning in Epidemiology with R — Part 2"
+subtitle: "Replicating the heart-disease workflow in Wright et al. (2026)"
 author: "Federica Gazzelloni"
 date: "2026-10-23"
-lang: en
 format:
   html:
     toc: true
     code-copy: true
 output-file: workshop-part-2-trees-to-neural-networks.html
 execute:
-  eval: false
   echo: true
+  warning: false
+  message: false
 ---
 
+## From the September introduction to the article workflow
 
-**Date:** Friday, 23 October 2026  
-**Duration:** 2 hours  
-**Instructor:** Federica Gazzelloni  
-**Format:** Online, hands-on R workshop  
-**Main packages:** `mlr3`, `mlr3learners`, `keras3`, `ggplot2`
+In Part 1, we explored how learning works and applied it to West Nile surveillance.
+In this session, we use the heart-disease data from
+[Wright et al.](https://arxiv.org/html/2602.16352v1) and follow the order of their
+published examples. Open `part2.Rproj` and keep this folder as the working directory.
 
-**Reference:** [Machine Learning in Epidemiology (Wright et al., 2026)](https://arxiv.org/abs/2602.16352)
+The authors' companion repository is currently unavailable. This workshop
+implements the published examples and documents the missing setup choices in
+[the replication record](references/replication-notes.md).
+The frozen data and transformation details are in [the data guide](data/README.md).
 
-### 1. Workshop concept
+## 1. Meet the data
 
-The first workshop introduced the foundations of machine learning, starting with:
+The task is to distinguish existing heart disease from its absence using clinical
+measurements. This is a classification example, not a future cardiovascular risk score.
 
-\[
-\hat y=wx+b
-\]
-
-Participants explored how a model learns, how gradient descent adjusts parameters, and how loss decreases during training. We also introduced the transition from base R to `mlr3`.
-
-**Part II should move from understanding how learning works to implementing and comparing machine-learning models on epidemiological data.**
-
-This time, we will follow the practical examples in the reference article more closely, using `mlr3` for machine-learning workflows and Keras for neural networks.
-
-The central question becomes:
-
-> How do different machine-learning algorithms learn from the same epidemiological data, and how can we compare their predictive performance?
-
-The workshop should demonstrate three ideas:
-
-1. **Different algorithms learn differently.** Decision trees learn splitting rules, random forests combine trees, and neural networks learn weights through gradient-based optimisation.
-2. **Training performance is not enough.** Models must be evaluated on unseen observations using appropriate performance measures.
-3. **Prediction and interpretation are different objectives.** A model can predict disease accurately without identifying its causes.
-
-### 2. Learning objectives
-
-By the end of the workshop, participants should be able to:
-
-- Define an epidemiological classification task using `mlr3`.
-- Train decision trees and random forests.
-- Build and train a simple neural network with Keras.
-- Understand neural-network layers, activation functions, epochs and batch sizes.
-- Visualise neural-network training and validation loss.
-- Evaluate models using the same test observations.
-- Compare accuracy, sensitivity, specificity and ROC/AUC.
-- Understand overfitting and the role of cross-validation.
-- Interpret model results without confusing prediction with causation.
-
-I would avoid introducing too many additional algorithms. The value of this second workshop is in **following a complete and consistent modelling workflow**, rather than expanding the number of methods covered.
-
-### 3. Two-hour workshop programme
-
-I recommend using the **same heart-disease dataset as the article**, rather than West Nile or Ebola for this second session.
-
-The authors use 270 observations and 13 predictors, with heart disease present or absent as the binary outcome. Their examples use R, `mlr3`, decision trees and Keras, and they provide a companion code repository. This gives us a reproducible starting point and allows participants to follow the paper directly.
-
-| Time | Section | Practical activity |
-|---|---|---|
-| 0–10 min | Welcome and recap of Part I | From gradient descent to model training |
-| 10–25 min | Epidemiological classification | Import and explore the heart-disease dataset |
-| 25–45 min | Decision trees with `mlr3` | Train, visualise and interpret a classification tree |
-| 45–60 min | Random forests | Train an ensemble and compare predictions |
-| 60–70 min | Neural-network fundamentals | Layers, weights, activation functions and backpropagation |
-| 70–95 min | Neural networks with Keras | Build, compile, train and predict |
-| 95–105 min | Visualising learning | Training/validation loss and accuracy across epochs |
-| 105–115 min | Model evaluation | Compare models using the same test set |
-| 115–120 min | Conclusions and Q&A | Generalisation, interpretation and next steps |
-
-The neural-network section is the main new contribution, so it receives more time than the tree-based models.
-
-### 4. The practical workflow
-
-#### Step 1 — Start with the article's data
-
-Use the authors' preprocessing and dataset definitions wherever possible.
-
-The companion repository is:
-
-https://github.com/bips-hb/epi-handbook-ml
-
-The prediction problem is:
-
-\[
-P(\text{heart disease present}\mid X)
-\]
-
-where \(X\) represents the available patient characteristics.
-
-Participants should first examine the outcome distribution, predictors, missing values and class balance.
-
-Before fitting any model, we establish a common training/test split.
-
-**All three models must use the same training and test observations.** Otherwise, their performance estimates are not directly comparable.
-
-Preprocessing operations that learn from data, such as scaling or imputation, must be estimated on the training data only.
-
-#### Data and task setup placeholders
-
-The examples are retained as R chunks and are disabled during rendering (`eval: false`). They have not been executed or verified against the article's exact code. Complete the setup below, check the authors' data definitions and preprocessing, and configure a working Keras backend before running them sequentially.
-
-```{r}
-library(mlr3)
-library(mlr3learners)
-library(keras3)
-library(ggplot2)
-
-# TODO: replace with the prepared article dataset and documented outcome.
-data_path <- "REPLACE_WITH_HEART_DATA.csv"
-target_name <- "REPLACE_WITH_BINARY_OUTCOME"
-positive_class <- "REPLACE_WITH_DISEASE_PRESENT_LABEL"
-heart <- read.csv(data_path)
-heart[[target_name]] <- factor(heart[[target_name]])
-stopifnot(nlevels(heart[[target_name]]) == 2L)
-task <- TaskClassif$new(
-  id = "heart_disease", backend = heart,
-  target = target_name, positive = positive_class
-)
-set.seed(20261023)
-split <- partition(task, ratio = 0.8)
-train_ids <- split$train
-test_ids <- split$test
-
-# TODO: construct numeric matrices with matching encoded predictor columns.
-# Fit encoding, imputation and scaling on training data only.
-# For strict validation, fit preprocessing on the inner training subset
-# and supply a separately transformed validation set to fit().
-# x_train <- ...
-# x_test <- ...
-# y_train <- as.integer(task$truth(rows = train_ids) == positive_class)
-# y_test <- as.integer(task$truth(rows = test_ids) == positive_class)
-# n_features <- ncol(x_train)
+```{r, code=readLines("R/01-data.R")}
 ```
 
-Required R packages include `mlr3`, `mlr3learners`, `rpart`, `ranger`, `keras3`, `ggplot2` and `pROC`. Backend installation is a separate preparation step. The original proposal specifies TensorFlow; Keras 3 also supports other backends. Confirm one supported backend before the session.
-
-#### Step 2 — Decision trees with `mlr3`
-
-We begin with a classification tree because its learning process is relatively easy to visualise.
-
 ```{r}
-library(mlr3)
-library(mlr3learners)
-
-tree <- lrn(
-  "classif.rpart",
-  predict_type = "prob"
-)
-
-tree$train(task, row_ids = train_ids)
-
-prediction_tree <- tree$predict(
-  task,
-  row_ids = test_ids
-)
+dim(heart)
+table(heart$heart_disease)
+str(heart)
 ```
 
-Here, `task` is the classification task created from the prepared heart-disease data.
+There are 270 patients and 13 predictors. The outcome is `heart_disease`, and
+`present` is the positive class. Examine age, chest pain, cholesterol and exercise
+measurements before discussing what information a learner receives.
 
-The teaching question is:
+## 2. Fit and prune a tree — article section 2.1.3
 
-**What does the tree learn?**
+The [core script](R/02-trees-and-evaluation.R) follows the tree examples, then
+continues through evaluation and resampling. Read it section by section in RStudio.
+The first trees use the complete dataset for illustration, as in the article;
+their fitted accuracy would not estimate performance on new patients.
 
-Unlike linear regression, it does not learn a slope and intercept. It learns splitting variables, thresholds, terminal nodes and their predictions.
-
-The article also provides examples of tree visualisation and pruning, so we can reproduce these rather than introduce unrelated code.
-
-#### Step 3 — Random forests
-
-We then introduce ensemble learning.
-
-```{r}
-forest <- lrn(
-  "classif.ranger",
-  predict_type = "prob",
-  num.trees = 200
-)
-
-forest$train(task, row_ids = train_ids)
-
-prediction_forest <- forest$predict(
-  task,
-  row_ids = test_ids
-)
+```{r, code=readLines("R/02-trees-and-evaluation.R")}
 ```
 
-The conceptual progression is:
+![](figures/01-tree.png)
 
-**One tree → many trees → aggregated predictions**
+Compare the default tree with the deep tree. The complexity plot connects pruning
+to the balance between fitting the observed sample and generalising beyond it.
+The article uses `cp = 0.031`; we retain that value for the replication.
 
-The main question is whether combining trees improves predictive performance on unseen observations.
+![](figures/02-complexity.png)
+![](figures/03-pruned-tree.png)
 
-This also introduces the trade-off between predictive performance and interpretability.
+## 3. Train a neural network — article section 2.2.3
 
-#### Step 4 — Neural networks with Keras
+The [network script](R/03-neural-network.R) retains the published 64/32-unit
+architecture, dropout of 0.4, sigmoid output, Adam learning rate of 0.002,
+binary cross-entropy, 50 epochs, batches of 32, 20% validation and early stopping
+with patience 10. The data guide explains how we construct 22 inputs.
 
-This is the central section of Part II.
+Run this after configuring Keras. It is separate from the default render because
+it needs a Python backend.
 
-We return to the concepts introduced in September:
-
-\[
-\hat y=wx+b
-\]
-
-In Part I, we learned two parameters.
-
-In Part II, we build a network containing multiple layers and many trainable parameters.
-
-For binary classification, a simple network might look like:
-
-```{r}
-library(keras3)
-
-model <- keras_model_sequential(input_shape = c(n_features)) |>
-  layer_dense(
-    units = 16,
-    activation = "relu"
-  ) |>
-  layer_dropout(rate = 0.2) |>
-  layer_dense(
-    units = 8,
-    activation = "relu"
-  ) |>
-  layer_dense(
-    units = 1,
-    activation = "sigmoid"
-  )
+```{r, code=readLines("R/03-neural-network.R"), eval=FALSE}
 ```
 
-We then compile the model:
+The script saves training and validation loss and the observed test accuracy.
+The paper's reported accuracy is not substituted for a local result.
+When a saved network run is available, its results appear below; these files
+come from the separate network script, rather than the core notebook render.
 
 ```{r}
-model |> compile(
-  optimizer = optimizer_adam(
-    learning_rate = 0.001
-  ),
-  loss = "binary_crossentropy",
-  metrics = c("accuracy")
-)
+#| echo: false
+if (file.exists("outputs/neural-accuracy.csv")) {
+  print(read.csv("outputs/neural-accuracy.csv"))
+  knitr::include_graphics("figures/05-neural-loss.png")
+}
 ```
 
-This is where the first workshop becomes directly relevant.
+## 4. Evaluate predictions — article section 3.1
 
-Participants already know what a loss function and optimiser are. Now they see how those components are used to train a neural network.
-
-The network can then be trained:
+The core script has trained a probability-producing random forest on two-thirds
+of the observations and evaluated it on the remaining third. These are the
+results of our seeded run.
 
 ```{r}
-history <- model |> fit(
-  x_train,
-  y_train,
-  epochs = 50,
-  batch_size = 16,
-  validation_split = 0.2,
-  verbose = 0
-)
+read.csv("outputs/holdout-measures.csv")
+read.csv("outputs/confusion.csv")
 ```
 
-Here, `x_train` must be a numeric predictor matrix and `y_train` a binary numeric target. Categorical variables need suitable encoding, and numeric scaling should be fitted on training data only.
+![](figures/04-roc.png)
+![](figures/04-threshold.png)
+![](figures/04-prc.png)
 
-The code above is an illustrative `keras3` implementation, not a claim that these are the article's exact architecture or hyperparameters. We should reproduce the authors' specific configuration in the final workshop materials.
+Discuss sensitivity, specificity, positive and negative predictive value, accuracy
+and the consequences of choosing a threshold. A good score does not establish causation.
 
-### 5. The key demonstration: watching a neural network learn
+## 5. Resample — article section 3.2
 
-This should be the most memorable part of the session.
-
-In Part I, participants watched a regression line move as gradient descent adjusted two parameters.
-
-In Part II, they will see the same general principle applied to a neural network.
-
-Keras records the training history, allowing us to plot the evolution of loss and accuracy.
+The next examples use a 100-tree forest, 3-fold cross-validation, 100 repeated
+subsamples and 40 bootstrap repetitions. The core script retains those counts.
 
 ```{r}
-plot(history)
+read.csv("outputs/train-test-auc.csv")
+read.csv("outputs/cv3.csv")
+read.csv("outputs/resampling-summary.csv")
 ```
 
-I would also prepare a customised `ggplot2` visualisation showing training and validation loss across epochs.
+Training and test AUC answer different questions. Resampling estimates how
+performance changes when the training sample changes.
 
-The questions to ask participants are:
+## 6. Tune within the training data — article section 4
 
-**What happens when training loss decreases but validation loss starts increasing?**
+The [tuning script](R/04-tuning.R) supplies the missing objects in the published
+snippets and retains their search ranges and budgets. Run one method at a time
+from a terminal in this folder:
 
-**Does a larger number of epochs necessarily produce a better model?**
-
-**How do the learning rate and batch size influence training?**
-
-This is where we introduce overfitting and early stopping, using the actual training curves rather than only theoretical explanations.
-
-### 6. Compare the three models
-
-The final practical exercise should compare the models using a common evaluation framework.
-
-| Model | What does it learn? | Main advantage | Main limitation |
-|---|---|---|---|
-| Decision tree | Splitting rules | Easy to explain | Can be unstable |
-| Random forest | An ensemble of trees | Often strong predictive performance | Less transparent |
-| Neural network | Weights and biases | Flexible nonlinear relationships | More training choices and potentially harder to interpret |
-
-The comparison should include ROC/AUC, sensitivity, specificity and accuracy.
-
-We should also discuss the uncertainty associated with performance estimates, particularly because the heart-disease dataset contains only 270 observations.
-
-For a dataset this small, a neural network is not automatically preferable to a tree-based model.
-
-That is an important result in itself: **more complex does not necessarily mean better**.
-
-For the live exercise, we can use one held-out test set for a simple demonstration. For a more defensible model comparison, we should use repeated or stratified cross-validation, with preprocessing and any hyperparameter tuning contained within the resampling procedure.
-
-### 7. Connection with the article
-
-I would organise the workshop around the following sections of Wright et al. (2026):
-
-| Article section | Workshop application |
-|---|---|
-| 2.1 Tree-based Machine Learning Methods | Decision trees and random forests |
-| 2.2 Artificial Neural Networks | Network architecture and training |
-| 2.2.2 Training of a Neural Network | Backpropagation, gradient descent and epochs |
-| 2.2.3 Data Example | Keras implementation |
-| 3 Model Evaluation and Resampling | Cross-validation and performance metrics |
-| 4 Hyperparameter Tuning | Learning rate, batch size and model complexity |
-| 5 Interpretable Machine Learning | Discussion of what predictions mean |
-
-This keeps the workshop grounded in the article without trying to reproduce every chapter section.
-
----
-
-### 8. Proposed workshop materials
-
-I would prepare a single Quarto tutorial with the complete reproducible workflow, supported by a short presentation.
-
-The tutorial should contain the data preparation, `mlr3` models, Keras implementation, learning curves and model comparison. Participants should be able to run the examples independently after the workshop.
-
-The materials should also include a short exercise asking participants to change the number of epochs or network units, inspect the training curves, and explain whether the changes improved generalisation.
-
-One technical point needs attention before announcing the workshop: **Keras requires a working Python/TensorFlow backend**. We should test the complete environment on macOS, Windows and a clean installation, or provide a browser-based environment to avoid spending workshop time troubleshooting installations.
-
-### 9. Meetup description
-
-**Introduction to Machine Learning in Epidemiology with R — Part II: From Trees to Neural Networks**
-
-How do different machine-learning algorithms learn from epidemiological data? And how can we evaluate whether their predictions are reliable?
-
-Join R-Ladies Rome on **23 October 2026** for the second part of our hands-on workshop on machine learning in epidemiology.
-
-Building on our previous session, where we explored gradient descent and the mechanics of learning from scratch, we will now follow the practical examples from *Machine Learning in Epidemiology* (Wright et al., 2026).
-
-Using R, `mlr3` and Keras, we will work with a heart-disease dataset to train decision trees, random forests and neural networks.
-
-We will explore how these models learn, visualise neural-network training across epochs, and compare predictive performance using appropriate evaluation measures.
-
-Throughout the session, we will also discuss overfitting, model complexity, interpretability and the distinction between prediction and causal explanation.
-
-**What to expect:** Live R coding, practical examples and reproducible workshop materials.
-
-Basic familiarity with R is recommended. Some exposure to machine learning will be useful, but participants who missed Part I are also welcome.
-
-Everyone is welcome! 💜
-
----
-
-### 10. My recommendation for Part II
-
-I would make **Keras and neural-network training the central focus**, with decision trees and random forests serving as the comparison.
-
-The main learning progression would be:
-
-**Part I — September**
-
-*How does a machine learn?*
-
-Model → Loss → Gradient → Optimisation → Parameter updates
-
-**Part II — 23 October**
-
-*How do different machine-learning models learn, and how do we evaluate them?*
-
-Data → `mlr3` → Trees → Random Forests → Keras → Training Curves → Model Evaluation
-
-The strongest continuity between the two sessions is the transition from the interactive gradient-descent demonstration to Keras training curves. Participants will recognise the learning process, even though the model is now much more complex.
-
-I would also retain your book as a reference, connecting the `mlr` workflows in *Health Metrics and the Spread of Infectious Diseases* (2025) with the modern `mlr3` and Keras implementations used in this second workshop.
-
-**The final deliverable should be a reproducible Quarto tutorial following the article's code, not simply a slide presentation.** That will give participants something they can study, modify and reuse after the event.
-
-## Additional runnable examples
-
-### Training and validation curves
-
-```{r}
-curves <- data.frame(
-  epoch = rep(seq_along(history$metrics$loss), 2),
-  loss = c(history$metrics$loss, history$metrics$val_loss),
-  dataset = rep(c("Training", "Validation"),
-                each = length(history$metrics$loss))
-)
-ggplot(curves, aes(epoch, loss, colour = dataset)) +
-  geom_line() +
-  labs(x = "Epoch", y = "Binary cross-entropy", colour = NULL) +
-  theme_minimal()
+```bash
+Rscript R/04-tuning.R grid_search
+Rscript R/04-tuning.R random_search
+Rscript R/04-tuning.R mbo
+Rscript R/04-tuning.R nested
 ```
 
-### Common test-set evaluation
+The grid uses resolution 10; random search evaluates 500 configurations;
+MBO evaluates 30. Nested tuning uses 100 configurations per inner search,
+10 inner folds and 10 outer folds. These are substantial runs, so the workshop
+can inspect the code before running the full searches outside the live session.
+The test set is excluded from search selection.
 
-Run after completing the numeric-matrix setup and fitting the network. Use a prespecified threshold of 0.5 for this teaching comparison; do not choose it using test outcomes.
+## 7. Interpret — article section 5
 
-```{r}
-measures <- msrs(c(
-  "classif.acc", "classif.sensitivity",
-  "classif.specificity", "classif.auc"
-))
-tree_scores <- prediction_tree$score(measures)
-forest_scores <- prediction_forest$score(measures)
-nn_prob <- as.numeric(predict(model, x_test))
-stopifnot(length(nn_prob) == length(test_ids))
-truth <- as.integer(task$truth(rows = test_ids) == positive_class)
-nn_class <- as.integer(nn_prob >= 0.5)
-nn_scores <- c(
-  classif.acc = mean(nn_class == truth),
-  classif.sensitivity = mean(nn_class[truth == 1] == 1),
-  classif.specificity = mean(nn_class[truth == 0] == 0),
-  classif.auc = as.numeric(pROC::auc(
-    pROC::roc(truth, nn_prob, levels = c(0, 1),
-              direction = "<", quiet = TRUE)
-  ))
-)
-comparison <- rbind(
-  Tree = tree_scores, Forest = forest_scores, Neural_network = nn_scores
-)
-comparison
+Discuss local explanations, feature effects and feature importance. The article
+explains these methods but prints no executable interpretation example.
+We do not introduce a different analysis and label it as replicated article code.
+Predictive importance describes a fitted model; it does not identify a causal effect.
+
+## 8. Generate synthetic observations — article section 6.2.5
+
+The [synthetic-data script](R/05-synthetic-data.R) follows the adversarial random
+forest, density estimation and sampling sequence. Its output is labelled synthetic.
+
+```{r, code=readLines("R/05-synthetic-data.R"), eval=FALSE}
 ```
 
-Check that both classes occur in the test set. No model scores or learning curves are asserted here. Reserve the test set for final evaluation; use training/validation data for architecture, stopping and threshold decisions.
+Synthetic rows are generated examples, not additional observed patients.
 
-## Materials, references and preparation checklist
+## Reproducibility
 
-- [Wright et al., Machine Learning in Epidemiology (arXiv:2602.16352)](https://arxiv.org/abs/2602.16352).
-- [Authors' companion code repository](https://github.com/bips-hb/epi-handbook-ml).
-- [Federica Gazzelloni, Health Metrics and the Spread of Infectious Diseases](https://federicagazzelloni.com/hmsidR/).
-- [Existing workshop repository and Part I materials](https://github.com/fgazzelloni/Intro-to-ml-in-epidemiology-with-r).
-- Part II tutorial: this Quarto file; prepared data, slides, exercise and solution links: **TO ADD**.
-- Meetup event URL, start time and joining link: **TO CONFIRM**. The announcement above is a draft.
-- Recording URL: **TO ADD after the workshop**.
-
-Before the session: confirm the heart-data snapshot, outcome coding, sample size and predictor definitions against the article; replace setup placeholders; align the network with the authors' code; test the complete workflow and backend on participant environments; prepare an accessible browser-based alternative if needed; record package versions with `sessionInfo()`.
-
-The plan retains the preceding response's proposed 270 observations and 13 predictors. These counts and the exact implementation require confirmation before teaching. This is a complete workshop plan with illustrative code, not a tested end-to-end tutorial.
-
+Observed results, seeds, split membership and package versions are saved in
+`outputs/`. The raw data remain unchanged. See the
+[replication record](references/replication-notes.md) and
+[validation results](outputs/VALIDATION.md) for differences from the
+published snippets and validation status.

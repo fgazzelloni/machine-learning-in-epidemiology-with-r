@@ -9,7 +9,7 @@
 <meta name="author" content="Federica Gazzelloni">
 <meta name="dcterms.date" content="2026-10-23">
 
-<title>Machine Learning in Epidemiology with R — Part II: From Trees to Neural Networks</title>
+<title>Machine Learning in Epidemiology with R — Part 2</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -84,22 +84,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#workshop-concept" id="toc-workshop-concept" class="nav-link active" data-scroll-target="#workshop-concept">1. Workshop concept</a></li>
-  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link" data-scroll-target="#learning-objectives">2. Learning objectives</a></li>
-  <li><a href="#two-hour-workshop-programme" id="toc-two-hour-workshop-programme" class="nav-link" data-scroll-target="#two-hour-workshop-programme">3. Two-hour workshop programme</a></li>
-  <li><a href="#the-practical-workflow" id="toc-the-practical-workflow" class="nav-link" data-scroll-target="#the-practical-workflow">4. The practical workflow</a></li>
-  <li><a href="#the-key-demonstration-watching-a-neural-network-learn" id="toc-the-key-demonstration-watching-a-neural-network-learn" class="nav-link" data-scroll-target="#the-key-demonstration-watching-a-neural-network-learn">5. The key demonstration: watching a neural network learn</a></li>
-  <li><a href="#compare-the-three-models" id="toc-compare-the-three-models" class="nav-link" data-scroll-target="#compare-the-three-models">6. Compare the three models</a></li>
-  <li><a href="#connection-with-the-article" id="toc-connection-with-the-article" class="nav-link" data-scroll-target="#connection-with-the-article">7. Connection with the article</a></li>
-  <li><a href="#proposed-workshop-materials" id="toc-proposed-workshop-materials" class="nav-link" data-scroll-target="#proposed-workshop-materials">8. Proposed workshop materials</a></li>
-  <li><a href="#meetup-description" id="toc-meetup-description" class="nav-link" data-scroll-target="#meetup-description">9. Meetup description</a></li>
-  <li><a href="#my-recommendation-for-part-ii" id="toc-my-recommendation-for-part-ii" class="nav-link" data-scroll-target="#my-recommendation-for-part-ii">10. My recommendation for Part II</a></li>
-  <li><a href="#additional-runnable-examples" id="toc-additional-runnable-examples" class="nav-link" data-scroll-target="#additional-runnable-examples">Additional runnable examples</a>
-  <ul class="collapse">
-  <li><a href="#training-and-validation-curves" id="toc-training-and-validation-curves" class="nav-link" data-scroll-target="#training-and-validation-curves">Training and validation curves</a></li>
-  <li><a href="#common-test-set-evaluation" id="toc-common-test-set-evaluation" class="nav-link" data-scroll-target="#common-test-set-evaluation">Common test-set evaluation</a></li>
-  </ul></li>
-  <li><a href="#materials-references-and-preparation-checklist" id="toc-materials-references-and-preparation-checklist" class="nav-link" data-scroll-target="#materials-references-and-preparation-checklist">Materials, references and preparation checklist</a></li>
+  <li><a href="#from-the-september-introduction-to-the-article-workflow" id="toc-from-the-september-introduction-to-the-article-workflow" class="nav-link active" data-scroll-target="#from-the-september-introduction-to-the-article-workflow">From the September introduction to the article workflow</a></li>
+  <li><a href="#meet-the-data" id="toc-meet-the-data" class="nav-link" data-scroll-target="#meet-the-data">1. Meet the data</a></li>
+  <li><a href="#fit-and-prune-a-tree-article-section-2.1.3" id="toc-fit-and-prune-a-tree-article-section-2.1.3" class="nav-link" data-scroll-target="#fit-and-prune-a-tree-article-section-2.1.3">2. Fit and prune a tree — article section 2.1.3</a></li>
+  <li><a href="#train-a-neural-network-article-section-2.2.3" id="toc-train-a-neural-network-article-section-2.2.3" class="nav-link" data-scroll-target="#train-a-neural-network-article-section-2.2.3">3. Train a neural network — article section 2.2.3</a></li>
+  <li><a href="#evaluate-predictions-article-section-3.1" id="toc-evaluate-predictions-article-section-3.1" class="nav-link" data-scroll-target="#evaluate-predictions-article-section-3.1">4. Evaluate predictions — article section 3.1</a></li>
+  <li><a href="#resample-article-section-3.2" id="toc-resample-article-section-3.2" class="nav-link" data-scroll-target="#resample-article-section-3.2">5. Resample — article section 3.2</a></li>
+  <li><a href="#tune-within-the-training-data-article-section-4" id="toc-tune-within-the-training-data-article-section-4" class="nav-link" data-scroll-target="#tune-within-the-training-data-article-section-4">6. Tune within the training data — article section 4</a></li>
+  <li><a href="#interpret-article-section-5" id="toc-interpret-article-section-5" class="nav-link" data-scroll-target="#interpret-article-section-5">7. Interpret — article section 5</a></li>
+  <li><a href="#generate-synthetic-observations-article-section-6.2.5" id="toc-generate-synthetic-observations-article-section-6.2.5" class="nav-link" data-scroll-target="#generate-synthetic-observations-article-section-6.2.5">8. Generate synthetic observations — article section 6.2.5</a></li>
+  <li><a href="#reproducibility" id="toc-reproducibility" class="nav-link" data-scroll-target="#reproducibility">Reproducibility</a></li>
   </ul>
 </nav>
 </div>
@@ -107,7 +101,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Machine Learning in Epidemiology with R — Part II: From Trees to Neural Networks</h1>
+<h1 class="title">Machine Learning in Epidemiology with R — Part 2</h1>
+<p class="subtitle lead">Replicating the heart-disease workflow in Wright et al.&nbsp;(2026)</p>
 </div>
 
 
@@ -136,470 +131,349 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p><strong>Date:</strong> Friday, 23 October 2026<br>
-<strong>Duration:</strong> 2 hours<br>
-<strong>Instructor:</strong> Federica Gazzelloni<br>
-<strong>Format:</strong> Online, hands-on R workshop<br>
-<strong>Main packages:</strong> <code>mlr3</code>, <code>mlr3learners</code>, <code>keras3</code>, <code>ggplot2</code></p>
-<p><strong>Reference:</strong> <a href="https://arxiv.org/abs/2602.16352">Machine Learning in Epidemiology (Wright et al., 2026)</a></p>
-<section id="workshop-concept" class="level3">
-<h3 class="anchored" data-anchor-id="workshop-concept">1. Workshop concept</h3>
-<p>The first workshop introduced the foundations of machine learning, starting with:</p>
-<p>[ y=wx+b ]</p>
-<p>Participants explored how a model learns, how gradient descent adjusts parameters, and how loss decreases during training. We also introduced the transition from base R to <code>mlr3</code>.</p>
-<p><strong>Part II should move from understanding how learning works to implementing and comparing machine-learning models on epidemiological data.</strong></p>
-<p>This time, we will follow the practical examples in the reference article more closely, using <code>mlr3</code> for machine-learning workflows and Keras for neural networks.</p>
-<p>The central question becomes:</p>
-<blockquote class="blockquote">
-<p>How do different machine-learning algorithms learn from the same epidemiological data, and how can we compare their predictive performance?</p>
-</blockquote>
-<p>The workshop should demonstrate three ideas:</p>
-<ol type="1">
-<li><strong>Different algorithms learn differently.</strong> Decision trees learn splitting rules, random forests combine trees, and neural networks learn weights through gradient-based optimisation.</li>
-<li><strong>Training performance is not enough.</strong> Models must be evaluated on unseen observations using appropriate performance measures.</li>
-<li><strong>Prediction and interpretation are different objectives.</strong> A model can predict disease accurately without identifying its causes.</li>
-</ol>
+<section id="from-the-september-introduction-to-the-article-workflow" class="level2">
+<h2 class="anchored" data-anchor-id="from-the-september-introduction-to-the-article-workflow">From the September introduction to the article workflow</h2>
+<p>In Part 1, we explored how learning works and applied it to West Nile surveillance. In this session, we use the heart-disease data from <a href="https://arxiv.org/html/2602.16352v1">Wright et al.</a> and follow the order of their published examples. Open <code>part2.Rproj</code> and keep this folder as the working directory.</p>
+<p>The authors’ companion repository is currently unavailable. This workshop implements the published examples and documents the missing setup choices in <a href="references/replication-notes.md">the replication record</a>. The frozen data and transformation details are in <a href="data/README.md">the data guide</a>.</p>
 </section>
-<section id="learning-objectives" class="level3">
-<h3 class="anchored" data-anchor-id="learning-objectives">2. Learning objectives</h3>
-<p>By the end of the workshop, participants should be able to:</p>
-<ul>
-<li>Define an epidemiological classification task using <code>mlr3</code>.</li>
-<li>Train decision trees and random forests.</li>
-<li>Build and train a simple neural network with Keras.</li>
-<li>Understand neural-network layers, activation functions, epochs and batch sizes.</li>
-<li>Visualise neural-network training and validation loss.</li>
-<li>Evaluate models using the same test observations.</li>
-<li>Compare accuracy, sensitivity, specificity and ROC/AUC.</li>
-<li>Understand overfitting and the role of cross-validation.</li>
-<li>Interpret model results without confusing prediction with causation.</li>
-</ul>
-<p>I would avoid introducing too many additional algorithms. The value of this second workshop is in <strong>following a complete and consistent modelling workflow</strong>, rather than expanding the number of methods covered.</p>
-</section>
-<section id="two-hour-workshop-programme" class="level3">
-<h3 class="anchored" data-anchor-id="two-hour-workshop-programme">3. Two-hour workshop programme</h3>
-<p>I recommend using the <strong>same heart-disease dataset as the article</strong>, rather than West Nile or Ebola for this second session.</p>
-<p>The authors use 270 observations and 13 predictors, with heart disease present or absent as the binary outcome. Their examples use R, <code>mlr3</code>, decision trees and Keras, and they provide a companion code repository. This gives us a reproducible starting point and allows participants to follow the paper directly.</p>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 33%">
-<col style="width: 33%">
-<col style="width: 33%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Time</th>
-<th>Section</th>
-<th>Practical activity</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>0–10 min</td>
-<td>Welcome and recap of Part I</td>
-<td>From gradient descent to model training</td>
-</tr>
-<tr class="even">
-<td>10–25 min</td>
-<td>Epidemiological classification</td>
-<td>Import and explore the heart-disease dataset</td>
-</tr>
-<tr class="odd">
-<td>25–45 min</td>
-<td>Decision trees with <code>mlr3</code></td>
-<td>Train, visualise and interpret a classification tree</td>
-</tr>
-<tr class="even">
-<td>45–60 min</td>
-<td>Random forests</td>
-<td>Train an ensemble and compare predictions</td>
-</tr>
-<tr class="odd">
-<td>60–70 min</td>
-<td>Neural-network fundamentals</td>
-<td>Layers, weights, activation functions and backpropagation</td>
-</tr>
-<tr class="even">
-<td>70–95 min</td>
-<td>Neural networks with Keras</td>
-<td>Build, compile, train and predict</td>
-</tr>
-<tr class="odd">
-<td>95–105 min</td>
-<td>Visualising learning</td>
-<td>Training/validation loss and accuracy across epochs</td>
-</tr>
-<tr class="even">
-<td>105–115 min</td>
-<td>Model evaluation</td>
-<td>Compare models using the same test set</td>
-</tr>
-<tr class="odd">
-<td>115–120 min</td>
-<td>Conclusions and Q&amp;A</td>
-<td>Generalisation, interpretation and next steps</td>
-</tr>
-</tbody>
-</table>
-<p>The neural-network section is the main new contribution, so it receives more time than the tree-based models.</p>
-</section>
-<section id="the-practical-workflow" class="level3">
-<h3 class="anchored" data-anchor-id="the-practical-workflow">4. The practical workflow</h3>
-<section id="step-1-start-with-the-articles-data" class="level4">
-<h4 class="anchored" data-anchor-id="step-1-start-with-the-articles-data">Step 1 — Start with the article’s data</h4>
-<p>Use the authors’ preprocessing and dataset definitions wherever possible.</p>
-<p>The companion repository is:</p>
-<p>https://github.com/bips-hb/epi-handbook-ml</p>
-<p>The prediction problem is:</p>
-<p>[ P(X) ]</p>
-<p>where (X) represents the available patient characteristics.</p>
-<p>Participants should first examine the outcome distribution, predictors, missing values and class balance.</p>
-<p>Before fitting any model, we establish a common training/test split.</p>
-<p><strong>All three models must use the same training and test observations.</strong> Otherwise, their performance estimates are not directly comparable.</p>
-<p>Preprocessing operations that learn from data, such as scaling or imputation, must be estimated on the training data only.</p>
-</section>
-<section id="data-and-task-setup-placeholders" class="level4">
-<h4 class="anchored" data-anchor-id="data-and-task-setup-placeholders">Data and task setup placeholders</h4>
-<p>The examples are retained as R chunks and are disabled during rendering (<code>eval: false</code>). They have not been executed or verified against the article’s exact code. Complete the setup below, check the authors’ data definitions and preprocessing, and configure a working Keras backend before running them sequentially.</p>
+<section id="meet-the-data" class="level2">
+<h2 class="anchored" data-anchor-id="meet-the-data">1. Meet the data</h2>
+<p>The task is to distinguish existing heart disease from its absence using clinical measurements. This is a classification example, not a future cardiovascular risk score.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlr3)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlr3learners)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(keras3)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">TODO</span><span class="co">: replace with the prepared article dataset and documented outcome.</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>data_path <span class="ot">&lt;-</span> <span class="st">"REPLACE_WITH_HEART_DATA.csv"</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>target_name <span class="ot">&lt;-</span> <span class="st">"REPLACE_WITH_BINARY_OUTCOME"</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>positive_class <span class="ot">&lt;-</span> <span class="st">"REPLACE_WITH_DISEASE_PRESENT_LABEL"</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>heart <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(data_path)</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>heart[[target_name]] <span class="ot">&lt;-</span> <span class="fu">factor</span>(heart[[target_name]])</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">stopifnot</span>(<span class="fu">nlevels</span>(heart[[target_name]]) <span class="sc">==</span> <span class="dv">2</span>L)</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>task <span class="ot">&lt;-</span> TaskClassif<span class="sc">$</span><span class="fu">new</span>(</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">id =</span> <span class="st">"heart_disease"</span>, <span class="at">backend =</span> heart,</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">target =</span> target_name, <span class="at">positive =</span> positive_class</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">20261023</span>)</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>split <span class="ot">&lt;-</span> <span class="fu">partition</span>(task, <span class="at">ratio =</span> <span class="fl">0.8</span>)</span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>train_ids <span class="ot">&lt;-</span> split<span class="sc">$</span>train</span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>test_ids <span class="ot">&lt;-</span> split<span class="sc">$</span>test</span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">TODO</span><span class="co">: construct numeric matrices with matching encoded predictor columns.</span></span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit encoding, imputation and scaling on training data only.</span></span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="co"># For strict validation, fit preprocessing on the inner training subset</span></span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="co"># and supply a separately transformed validation set to fit().</span></span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="co"># x_train &lt;- ...</span></span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="co"># x_test &lt;- ...</span></span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="co"># y_train &lt;- as.integer(task$truth(rows = train_ids) == positive_class)</span></span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="co"># y_test &lt;- as.integer(task$truth(rows = test_ids) == positive_class)</span></span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="co"># n_features &lt;- ncol(x_train)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Article section 1 and appendix: heart-statlog, OpenML 53, version 1.</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Run from part2/. All preprocessing choices are listed in data/README.md.</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>arff <span class="ot">&lt;-</span> <span class="fu">readLines</span>(<span class="st">"data/raw/heart-statlog.arff"</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>start <span class="ot">&lt;-</span> <span class="fu">grep</span>(<span class="st">"^@data"</span>, arff, <span class="at">ignore.case =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>heart <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="at">text =</span> <span class="fu">paste</span>(arff[(start <span class="sc">+</span> <span class="dv">1</span>)<span class="sc">:</span><span class="fu">length</span>(arff)], <span class="at">collapse =</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>),</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>                  <span class="at">header =</span> <span class="cn">FALSE</span>, <span class="at">strip.white =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(heart) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"age"</span>, <span class="st">"sex"</span>, <span class="st">"chest_pain"</span>, <span class="st">"resting_blood_pressure"</span>,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">"serum_cholesterol"</span>, <span class="st">"fasting_blood_sugar"</span>, <span class="st">"resting_ecg"</span>, <span class="st">"max_heart_rate"</span>,</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">"exercise_induced_angina"</span>, <span class="st">"ST_depression"</span>, <span class="st">"ST_slope"</span>, <span class="st">"num_major_vessels"</span>,</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="st">"thal"</span>, <span class="st">"heart_disease"</span>)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">stopifnot</span>(<span class="fu">nrow</span>(heart) <span class="sc">==</span> <span class="dv">270</span>L, <span class="fu">ncol</span>(heart) <span class="sc">==</span> <span class="dv">14</span>L, <span class="sc">!</span><span class="fu">anyNA</span>(heart))</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>heart<span class="sc">$</span>sex <span class="ot">&lt;-</span> <span class="fu">factor</span>(heart<span class="sc">$</span>sex, <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="fu">c</span>(<span class="st">"female"</span>, <span class="st">"male"</span>))</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>heart<span class="sc">$</span>chest_pain <span class="ot">&lt;-</span> <span class="fu">factor</span>(heart<span class="sc">$</span>chest_pain, <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>,</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="st">"typical angina"</span>, <span class="st">"atypical angina"</span>, <span class="st">"non-anginal pain"</span>, <span class="st">"asymptomatic"</span>))</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>heart<span class="sc">$</span>fasting_blood_sugar <span class="ot">&lt;-</span> <span class="fu">factor</span>(heart<span class="sc">$</span>fasting_blood_sugar, <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="fu">c</span>(<span class="st">"false"</span>, <span class="st">"true"</span>))</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>heart<span class="sc">$</span>resting_ecg <span class="ot">&lt;-</span> <span class="fu">factor</span>(heart<span class="sc">$</span>resting_ecg, <span class="dv">0</span><span class="sc">:</span><span class="dv">2</span>,</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="st">"normal"</span>, <span class="st">"ST-T wave abnormality"</span>, <span class="st">"left ventricular hypertrophy"</span>))</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>heart<span class="sc">$</span>exercise_induced_angina <span class="ot">&lt;-</span> <span class="fu">factor</span>(heart<span class="sc">$</span>exercise_induced_angina, <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="fu">c</span>(<span class="st">"no"</span>, <span class="st">"yes"</span>))</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>heart<span class="sc">$</span>ST_slope <span class="ot">&lt;-</span> <span class="fu">factor</span>(heart<span class="sc">$</span>ST_slope, <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="fu">c</span>(<span class="st">"upsloping"</span>, <span class="st">"flat"</span>, <span class="st">"downsloping"</span>))</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>heart<span class="sc">$</span>thal <span class="ot">&lt;-</span> <span class="fu">factor</span>(heart<span class="sc">$</span>thal, <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">6</span>, <span class="dv">7</span>), <span class="fu">c</span>(<span class="st">"normal"</span>, <span class="st">"fixed defect"</span>, <span class="st">"reversible defect"</span>))</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>heart<span class="sc">$</span>heart_disease <span class="ot">&lt;-</span> <span class="fu">factor</span>(heart<span class="sc">$</span>heart_disease, <span class="fu">c</span>(<span class="st">"absent"</span>, <span class="st">"present"</span>))</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>numeric_columns <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"age"</span>, <span class="st">"resting_blood_pressure"</span>, <span class="st">"serum_cholesterol"</span>,</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"max_heart_rate"</span>, <span class="st">"ST_depression"</span>, <span class="st">"num_major_vessels"</span>)</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>heart[numeric_columns] <span class="ot">&lt;-</span> <span class="fu">lapply</span>(heart[numeric_columns], as.numeric)</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="fu">stopifnot</span>(<span class="sc">!</span><span class="fu">anyNA</span>(heart), <span class="fu">identical</span>(<span class="fu">as.integer</span>(<span class="fu">table</span>(heart<span class="sc">$</span>heart_disease)), <span class="fu">c</span>(<span class="dv">150</span>L, <span class="dv">120</span>L)))</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="st">"outputs"</span>, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="st">"figures"</span>, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(heart, <span class="st">"data/processed/heart.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Required R packages include <code>mlr3</code>, <code>mlr3learners</code>, <code>rpart</code>, <code>ranger</code>, <code>keras3</code>, <code>ggplot2</code> and <code>pROC</code>. Backend installation is a separate preparation step. The original proposal specifies TensorFlow; Keras 3 also supports other backends. Confirm one supported backend before the session.</p>
-</section>
-<section id="step-2-decision-trees-with-mlr3" class="level4">
-<h4 class="anchored" data-anchor-id="step-2-decision-trees-with-mlr3">Step 2 — Decision trees with <code>mlr3</code></h4>
-<p>We begin with a classification tree because its learning process is relatively easy to visualise.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlr3)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlr3learners)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>tree <span class="ot">&lt;-</span> <span class="fu">lrn</span>(</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"classif.rpart"</span>,</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">predict_type =</span> <span class="st">"prob"</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>tree<span class="sc">$</span><span class="fu">train</span>(task, <span class="at">row_ids =</span> train_ids)</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>prediction_tree <span class="ot">&lt;-</span> tree<span class="sc">$</span><span class="fu">predict</span>(</span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  task,</span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">row_ids =</span> test_ids</span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(heart)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 270  14</code></pre>
 </div>
-<p>Here, <code>task</code> is the classification task created from the prepared heart-disease data.</p>
-<p>The teaching question is:</p>
-<p><strong>What does the tree learn?</strong></p>
-<p>Unlike linear regression, it does not learn a slope and intercept. It learns splitting variables, thresholds, terminal nodes and their predictions.</p>
-<p>The article also provides examples of tree visualisation and pruning, so we can reproduce these rather than introduce unrelated code.</p>
-</section>
-<section id="step-3-random-forests" class="level4">
-<h4 class="anchored" data-anchor-id="step-3-random-forests">Step 3 — Random forests</h4>
-<p>We then introduce ensemble learning.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>forest <span class="ot">&lt;-</span> <span class="fu">lrn</span>(</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"classif.ranger"</span>,</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">predict_type =</span> <span class="st">"prob"</span>,</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">num.trees =</span> <span class="dv">200</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>forest<span class="sc">$</span><span class="fu">train</span>(task, <span class="at">row_ids =</span> train_ids)</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>prediction_forest <span class="ot">&lt;-</span> forest<span class="sc">$</span><span class="fu">predict</span>(</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  task,</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">row_ids =</span> test_ids</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(heart<span class="sc">$</span>heart_disease)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+ absent present 
+    150     120 </code></pre>
 </div>
-<p>The conceptual progression is:</p>
-<p><strong>One tree → many trees → aggregated predictions</strong></p>
-<p>The main question is whether combining trees improves predictive performance on unseen observations.</p>
-<p>This also introduces the trade-off between predictive performance and interpretability.</p>
-</section>
-<section id="step-4-neural-networks-with-keras" class="level4">
-<h4 class="anchored" data-anchor-id="step-4-neural-networks-with-keras">Step 4 — Neural networks with Keras</h4>
-<p>This is the central section of Part II.</p>
-<p>We return to the concepts introduced in September:</p>
-<p>[ y=wx+b ]</p>
-<p>In Part I, we learned two parameters.</p>
-<p>In Part II, we build a network containing multiple layers and many trainable parameters.</p>
-<p>For binary classification, a simple network might look like:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(keras3)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">keras_model_sequential</span>(<span class="at">input_shape =</span> <span class="fu">c</span>(n_features)) <span class="sc">|&gt;</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">units =</span> <span class="dv">16</span>,</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">activation =</span> <span class="st">"relu"</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dropout</span>(<span class="at">rate =</span> <span class="fl">0.2</span>) <span class="sc">|&gt;</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(</span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">units =</span> <span class="dv">8</span>,</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">activation =</span> <span class="st">"relu"</span></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(</span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">units =</span> <span class="dv">1</span>,</span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">activation =</span> <span class="st">"sigmoid"</span></span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(heart)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>'data.frame':   270 obs. of  14 variables:
+ $ age                    : num  70 67 57 64 74 65 56 59 60 63 ...
+ $ sex                    : Factor w/ 2 levels "female","male": 2 1 2 2 1 2 2 2 2 1 ...
+ $ chest_pain             : Factor w/ 4 levels "typical angina",..: 4 3 2 4 2 4 3 4 4 4 ...
+ $ resting_blood_pressure : num  130 115 124 128 120 120 130 110 140 150 ...
+ $ serum_cholesterol      : num  322 564 261 263 269 177 256 239 293 407 ...
+ $ fasting_blood_sugar    : Factor w/ 2 levels "false","true": 1 1 1 1 1 1 2 1 1 1 ...
+ $ resting_ecg            : Factor w/ 3 levels "normal","ST-T wave abnormality",..: 3 3 1 1 3 1 3 3 3 3 ...
+ $ max_heart_rate         : num  109 160 141 105 121 140 142 142 170 154 ...
+ $ exercise_induced_angina: Factor w/ 2 levels "no","yes": 1 1 1 2 2 1 2 2 1 1 ...
+ $ ST_depression          : num  2.4 1.6 0.3 0.2 0.2 0.4 0.6 1.2 1.2 4 ...
+ $ ST_slope               : Factor w/ 3 levels "upsloping","flat",..: 2 2 1 2 1 1 2 2 2 2 ...
+ $ num_major_vessels      : num  3 0 0 1 1 0 1 1 2 3 ...
+ $ thal                   : Factor w/ 3 levels "normal","fixed defect",..: 1 3 3 3 1 3 2 3 3 3 ...
+ $ heart_disease          : Factor w/ 2 levels "absent","present": 2 1 2 1 1 1 2 2 2 2 ...</code></pre>
 </div>
-<p>We then compile the model:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>model <span class="sc">|&gt;</span> <span class="fu">compile</span>(</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">optimizer =</span> <span class="fu">optimizer_adam</span>(</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">learning_rate =</span> <span class="fl">0.001</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  ),</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">loss =</span> <span class="st">"binary_crossentropy"</span>,</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">metrics =</span> <span class="fu">c</span>(<span class="st">"accuracy"</span>)</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>This is where the first workshop becomes directly relevant.</p>
-<p>Participants already know what a loss function and optimiser are. Now they see how those components are used to train a neural network.</p>
-<p>The network can then be trained:</p>
+<p>There are 270 patients and 13 predictors. The outcome is <code>heart_disease</code>, and <code>present</code> is the positive class. Examine age, chest pain, cholesterol and exercise measurements before discussing what information a learner receives.</p>
+</section>
+<section id="fit-and-prune-a-tree-article-section-2.1.3" class="level2">
+<h2 class="anchored" data-anchor-id="fit-and-prune-a-tree-article-section-2.1.3">2. Fit and prune a tree — article section 2.1.3</h2>
+<p>The <a href="R/02-trees-and-evaluation.R">core script</a> follows the tree examples, then continues through evaluation and resampling. Read it section by section in RStudio. The first trees use the complete dataset for illustration, as in the article; their fitted accuracy would not estimate performance on new patients.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>history <span class="ot">&lt;-</span> model <span class="sc">|&gt;</span> <span class="fu">fit</span>(</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  x_train,</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  y_train,</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">epochs =</span> <span class="dv">50</span>,</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">batch_size =</span> <span class="dv">16</span>,</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">validation_split =</span> <span class="fl">0.2</span>,</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">verbose =</span> <span class="dv">0</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Article sections 2.1, 3.1 and 3.2. Local seeds make this run reproducible.</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"R/01-data.R"</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlr3)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlr3learners)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlr3viz)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">20261023</span>)</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co"># These first trees illustrate fitting and pruning on all observations,</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co"># as in the article; they do not estimate generalisation performance.</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>cart <span class="ot">&lt;-</span> rpart<span class="sc">::</span><span class="fu">rpart</span>(heart_disease <span class="sc">~</span> ., <span class="at">data =</span> heart)</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="fu">png</span>(<span class="st">"figures/01-tree.png"</span>, <span class="at">width =</span> <span class="dv">1500</span>, <span class="at">height =</span> <span class="dv">1000</span>, <span class="at">res =</span> <span class="dv">150</span>)</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>rpart.plot<span class="sc">::</span><span class="fu">rpart.plot</span>(cart)</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>quartz_off_screen 
+                2 </code></pre>
 </div>
-<p>Here, <code>x_train</code> must be a numeric predictor matrix and <code>y_train</code> a binary numeric target. Categorical variables need suitable encoding, and numeric scaling should be fitted on training data only.</p>
-<p>The code above is an illustrative <code>keras3</code> implementation, not a claim that these are the article’s exact architecture or hyperparameters. We should reproduce the authors’ specific configuration in the final workshop materials.</p>
-</section>
-</section>
-<section id="the-key-demonstration-watching-a-neural-network-learn" class="level3">
-<h3 class="anchored" data-anchor-id="the-key-demonstration-watching-a-neural-network-learn">5. The key demonstration: watching a neural network learn</h3>
-<p>This should be the most memorable part of the session.</p>
-<p>In Part I, participants watched a regression line move as gradient descent adjusted two parameters.</p>
-<p>In Part II, they will see the same general principle applied to a neural network.</p>
-<p>Keras records the training history, allowing us to plot the evolution of loss and accuracy.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(history)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>deep_cart <span class="ot">&lt;-</span> rpart<span class="sc">::</span><span class="fu">rpart</span>(heart_disease <span class="sc">~</span> ., <span class="at">data =</span> heart,</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>                         <span class="at">control =</span> rpart<span class="sc">::</span><span class="fu">rpart.control</span>(<span class="at">minsplit =</span> <span class="dv">2</span>))</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">png</span>(<span class="st">"figures/02-complexity.png"</span>, <span class="at">width =</span> <span class="dv">1200</span>, <span class="at">height =</span> <span class="dv">900</span>, <span class="at">res =</span> <span class="dv">150</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>rpart<span class="sc">::</span><span class="fu">plotcp</span>(deep_cart)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>quartz_off_screen 
+                2 </code></pre>
 </div>
-<p>I would also prepare a customised <code>ggplot2</code> visualisation showing training and validation loss across epochs.</p>
-<p>The questions to ask participants are:</p>
-<p><strong>What happens when training loss decreases but validation loss starts increasing?</strong></p>
-<p><strong>Does a larger number of epochs necessarily produce a better model?</strong></p>
-<p><strong>How do the learning rate and batch size influence training?</strong></p>
-<p>This is where we introduce overfitting and early stopping, using the actual training curves rather than only theoretical explanations.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>pruned_cart <span class="ot">&lt;-</span> rpart<span class="sc">::</span><span class="fu">prune</span>(deep_cart, <span class="at">cp =</span> <span class="fl">0.031</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">png</span>(<span class="st">"figures/03-pruned-tree.png"</span>, <span class="at">width =</span> <span class="dv">1500</span>, <span class="at">height =</span> <span class="dv">1000</span>, <span class="at">res =</span> <span class="dv">150</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>rpart.plot<span class="sc">::</span><span class="fu">rpart.plot</span>(pruned_cart)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>quartz_off_screen 
+                2 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The article alternates task and heart_task; use one name consistently.</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>heart_task <span class="ot">&lt;-</span> <span class="fu">as_task_classif</span>(heart, <span class="at">target =</span> <span class="st">"heart_disease"</span>, <span class="at">positive =</span> <span class="st">"present"</span>, <span class="at">id =</span> <span class="st">"heart"</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">20261023</span>)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>split <span class="ot">&lt;-</span> <span class="fu">partition</span>(heart_task, <span class="at">ratio =</span> <span class="dv">2</span><span class="sc">/</span><span class="dv">3</span>)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(<span class="fu">data.frame</span>(<span class="at">row_id =</span> <span class="fu">c</span>(split<span class="sc">$</span>train, split<span class="sc">$</span>test),</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">subset =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"train"</span>, <span class="st">"test"</span>), <span class="fu">c</span>(<span class="fu">length</span>(split<span class="sc">$</span>train), <span class="fu">length</span>(split<span class="sc">$</span>test)))), <span class="st">"outputs/split.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>forest <span class="ot">&lt;-</span> <span class="fu">lrn</span>(<span class="st">"classif.ranger"</span>, <span class="at">predict_type =</span> <span class="st">"prob"</span>, <span class="at">num.threads =</span> <span class="dv">1</span>)</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>forest<span class="sc">$</span><span class="fu">train</span>(heart_task, <span class="at">row_ids =</span> split<span class="sc">$</span>train)</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>forest_pred <span class="ot">&lt;-</span> forest<span class="sc">$</span><span class="fu">predict</span>(heart_task, <span class="at">row_ids =</span> split<span class="sc">$</span>test)</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>measures <span class="ot">&lt;-</span> <span class="fu">msrs</span>(<span class="fu">c</span>(<span class="st">"classif.tpr"</span>, <span class="st">"classif.tnr"</span>, <span class="st">"classif.ppv"</span>, <span class="st">"classif.npv"</span>, <span class="st">"classif.acc"</span>))</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(forest_pred<span class="sc">$</span>confusion)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>         truth
+response  present absent
+  present      30      8
+  absent        7     45</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(forest_pred<span class="sc">$</span><span class="fu">score</span>(measures))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>classif.tpr classif.tnr classif.ppv classif.npv classif.acc 
+  0.8108108   0.8490566   0.7894737   0.8653846   0.8333333 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(<span class="fu">as.data.frame</span>(forest_pred<span class="sc">$</span>confusion), <span class="st">"outputs/confusion.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(<span class="fu">data.frame</span>(<span class="at">measure =</span> <span class="fu">names</span>(forest_pred<span class="sc">$</span><span class="fu">score</span>(measures)),</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">value =</span> <span class="fu">unname</span>(forest_pred<span class="sc">$</span><span class="fu">score</span>(measures))), <span class="st">"outputs/holdout-measures.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (kind <span class="cf">in</span> <span class="fu">c</span>(<span class="st">"roc"</span>, <span class="st">"threshold"</span>, <span class="st">"prc"</span>)) {</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  ggplot2<span class="sc">::</span><span class="fu">ggsave</span>(<span class="fu">paste0</span>(<span class="st">"figures/04-"</span>, kind, <span class="st">".png"</span>),</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    ggplot2<span class="sc">::</span><span class="fu">autoplot</span>(forest_pred, <span class="at">type =</span> kind), <span class="at">width =</span> <span class="dv">7</span>, <span class="at">height =</span> <span class="dv">5</span>)</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Section 3.2 uses a 100-tree forest, rather than the learner default above.</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>forest100 <span class="ot">&lt;-</span> <span class="fu">lrn</span>(<span class="st">"classif.ranger"</span>, <span class="at">predict_type =</span> <span class="st">"prob"</span>, <span class="at">num.trees =</span> <span class="dv">100</span>, <span class="at">num.threads =</span> <span class="dv">1</span>)</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">20261024</span>)</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>forest100<span class="sc">$</span><span class="fu">train</span>(heart_task, <span class="at">row_ids =</span> split<span class="sc">$</span>train)</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>auc <span class="ot">&lt;-</span> <span class="fu">msr</span>(<span class="st">"classif.auc"</span>)</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>auc_by_subset <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">subset =</span> <span class="fu">c</span>(<span class="st">"train"</span>, <span class="st">"test"</span>), <span class="at">auc =</span> <span class="fu">c</span>(</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>  forest100<span class="sc">$</span><span class="fu">predict</span>(heart_task, <span class="at">row_ids =</span> split<span class="sc">$</span>train)<span class="sc">$</span><span class="fu">score</span>(auc),</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>  forest100<span class="sc">$</span><span class="fu">predict</span>(heart_task, <span class="at">row_ids =</span> split<span class="sc">$</span>test)<span class="sc">$</span><span class="fu">score</span>(auc)))</span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(auc_by_subset)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  subset       auc
+1  train 0.9954043
+2   test 0.8980112</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(auc_by_subset, <span class="st">"outputs/train-test-auc.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">20261025</span>)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>cv3 <span class="ot">&lt;-</span> <span class="fu">resample</span>(heart_task, forest100, <span class="fu">rsmp</span>(<span class="st">"cv"</span>, <span class="at">folds =</span> <span class="dv">3</span>))</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(cv3<span class="sc">$</span><span class="fu">score</span>(auc)[, <span class="fu">c</span>(<span class="st">"iteration"</span>, <span class="st">"classif.auc"</span>), <span class="at">with =</span> <span class="cn">FALSE</span>],</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"outputs/cv3.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(cv3<span class="sc">$</span><span class="fu">aggregate</span>(auc))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>classif.auc 
+  0.8994852 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Same repeat counts as section 3.2; no reduced demonstration budgets.</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">20261026</span>)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>subsampling <span class="ot">&lt;-</span> <span class="fu">resample</span>(heart_task, forest100, <span class="fu">rsmp</span>(<span class="st">"subsampling"</span>, <span class="at">ratio =</span> <span class="dv">2</span><span class="sc">/</span><span class="dv">3</span>, <span class="at">repeats =</span> <span class="dv">100</span>))</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">20261027</span>)</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>bootstrap <span class="ot">&lt;-</span> <span class="fu">resample</span>(heart_task, forest100, <span class="fu">rsmp</span>(<span class="st">"bootstrap"</span>, <span class="at">repeats =</span> <span class="dv">40</span>))</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>resampling_scores <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">method =</span> <span class="fu">c</span>(<span class="st">"cv3"</span>, <span class="st">"subsampling100"</span>, <span class="st">"bootstrap40"</span>),</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">auc =</span> <span class="fu">c</span>(cv3<span class="sc">$</span><span class="fu">aggregate</span>(auc), subsampling<span class="sc">$</span><span class="fu">aggregate</span>(auc), bootstrap<span class="sc">$</span><span class="fu">aggregate</span>(auc)))</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(resampling_scores)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          method       auc
+1            cv3 0.8994852
+2 subsampling100 0.9025847
+3    bootstrap40 0.9028705</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(resampling_scores, <span class="st">"outputs/resampling-summary.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">capture.output</span>(<span class="fu">sessionInfo</span>(), <span class="at">file =</span> <span class="st">"outputs/session-info-core.txt"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><img src="figures/01-tree.png" class="img-fluid"></p>
+<p>Compare the default tree with the deep tree. The complexity plot connects pruning to the balance between fitting the observed sample and generalising beyond it. The article uses <code>cp = 0.031</code>; we retain that value for the replication.</p>
+<p><img src="figures/02-complexity.png" class="img-fluid"> <img src="figures/03-pruned-tree.png" class="img-fluid"></p>
 </section>
-<section id="compare-the-three-models" class="level3">
-<h3 class="anchored" data-anchor-id="compare-the-three-models">6. Compare the three models</h3>
-<p>The final practical exercise should compare the models using a common evaluation framework.</p>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 25%">
-<col style="width: 25%">
-<col style="width: 25%">
-<col style="width: 25%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Model</th>
-<th>What does it learn?</th>
-<th>Main advantage</th>
-<th>Main limitation</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Decision tree</td>
-<td>Splitting rules</td>
-<td>Easy to explain</td>
-<td>Can be unstable</td>
-</tr>
-<tr class="even">
-<td>Random forest</td>
-<td>An ensemble of trees</td>
-<td>Often strong predictive performance</td>
-<td>Less transparent</td>
-</tr>
-<tr class="odd">
-<td>Neural network</td>
-<td>Weights and biases</td>
-<td>Flexible nonlinear relationships</td>
-<td>More training choices and potentially harder to interpret</td>
-</tr>
-</tbody>
-</table>
-<p>The comparison should include ROC/AUC, sensitivity, specificity and accuracy.</p>
-<p>We should also discuss the uncertainty associated with performance estimates, particularly because the heart-disease dataset contains only 270 observations.</p>
-<p>For a dataset this small, a neural network is not automatically preferable to a tree-based model.</p>
-<p>That is an important result in itself: <strong>more complex does not necessarily mean better</strong>.</p>
-<p>For the live exercise, we can use one held-out test set for a simple demonstration. For a more defensible model comparison, we should use repeated or stratified cross-validation, with preprocessing and any hyperparameter tuning contained within the resampling procedure.</p>
-</section>
-<section id="connection-with-the-article" class="level3">
-<h3 class="anchored" data-anchor-id="connection-with-the-article">7. Connection with the article</h3>
-<p>I would organise the workshop around the following sections of Wright et al.&nbsp;(2026):</p>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Article section</th>
-<th>Workshop application</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>2.1 Tree-based Machine Learning Methods</td>
-<td>Decision trees and random forests</td>
-</tr>
-<tr class="even">
-<td>2.2 Artificial Neural Networks</td>
-<td>Network architecture and training</td>
-</tr>
-<tr class="odd">
-<td>2.2.2 Training of a Neural Network</td>
-<td>Backpropagation, gradient descent and epochs</td>
-</tr>
-<tr class="even">
-<td>2.2.3 Data Example</td>
-<td>Keras implementation</td>
-</tr>
-<tr class="odd">
-<td>3 Model Evaluation and Resampling</td>
-<td>Cross-validation and performance metrics</td>
-</tr>
-<tr class="even">
-<td>4 Hyperparameter Tuning</td>
-<td>Learning rate, batch size and model complexity</td>
-</tr>
-<tr class="odd">
-<td>5 Interpretable Machine Learning</td>
-<td>Discussion of what predictions mean</td>
-</tr>
-</tbody>
-</table>
-<p>This keeps the workshop grounded in the article without trying to reproduce every chapter section.</p>
-<hr>
-</section>
-<section id="proposed-workshop-materials" class="level3">
-<h3 class="anchored" data-anchor-id="proposed-workshop-materials">8. Proposed workshop materials</h3>
-<p>I would prepare a single Quarto tutorial with the complete reproducible workflow, supported by a short presentation.</p>
-<p>The tutorial should contain the data preparation, <code>mlr3</code> models, Keras implementation, learning curves and model comparison. Participants should be able to run the examples independently after the workshop.</p>
-<p>The materials should also include a short exercise asking participants to change the number of epochs or network units, inspect the training curves, and explain whether the changes improved generalisation.</p>
-<p>One technical point needs attention before announcing the workshop: <strong>Keras requires a working Python/TensorFlow backend</strong>. We should test the complete environment on macOS, Windows and a clean installation, or provide a browser-based environment to avoid spending workshop time troubleshooting installations.</p>
-</section>
-<section id="meetup-description" class="level3">
-<h3 class="anchored" data-anchor-id="meetup-description">9. Meetup description</h3>
-<p><strong>Introduction to Machine Learning in Epidemiology with R — Part II: From Trees to Neural Networks</strong></p>
-<p>How do different machine-learning algorithms learn from epidemiological data? And how can we evaluate whether their predictions are reliable?</p>
-<p>Join R-Ladies Rome on <strong>23 October 2026</strong> for the second part of our hands-on workshop on machine learning in epidemiology.</p>
-<p>Building on our previous session, where we explored gradient descent and the mechanics of learning from scratch, we will now follow the practical examples from <em>Machine Learning in Epidemiology</em> (Wright et al., 2026).</p>
-<p>Using R, <code>mlr3</code> and Keras, we will work with a heart-disease dataset to train decision trees, random forests and neural networks.</p>
-<p>We will explore how these models learn, visualise neural-network training across epochs, and compare predictive performance using appropriate evaluation measures.</p>
-<p>Throughout the session, we will also discuss overfitting, model complexity, interpretability and the distinction between prediction and causal explanation.</p>
-<p><strong>What to expect:</strong> Live R coding, practical examples and reproducible workshop materials.</p>
-<p>Basic familiarity with R is recommended. Some exposure to machine learning will be useful, but participants who missed Part I are also welcome.</p>
-<p>Everyone is welcome! 💜</p>
-<hr>
-</section>
-<section id="my-recommendation-for-part-ii" class="level3">
-<h3 class="anchored" data-anchor-id="my-recommendation-for-part-ii">10. My recommendation for Part II</h3>
-<p>I would make <strong>Keras and neural-network training the central focus</strong>, with decision trees and random forests serving as the comparison.</p>
-<p>The main learning progression would be:</p>
-<p><strong>Part I — September</strong></p>
-<p><em>How does a machine learn?</em></p>
-<p>Model → Loss → Gradient → Optimisation → Parameter updates</p>
-<p><strong>Part II — 23 October</strong></p>
-<p><em>How do different machine-learning models learn, and how do we evaluate them?</em></p>
-<p>Data → <code>mlr3</code> → Trees → Random Forests → Keras → Training Curves → Model Evaluation</p>
-<p>The strongest continuity between the two sessions is the transition from the interactive gradient-descent demonstration to Keras training curves. Participants will recognise the learning process, even though the model is now much more complex.</p>
-<p>I would also retain your book as a reference, connecting the <code>mlr</code> workflows in <em>Health Metrics and the Spread of Infectious Diseases</em> (2025) with the modern <code>mlr3</code> and Keras implementations used in this second workshop.</p>
-<p><strong>The final deliverable should be a reproducible Quarto tutorial following the article’s code, not simply a slide presentation.</strong> That will give participants something they can study, modify and reuse after the event.</p>
-</section>
-<section id="additional-runnable-examples" class="level2">
-<h2 class="anchored" data-anchor-id="additional-runnable-examples">Additional runnable examples</h2>
-<section id="training-and-validation-curves" class="level3">
-<h3 class="anchored" data-anchor-id="training-and-validation-curves">Training and validation curves</h3>
+<section id="train-a-neural-network-article-section-2.2.3" class="level2">
+<h2 class="anchored" data-anchor-id="train-a-neural-network-article-section-2.2.3">3. Train a neural network — article section 2.2.3</h2>
+<p>The <a href="R/03-neural-network.R">network script</a> retains the published 64/32-unit architecture, dropout of 0.4, sigmoid output, Adam learning rate of 0.002, binary cross-entropy, 50 epochs, batches of 32, 20% validation and early stopping with patience 10. The data guide explains how we construct 22 inputs.</p>
+<p>Run this after configuring Keras. It is separate from the default render because it needs a Python backend.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>curves <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">epoch =</span> <span class="fu">rep</span>(<span class="fu">seq_along</span>(history<span class="sc">$</span>metrics<span class="sc">$</span>loss), <span class="dv">2</span>),</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">loss =</span> <span class="fu">c</span>(history<span class="sc">$</span>metrics<span class="sc">$</span>loss, history<span class="sc">$</span>metrics<span class="sc">$</span>val_loss),</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">dataset =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"Training"</span>, <span class="st">"Validation"</span>),</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">each =</span> <span class="fu">length</span>(history<span class="sc">$</span>metrics<span class="sc">$</span>loss))</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(curves, <span class="fu">aes</span>(epoch, loss, <span class="at">colour =</span> dataset)) <span class="sc">+</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Epoch"</span>, <span class="at">y =</span> <span class="st">"Binary cross-entropy"</span>, <span class="at">colour =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Article section 2.2.3, using the current keras3 interface.</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"R/01-data.R"</span>)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlr3)</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(keras3)</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="fu">set_random_seed</span>(<span class="dv">20261023</span>)</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>heart_task <span class="ot">&lt;-</span> <span class="fu">as_task_classif</span>(heart, <span class="at">target =</span> <span class="st">"heart_disease"</span>, <span class="at">positive =</span> <span class="st">"present"</span>, <span class="at">id =</span> <span class="st">"heart"</span>)</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">20261023</span>)</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>split <span class="ot">&lt;-</span> <span class="fu">partition</span>(heart_task, <span class="at">ratio =</span> <span class="dv">2</span><span class="sc">/</span><span class="dv">3</span>)</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Binary predictors use 0/1; remaining nominal predictors use all indicators.</span></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a><span class="co"># This explicit reconstruction yields the article's 22 input columns.</span></span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>x_data <span class="ot">&lt;-</span> heart[, <span class="fu">setdiff</span>(<span class="fu">names</span>(heart), <span class="st">"heart_disease"</span>)]</span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (nm <span class="cf">in</span> <span class="fu">c</span>(<span class="st">"sex"</span>, <span class="st">"fasting_blood_sugar"</span>, <span class="st">"exercise_induced_angina"</span>)) {</span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>  x_data[[nm]] <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(x_data[[nm]]) <span class="sc">-</span> <span class="dv">1</span>L</span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>nominal <span class="ot">&lt;-</span> <span class="fu">names</span>(x_data)[<span class="fu">vapply</span>(x_data, is.factor, <span class="fu">logical</span>(<span class="dv">1</span>))]</span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>contrasts_full <span class="ot">&lt;-</span> <span class="fu">lapply</span>(x_data[nominal], <span class="cf">function</span>(x) <span class="fu">contrasts</span>(x, <span class="at">contrasts =</span> <span class="cn">FALSE</span>))</span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> . <span class="sc">-</span> <span class="dv">1</span>, <span class="at">data =</span> x_data, <span class="at">contrasts.arg =</span> contrasts_full)</span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a><span class="fu">stopifnot</span>(<span class="fu">ncol</span>(x) <span class="sc">==</span> <span class="dv">22</span>L, <span class="fu">all</span>(<span class="fu">is.finite</span>(x)))</span>
+<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Added for numerical stability: fit numeric scaling on inner training rows only.</span></span>
+<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Keras takes the final 20% of supplied training rows for validation.</span></span>
+<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a>inner_n <span class="ot">&lt;-</span> <span class="fu">floor</span>(<span class="fu">length</span>(split<span class="sc">$</span>train) <span class="sc">*</span> <span class="fl">0.8</span>)</span>
+<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a>fit_rows <span class="ot">&lt;-</span> split<span class="sc">$</span>train[<span class="fu">seq_len</span>(inner_n)]</span>
+<span id="cb25-23"><a href="#cb25-23" aria-hidden="true" tabindex="-1"></a>continuous <span class="ot">&lt;-</span> <span class="fu">names</span>(x_data)[<span class="fu">vapply</span>(x_data, is.numeric, <span class="fu">logical</span>(<span class="dv">1</span>))]</span>
+<span id="cb25-24"><a href="#cb25-24" aria-hidden="true" tabindex="-1"></a>continuous <span class="ot">&lt;-</span> <span class="fu">setdiff</span>(continuous, <span class="fu">c</span>(<span class="st">"sex"</span>, <span class="st">"fasting_blood_sugar"</span>, <span class="st">"exercise_induced_angina"</span>))</span>
+<span id="cb25-25"><a href="#cb25-25" aria-hidden="true" tabindex="-1"></a>centre <span class="ot">&lt;-</span> <span class="fu">colMeans</span>(x[fit_rows, continuous, <span class="at">drop =</span> <span class="cn">FALSE</span>])</span>
+<span id="cb25-26"><a href="#cb25-26" aria-hidden="true" tabindex="-1"></a>spread <span class="ot">&lt;-</span> <span class="fu">apply</span>(x[fit_rows, continuous, <span class="at">drop =</span> <span class="cn">FALSE</span>], <span class="dv">2</span>, sd)</span>
+<span id="cb25-27"><a href="#cb25-27" aria-hidden="true" tabindex="-1"></a><span class="fu">stopifnot</span>(<span class="fu">all</span>(spread <span class="sc">&gt;</span> <span class="dv">0</span>))</span>
+<span id="cb25-28"><a href="#cb25-28" aria-hidden="true" tabindex="-1"></a>x[, continuous] <span class="ot">&lt;-</span> <span class="fu">sweep</span>(<span class="fu">sweep</span>(x[, continuous, <span class="at">drop =</span> <span class="cn">FALSE</span>], <span class="dv">2</span>, centre), <span class="dv">2</span>, spread, <span class="st">"/"</span>)</span>
+<span id="cb25-29"><a href="#cb25-29" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(heart<span class="sc">$</span>heart_disease <span class="sc">==</span> <span class="st">"present"</span>)</span>
+<span id="cb25-30"><a href="#cb25-30" aria-hidden="true" tabindex="-1"></a>network <span class="ot">&lt;-</span> <span class="fu">keras_model_sequential</span>(<span class="at">input_shape =</span> <span class="fu">c</span>(<span class="dv">22</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb25-31"><a href="#cb25-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">64</span>, <span class="at">activation =</span> <span class="st">"relu"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb25-32"><a href="#cb25-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dropout</span>(<span class="at">rate =</span> <span class="fl">0.4</span>) <span class="sc">|&gt;</span></span>
+<span id="cb25-33"><a href="#cb25-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">32</span>, <span class="at">activation =</span> <span class="st">"relu"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb25-34"><a href="#cb25-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dropout</span>(<span class="at">rate =</span> <span class="fl">0.4</span>) <span class="sc">|&gt;</span></span>
+<span id="cb25-35"><a href="#cb25-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">1</span>, <span class="at">activation =</span> <span class="st">"sigmoid"</span>)</span>
+<span id="cb25-36"><a href="#cb25-36" aria-hidden="true" tabindex="-1"></a><span class="fu">compile</span>(network, <span class="at">optimizer =</span> <span class="fu">optimizer_adam</span>(<span class="at">learning_rate =</span> <span class="fl">0.002</span>),</span>
+<span id="cb25-37"><a href="#cb25-37" aria-hidden="true" tabindex="-1"></a>        <span class="at">loss =</span> <span class="st">"binary_crossentropy"</span>, <span class="at">metrics =</span> <span class="st">"accuracy"</span>)</span>
+<span id="cb25-38"><a href="#cb25-38" aria-hidden="true" tabindex="-1"></a>training <span class="ot">&lt;-</span> <span class="fu">fit</span>(network, x[split<span class="sc">$</span>train, ], y[split<span class="sc">$</span>train], <span class="at">epochs =</span> <span class="dv">50</span>,</span>
+<span id="cb25-39"><a href="#cb25-39" aria-hidden="true" tabindex="-1"></a>  <span class="at">batch_size =</span> <span class="dv">32</span>, <span class="at">validation_split =</span> <span class="fl">0.2</span>, <span class="at">verbose =</span> <span class="dv">0</span>,</span>
+<span id="cb25-40"><a href="#cb25-40" aria-hidden="true" tabindex="-1"></a>  <span class="at">callbacks =</span> <span class="fu">list</span>(<span class="fu">callback_early_stopping</span>(<span class="at">patience =</span> <span class="dv">10</span>, <span class="at">restore_best_weights =</span> <span class="cn">TRUE</span>)))</span>
+<span id="cb25-41"><a href="#cb25-41" aria-hidden="true" tabindex="-1"></a>prob <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">predict</span>(network, x[split<span class="sc">$</span>test, ], <span class="at">verbose =</span> <span class="dv">0</span>))</span>
+<span id="cb25-42"><a href="#cb25-42" aria-hidden="true" tabindex="-1"></a>class <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(prob <span class="sc">&gt;=</span> <span class="fl">0.5</span>, <span class="st">"present"</span>, <span class="st">"absent"</span>)</span>
+<span id="cb25-43"><a href="#cb25-43" aria-hidden="true" tabindex="-1"></a>accuracy <span class="ot">&lt;-</span> <span class="fu">mean</span>(class <span class="sc">==</span> <span class="fu">as.character</span>(heart<span class="sc">$</span>heart_disease[split<span class="sc">$</span>test]))</span>
+<span id="cb25-44"><a href="#cb25-44" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(accuracy)</span>
+<span id="cb25-45"><a href="#cb25-45" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(<span class="fu">data.frame</span>(<span class="at">row_id =</span> split<span class="sc">$</span>test, <span class="at">truth =</span> heart<span class="sc">$</span>heart_disease[split<span class="sc">$</span>test],</span>
+<span id="cb25-46"><a href="#cb25-46" aria-hidden="true" tabindex="-1"></a>  <span class="at">probability_present =</span> prob, <span class="at">prediction =</span> class), <span class="st">"outputs/neural-predictions.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb25-47"><a href="#cb25-47" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(<span class="fu">data.frame</span>(<span class="at">accuracy =</span> accuracy), <span class="st">"outputs/neural-accuracy.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb25-48"><a href="#cb25-48" aria-hidden="true" tabindex="-1"></a>curves <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">epoch =</span> <span class="fu">seq_along</span>(training<span class="sc">$</span>metrics<span class="sc">$</span>loss),</span>
+<span id="cb25-49"><a href="#cb25-49" aria-hidden="true" tabindex="-1"></a>  <span class="at">loss =</span> training<span class="sc">$</span>metrics<span class="sc">$</span>loss, <span class="at">val_loss =</span> training<span class="sc">$</span>metrics<span class="sc">$</span>val_loss)</span>
+<span id="cb25-50"><a href="#cb25-50" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(curves, <span class="st">"outputs/neural-loss.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb25-51"><a href="#cb25-51" aria-hidden="true" tabindex="-1"></a><span class="fu">png</span>(<span class="st">"figures/05-neural-loss.png"</span>, <span class="at">width =</span> <span class="dv">1200</span>, <span class="at">height =</span> <span class="dv">900</span>, <span class="at">res =</span> <span class="dv">150</span>)</span>
+<span id="cb25-52"><a href="#cb25-52" aria-hidden="true" tabindex="-1"></a><span class="fu">matplot</span>(curves<span class="sc">$</span>epoch, curves[, <span class="fu">c</span>(<span class="st">"loss"</span>, <span class="st">"val_loss"</span>)], <span class="at">type =</span> <span class="st">"l"</span>, <span class="at">lty =</span> <span class="dv">1</span>,</span>
+<span id="cb25-53"><a href="#cb25-53" aria-hidden="true" tabindex="-1"></a>        <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"steelblue"</span>, <span class="st">"firebrick"</span>), <span class="at">xlab =</span> <span class="st">"Epoch"</span>, <span class="at">ylab =</span> <span class="st">"Binary cross-entropy"</span>)</span>
+<span id="cb25-54"><a href="#cb25-54" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topright"</span>, <span class="fu">c</span>(<span class="st">"Training"</span>, <span class="st">"Validation"</span>), <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"steelblue"</span>, <span class="st">"firebrick"</span>), <span class="at">lty =</span> <span class="dv">1</span>)</span>
+<span id="cb25-55"><a href="#cb25-55" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()</span>
+<span id="cb25-56"><a href="#cb25-56" aria-hidden="true" tabindex="-1"></a><span class="fu">capture.output</span>(<span class="fu">sessionInfo</span>(), <span class="at">file =</span> <span class="st">"outputs/session-info-neural.txt"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The script saves training and validation loss and the observed test accuracy. The paper’s reported accuracy is not substituted for a local result. When a saved network run is available, its results appear below; these files come from the separate network script, rather than the core notebook render.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>   accuracy
+1 0.8555556</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="figures/05-neural-loss.png" class="img-fluid figure-img" width="600"></p>
+</figure>
+</div>
+</div>
 </div>
 </section>
-<section id="common-test-set-evaluation" class="level3">
-<h3 class="anchored" data-anchor-id="common-test-set-evaluation">Common test-set evaluation</h3>
-<p>Run after completing the numeric-matrix setup and fitting the network. Use a prespecified threshold of 0.5 for this teaching comparison; do not choose it using test outcomes.</p>
+<section id="evaluate-predictions-article-section-3.1" class="level2">
+<h2 class="anchored" data-anchor-id="evaluate-predictions-article-section-3.1">4. Evaluate predictions — article section 3.1</h2>
+<p>The core script has trained a probability-producing random forest on two-thirds of the observations and evaluated it on the remaining third. These are the results of our seeded run.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>measures <span class="ot">&lt;-</span> <span class="fu">msrs</span>(<span class="fu">c</span>(</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"classif.acc"</span>, <span class="st">"classif.sensitivity"</span>,</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"classif.specificity"</span>, <span class="st">"classif.auc"</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>))</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>tree_scores <span class="ot">&lt;-</span> prediction_tree<span class="sc">$</span><span class="fu">score</span>(measures)</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>forest_scores <span class="ot">&lt;-</span> prediction_forest<span class="sc">$</span><span class="fu">score</span>(measures)</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>nn_prob <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">predict</span>(model, x_test))</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="fu">stopifnot</span>(<span class="fu">length</span>(nn_prob) <span class="sc">==</span> <span class="fu">length</span>(test_ids))</span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>truth <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(task<span class="sc">$</span><span class="fu">truth</span>(<span class="at">rows =</span> test_ids) <span class="sc">==</span> positive_class)</span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>nn_class <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(nn_prob <span class="sc">&gt;=</span> <span class="fl">0.5</span>)</span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>nn_scores <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">classif.acc =</span> <span class="fu">mean</span>(nn_class <span class="sc">==</span> truth),</span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">classif.sensitivity =</span> <span class="fu">mean</span>(nn_class[truth <span class="sc">==</span> <span class="dv">1</span>] <span class="sc">==</span> <span class="dv">1</span>),</span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">classif.specificity =</span> <span class="fu">mean</span>(nn_class[truth <span class="sc">==</span> <span class="dv">0</span>] <span class="sc">==</span> <span class="dv">0</span>),</span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">classif.auc =</span> <span class="fu">as.numeric</span>(pROC<span class="sc">::</span><span class="fu">auc</span>(</span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>    pROC<span class="sc">::</span><span class="fu">roc</span>(truth, nn_prob, <span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>),</span>
-<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>              <span class="at">direction =</span> <span class="st">"&lt;"</span>, <span class="at">quiet =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>  ))</span>
-<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>comparison <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
-<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">Tree =</span> tree_scores, <span class="at">Forest =</span> forest_scores, <span class="at">Neural_network =</span> nn_scores</span>
-<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>comparison</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read.csv</span>(<span class="st">"outputs/holdout-measures.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      measure     value
+1 classif.tpr 0.8108108
+2 classif.tnr 0.8490566
+3 classif.ppv 0.7894737
+4 classif.npv 0.8653846
+5 classif.acc 0.8333333</code></pre>
 </div>
-<p>Check that both classes occur in the test set. No model scores or learning curves are asserted here. Reserve the test set for final evaluation; use training/validation data for architecture, stopping and threshold decisions.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read.csv</span>(<span class="st">"outputs/confusion.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  response   truth Freq
+1  present present   30
+2   absent present    7
+3  present  absent    8
+4   absent  absent   45</code></pre>
+</div>
+</div>
+<p><img src="figures/04-roc.png" class="img-fluid"> <img src="figures/04-threshold.png" class="img-fluid"> <img src="figures/04-prc.png" class="img-fluid"></p>
+<p>Discuss sensitivity, specificity, positive and negative predictive value, accuracy and the consequences of choosing a threshold. A good score does not establish causation.</p>
 </section>
+<section id="resample-article-section-3.2" class="level2">
+<h2 class="anchored" data-anchor-id="resample-article-section-3.2">5. Resample — article section 3.2</h2>
+<p>The next examples use a 100-tree forest, 3-fold cross-validation, 100 repeated subsamples and 40 bootstrap repetitions. The core script retains those counts.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read.csv</span>(<span class="st">"outputs/train-test-auc.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  subset       auc
+1  train 0.9954043
+2   test 0.8980112</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read.csv</span>(<span class="st">"outputs/cv3.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  iteration classif.auc
+1         1   0.8989547
+2         2   0.8931222
+3         3   0.9063786</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read.csv</span>(<span class="st">"outputs/resampling-summary.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          method       auc
+1            cv3 0.8994852
+2 subsampling100 0.9025847
+3    bootstrap40 0.9028705</code></pre>
+</div>
+</div>
+<p>Training and test AUC answer different questions. Resampling estimates how performance changes when the training sample changes.</p>
 </section>
-<section id="materials-references-and-preparation-checklist" class="level2">
-<h2 class="anchored" data-anchor-id="materials-references-and-preparation-checklist">Materials, references and preparation checklist</h2>
-<ul>
-<li><a href="https://arxiv.org/abs/2602.16352">Wright et al., Machine Learning in Epidemiology (arXiv:2602.16352)</a>.</li>
-<li><a href="https://github.com/bips-hb/epi-handbook-ml">Authors’ companion code repository</a>.</li>
-<li><a href="https://federicagazzelloni.com/hmsidR/">Federica Gazzelloni, Health Metrics and the Spread of Infectious Diseases</a>.</li>
-<li><a href="https://github.com/fgazzelloni/Intro-to-ml-in-epidemiology-with-r">Existing workshop repository and Part I materials</a>.</li>
-<li>Part II tutorial: this Quarto file; prepared data, slides, exercise and solution links: <strong>TO ADD</strong>.</li>
-<li>Meetup event URL, start time and joining link: <strong>TO CONFIRM</strong>. The announcement above is a draft.</li>
-<li>Recording URL: <strong>TO ADD after the workshop</strong>.</li>
-</ul>
-<p>Before the session: confirm the heart-data snapshot, outcome coding, sample size and predictor definitions against the article; replace setup placeholders; align the network with the authors’ code; test the complete workflow and backend on participant environments; prepare an accessible browser-based alternative if needed; record package versions with <code>sessionInfo()</code>.</p>
-<p>The plan retains the preceding response’s proposed 270 observations and 13 predictors. These counts and the exact implementation require confirmation before teaching. This is a complete workshop plan with illustrative code, not a tested end-to-end tutorial.</p>
+<section id="tune-within-the-training-data-article-section-4" class="level2">
+<h2 class="anchored" data-anchor-id="tune-within-the-training-data-article-section-4">6. Tune within the training data — article section 4</h2>
+<p>The <a href="R/04-tuning.R">tuning script</a> supplies the missing objects in the published snippets and retains their search ranges and budgets. Run one method at a time from a terminal in this folder:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb37"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> R/04-tuning.R grid_search</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> R/04-tuning.R random_search</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> R/04-tuning.R mbo</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> R/04-tuning.R nested</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The grid uses resolution 10; random search evaluates 500 configurations; MBO evaluates 30. Nested tuning uses 100 configurations per inner search, 10 inner folds and 10 outer folds. These are substantial runs, so the workshop can inspect the code before running the full searches outside the live session. The test set is excluded from search selection.</p>
+</section>
+<section id="interpret-article-section-5" class="level2">
+<h2 class="anchored" data-anchor-id="interpret-article-section-5">7. Interpret — article section 5</h2>
+<p>Discuss local explanations, feature effects and feature importance. The article explains these methods but prints no executable interpretation example. We do not introduce a different analysis and label it as replicated article code. Predictive importance describes a fitted model; it does not identify a causal effect.</p>
+</section>
+<section id="generate-synthetic-observations-article-section-6.2.5" class="level2">
+<h2 class="anchored" data-anchor-id="generate-synthetic-observations-article-section-6.2.5">8. Generate synthetic observations — article section 6.2.5</h2>
+<p>The <a href="R/05-synthetic-data.R">synthetic-data script</a> follows the adversarial random forest, density estimation and sampling sequence. Its output is labelled synthetic.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Article section 6.2.5: adversarial random forests.</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"R/01-data.R"</span>)</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(arf)</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">20261023</span>)</span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>generator <span class="ot">&lt;-</span> <span class="fu">adversarial_rf</span>(heart)</span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>density <span class="ot">&lt;-</span> <span class="fu">forde</span>(generator, heart)</span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>synthetic_heart <span class="ot">&lt;-</span> <span class="fu">forge</span>(density, <span class="at">n_synth =</span> <span class="fu">nrow</span>(heart))</span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a><span class="fu">stopifnot</span>(<span class="fu">nrow</span>(synthetic_heart) <span class="sc">==</span> <span class="fu">nrow</span>(heart))</span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(synthetic_heart, <span class="st">"outputs/synthetic-heart.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a><span class="fu">capture.output</span>(<span class="fu">sessionInfo</span>(), <span class="at">file =</span> <span class="st">"outputs/session-info-synthetic.txt"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Synthetic rows are generated examples, not additional observed patients.</p>
+</section>
+<section id="reproducibility" class="level2">
+<h2 class="anchored" data-anchor-id="reproducibility">Reproducibility</h2>
+<p>Observed results, seeds, split membership and package versions are saved in <code>outputs/</code>. The raw data remain unchanged. See the <a href="references/replication-notes.md">replication record</a> and <a href="outputs/VALIDATION.md">validation results</a> for differences from the published snippets and validation status.</p>
 </section>
 
 </main>
