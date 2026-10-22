@@ -67,6 +67,32 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<script>
+(function () {
+  function updateLinks() {
+    document.querySelectorAll('a[href]').forEach(function (link) {
+      var href = link.getAttribute('href').trim();
+      if (!href || /^(#|javascript:|mailto:|tel:)/i.test(href) ||
+          link.hasAttribute('download') || link.getAttribute('role') === 'tab' ||
+          link.hasAttribute('data-bs-toggle')) return;
+      var destination = new URL(href, document.baseURI);
+      if (destination.origin === location.origin &&
+          destination.pathname === location.pathname &&
+          destination.search === location.search && destination.hash) return;
+      link.target = '_blank';
+      link.relList.add('noopener', 'noreferrer');
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', updateLinks);
+  } else {
+    updateLinks();
+  }
+  new MutationObserver(updateLinks).observe(document.documentElement, {
+    childList: true, subtree: true
+  });
+})();
+</script>
 
 
 <link rel="stylesheet" href="../../styles.css">

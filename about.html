@@ -67,12 +67,38 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<script>
+(function () {
+  function updateLinks() {
+    document.querySelectorAll('a[href]').forEach(function (link) {
+      var href = link.getAttribute('href').trim();
+      if (!href || /^(#|javascript:|mailto:|tel:)/i.test(href) ||
+          link.hasAttribute('download') || link.getAttribute('role') === 'tab' ||
+          link.hasAttribute('data-bs-toggle')) return;
+      var destination = new URL(href, document.baseURI);
+      if (destination.origin === location.origin &&
+          destination.pathname === location.pathname &&
+          destination.search === location.search && destination.hash) return;
+      link.target = '_blank';
+      link.relList.add('noopener', 'noreferrer');
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', updateLinks);
+  } else {
+    updateLinks();
+  }
+  new MutationObserver(updateLinks).observe(document.documentElement, {
+    childList: true, subtree: true
+  });
+})();
+</script>
 
 
 <link rel="stylesheet" href="styles.css">
 </head>
 
-<body class="nav-sidebar floating nav-fixed quarto-light">
+<body class="nav-sidebar floating nav-fixed fullcontent quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -225,17 +251,7 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#about-the-instructor" id="toc-about-the-instructor" class="nav-link active" data-scroll-target="#about-the-instructor">About the instructor</a></li>
-  <li><a href="#the-two-part-learning-journey" id="toc-the-two-part-learning-journey" class="nav-link" data-scroll-target="#the-two-part-learning-journey">The two-part learning journey</a></li>
-  <li><a href="#workshop-materials-and-next-steps" id="toc-workshop-materials-and-next-steps" class="nav-link" data-scroll-target="#workshop-materials-and-next-steps">Workshop materials and next steps</a></li>
-  </ul>
-</nav>
-    </div>
+    
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
@@ -258,33 +274,16 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="about-the-instructor" class="level2">
-<h2 class="anchored" data-anchor-id="about-the-instructor">About the instructor</h2>
-<p>Federica Gazzelloni is an actuary, statistician, data scientist, author and instructor whose work spans health metrics, actuarial modelling, R and Python, data visualisation and reproducible research. She leads <a href="https://www.meetup.com/it-IT/rladies-rome/">R-Ladies Rome</a> and the <a href="https://www.meetup.com/it-IT/rome-r-users-group/">Rome R Users Group</a>, and she brings that practical, collaborative style to the workshop materials in this repository.</p>
-<p>This experience connects directly to the workshop’s practical approach to machine learning in epidemiology: we start with a clear understanding of the modelling problem, keep the code and data workflow reproducible, and explain how model choices relate to the epidemiological question being asked.</p>
-</section>
-<section id="the-two-part-learning-journey" class="level2">
-<h2 class="anchored" data-anchor-id="the-two-part-learning-journey">The two-part learning journey</h2>
-<p>This workshop is designed as a guided progression through two connected learning experiences:</p>
-<ul>
-<li><strong>Part 1 — September 2026:</strong> foundations of machine learning, the idea of learning itself, gradient descent, and a West Nile virus prediction workflow.</li>
-<li><strong>Part 2 — 23 October 2026:</strong> a heart-disease workflow inspired by Wright et al., including trees, neural networks, evaluation, resampling and tuning.</li>
-</ul>
-<p>The materials are organised so that participants can move from conceptual understanding to code-based practice without losing sight of the data, the modelling assumptions and the interpretation of results.</p>
-</section>
-<section id="workshop-materials-and-next-steps" class="level2">
-<h2 class="anchored" data-anchor-id="workshop-materials-and-next-steps">Workshop materials and next steps</h2>
-<p>The repository keeps the two session tracks easy to navigate while preserving the source files, notebook structure and project-level working directories.</p>
+<p>Federica Gazzelloni is an actuary, statistician, data scientist, author and instructor working across health metrics, actuarial modelling, R and Python, data visualisation and reproducible research. She leads <a href="https://www.meetup.com/it-IT/rladies-rome/">R-Ladies Rome</a> and the <a href="https://www.meetup.com/it-IT/rome-r-users-group/">Rome R Users Group</a>.</p>
+<p>This workshop connects machine-learning concepts with practical epidemiological examples. We focus on clear modelling questions, reproducible code and careful interpretation.</p>
 <ul>
 <li><a href="./index.html">Workshop home</a></li>
 <li><a href="./part1/guide.html">Part 1 materials</a></li>
 <li><a href="./part2/guide.html">Part 2 materials</a></li>
-<li><a href="https://github.com/fgazzelloni/Intro-to-ml-in-epidemiology-with-r">Original September workshop repository</a></li>
+<li><a href="./resources.html">Resources and references</a></li>
 </ul>
-<p>This new repository is a workshop organization and teaching resource for the current series. The original September repository and published website remain separate and are not replaced by these materials.</p>
 
 
-</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

@@ -1,0 +1,10 @@
+# Article section 6.2.5: adversarial random forests.
+source("R/01-data.R")
+library(arf)
+set.seed(20261023)
+generator <- adversarial_rf(heart)
+density <- forde(generator, heart)
+synthetic_heart <- forge(density, n_synth = nrow(heart))
+stopifnot(nrow(synthetic_heart) == nrow(heart))
+write.csv(synthetic_heart, "outputs/synthetic-heart.csv", row.names = FALSE)
+capture.output(sessionInfo(), file = "outputs/session-info-synthetic.txt")

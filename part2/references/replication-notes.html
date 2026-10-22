@@ -67,6 +67,32 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<script>
+(function () {
+  function updateLinks() {
+    document.querySelectorAll('a[href]').forEach(function (link) {
+      var href = link.getAttribute('href').trim();
+      if (!href || /^(#|javascript:|mailto:|tel:)/i.test(href) ||
+          link.hasAttribute('download') || link.getAttribute('role') === 'tab' ||
+          link.hasAttribute('data-bs-toggle')) return;
+      var destination = new URL(href, document.baseURI);
+      if (destination.origin === location.origin &&
+          destination.pathname === location.pathname &&
+          destination.search === location.search && destination.hash) return;
+      link.target = '_blank';
+      link.relList.add('noopener', 'noreferrer');
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', updateLinks);
+  } else {
+    updateLinks();
+  }
+  new MutationObserver(updateLinks).observe(document.documentElement, {
+    childList: true, subtree: true
+  });
+})();
+</script>
 
 
 <link rel="stylesheet" href="../../styles.css">
@@ -230,7 +256,7 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#changes-required-to-make-the-examples-runnable" id="toc-changes-required-to-make-the-examples-runnable" class="nav-link active" data-scroll-target="#changes-required-to-make-the-examples-runnable">Changes required to make the examples runnable</a></li>
+  <li><a href="#workshop-implementation" id="toc-workshop-implementation" class="nav-link active" data-scroll-target="#workshop-implementation">Workshop implementation</a></li>
   <li><a href="#validation" id="toc-validation" class="nav-link" data-scroll-target="#validation">Validation</a></li>
   </ul>
 </nav>
@@ -259,10 +285,9 @@ ul.task-list li input[type="checkbox"] {
 
 <ul>
 <li>Wright et al.&nbsp;(2026), <a href="https://arxiv.org/html/2602.16352v1">Machine Learning in Epidemiology, arXiv v1</a>.</li>
-<li><a href="https://github.com/bips-hb/epi-handbook-ml">Companion repository cited in the article</a>: returned HTTP 404 on 12 October 2026, including authenticated GitHub API access.</li>
 <li><a href="https://www.openml.org/d/53">OpenML dataset 53</a>, version 1; saved metadata and raw data are in <code>data/raw/</code>.</li>
 </ul>
-<p>This is an implementation of the article’s published workflow, not a verified copy of the unavailable companion code. New explanatory prose and scripts were written for this workshop. Models and settings follow the published examples.</p>
+<p>This workshop implements the article’s published workflow with teaching scripts and explanatory notes. Models and settings follow the published examples.</p>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 33%">
@@ -314,10 +339,10 @@ ul.task-list li input[type="checkbox"] {
 </tr>
 </tbody>
 </table>
-<section id="changes-required-to-make-the-examples-runnable" class="level2">
-<h2 class="anchored" data-anchor-id="changes-required-to-make-the-examples-runnable">Changes required to make the examples runnable</h2>
-<p>The paper omits data preparation, seeds, train/test objects in some snippets and parts of tuning code (shown as ellipses). The scripts add these definitions, use <code>heart_task</code> consistently and set explicit local seeds. Keras uses <code>keras3</code> instead of the article’s older <code>keras</code> interface, retaining the architecture and training settings. Data encoding/scaling choices are recorded in the data guide. Random-forest threading is fixed to one for reproducibility. The initial forest uses the learner default; the resampling examples use 100 trees, as printed. Tuning is restricted to the training task; nested CV uses an outer and inner 10-fold design. The article’s full grid has up to 10,000 configurations and is not run during a normal notebook render.</p>
-<p>The article reports a 100% neural-network test accuracy. That is a reported result for its run, not an expected or guaranteed workshop result. Our outputs are saved separately. Matching all printed numeric results requires the missing original seeds, split, preprocessing and software environment.</p>
+<section id="workshop-implementation" class="level2">
+<h2 class="anchored" data-anchor-id="workshop-implementation">Workshop implementation</h2>
+<p>The scripts define data preparation, train/test objects and tuning code, use <code>heart_task</code> consistently and set explicit seeds. Keras uses <code>keras3</code> instead of the article’s older <code>keras</code> interface, retaining the architecture and training settings. Data encoding/scaling choices are recorded in the data guide. Random-forest threading is fixed to one for reproducibility. The initial forest uses the learner default; the resampling examples use 100 trees, as printed. Tuning is restricted to the training task; nested CV uses an outer and inner 10-fold design. The article’s full grid has up to 10,000 configurations and is not run during a normal notebook render.</p>
+<p>The article reports a 100% neural-network test accuracy. That is a reported result for its run, not an expected or guaranteed workshop result. Our outputs are saved separately. Results depend on the random seed, data split, preprocessing and software versions.</p>
 </section>
 <section id="validation" class="level2">
 <h2 class="anchored" data-anchor-id="validation">Validation</h2>

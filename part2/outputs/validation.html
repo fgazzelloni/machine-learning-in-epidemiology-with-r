@@ -67,6 +67,32 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<script>
+(function () {
+  function updateLinks() {
+    document.querySelectorAll('a[href]').forEach(function (link) {
+      var href = link.getAttribute('href').trim();
+      if (!href || /^(#|javascript:|mailto:|tel:)/i.test(href) ||
+          link.hasAttribute('download') || link.getAttribute('role') === 'tab' ||
+          link.hasAttribute('data-bs-toggle')) return;
+      var destination = new URL(href, document.baseURI);
+      if (destination.origin === location.origin &&
+          destination.pathname === location.pathname &&
+          destination.search === location.search && destination.hash) return;
+      link.target = '_blank';
+      link.relList.add('noopener', 'noreferrer');
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', updateLinks);
+  } else {
+    updateLinks();
+  }
+  new MutationObserver(updateLinks).observe(document.documentElement, {
+    childList: true, subtree: true
+  });
+})();
+</script>
 
 
 <link rel="stylesheet" href="../../styles.css">
@@ -261,7 +287,7 @@ ul.task-list li input[type="checkbox"] {
 <section id="completed" class="level2">
 <h2 class="anchored" data-anchor-id="completed">Completed</h2>
 <ul>
-<li>Raw ARFF checksum agrees with the saved OpenML metadata.</li>
+<li>The original data file uses ARFF (Attribute–Relation File Format), a text format that describes column names and types, followed by one patient per row. “Raw” means the downloaded file before workshop preparation. Its checksum (a fingerprint of the file contents) matches the saved OpenML metadata, confirming that the file has not changed.</li>
 <li>270 complete rows; 13 predictors; target counts 150 absent and 120 present.</li>
 <li>Train/test split: 180/90 disjoint rows covering all patients.</li>
 <li>Default/deep/pruned trees, confusion matrix, five classification measures and three evaluation plots.</li>
@@ -281,8 +307,7 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="environment-notes" class="level2">
 <h2 class="anchored" data-anchor-id="environment-notes">Environment notes</h2>
-<p>The installed mlr3learners/XGBoost combination completed the runs but emitted XGBoost deprecation warnings about legacy parameter passing. A future XGBoost release may require an updated mlr3learners version. MBO invoked its built-in random-forest surrogate fallback during this run. ARF ran sequentially without a registered parallel backend. Neither warning was treated as a model result.</p>
-<p>The authors’ companion repository returned 404. Unpublished seeds, data preparation and environment cannot be verified; see the replication record.</p>
+<p>The installed mlr3learners/XGBoost combination completed the runs but emitted XGBoost deprecation warnings about legacy parameter passing. MBO invoked its built-in random-forest surrogate fallback during this run. ARF ran sequentially without a registered parallel backend.</p>
 
 
 </section>
