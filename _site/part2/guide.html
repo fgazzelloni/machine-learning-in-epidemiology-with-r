@@ -70,6 +70,33 @@ ul.task-list li input[type="checkbox"] {
 
 
 <link rel="stylesheet" href="../styles.css">
+<script>
+(function () {
+  function updateLinks() {
+    document.querySelectorAll('a[href]').forEach(function (link) {
+      var href = link.getAttribute('href').trim();
+      if (!href || /^(#|javascript:|mailto:|tel:)/i.test(href) ||
+          link.hasAttribute('download') || link.getAttribute('role') === 'tab' ||
+          link.hasAttribute('data-bs-toggle')) return;
+      var destination = new URL(href, document.baseURI);
+      if (destination.origin === location.origin &&
+          destination.pathname === location.pathname &&
+          destination.search === location.search && destination.hash) return;
+      link.target = '_blank';
+      link.relList.add('noopener', 'noreferrer');
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', updateLinks);
+  } else {
+    updateLinks();
+  }
+  new MutationObserver(updateLinks).observe(document.documentElement, {
+    childList: true, subtree: true
+  });
+})();
+</script>
+
 </head>
 
 <body class="nav-sidebar floating nav-fixed quarto-light">
@@ -102,7 +129,7 @@ ul.task-list li input[type="checkbox"] {
 <span class="menu-text">Part 2</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../resources.html"> 
+    <a class="nav-link" href="../resources.qmd"> 
 <span class="menu-text">Resources</span></a>
   </li>  
   <li class="nav-item">
@@ -196,13 +223,13 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../part2/references/replication-notes.html" class="sidebar-item-text sidebar-link">
+  <a href="../part2/references/replication-notes.qmd" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Replication record</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../part2/outputs/validation.html" class="sidebar-item-text sidebar-link">
+  <a href="../part2/outputs/validation.qmd" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Validation</span></a>
   </div>
 </li>
@@ -210,7 +237,7 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../resources.html" class="sidebar-item-text sidebar-link">
+  <a href="../resources.qmd" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Resources</span></a>
   </div>
 </li>
@@ -302,7 +329,7 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="scope-and-provenance" class="level2">
 <h2 class="anchored" data-anchor-id="scope-and-provenance">Scope and provenance</h2>
-<p>The companion repository cited by the article currently returns 404. These scripts implement the published examples with explicit setup choices; they are not a verified copy of that repository. The <a href="data/guide.html">data guide</a> and <a href="references/replication-notes.html">replication record</a> document what is specified, what was reconstructed and what has been tested. The article’s printed scores are not guaranteed for a different split or environment.</p>
+<p>These scripts implement the published examples. The <a href="data/guide.html">data guide</a> and <a href="references/replication-notes.html">replication record</a> document data preparation, implementation choices and completed checks. The article’s printed scores are not guaranteed for a different split or environment.</p>
 <p><a href="../guide.html">Series guide</a> · <a href="../part1/guide.html">Part 1</a></p>
 
 

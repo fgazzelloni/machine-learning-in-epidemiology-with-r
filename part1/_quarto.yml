@@ -10,5 +10,6 @@ output-file: index.html
 
 format:
   html:
+    include-in-header: ../includes/new-tab-links.html
     theme: flatly
     css: ../styles.css

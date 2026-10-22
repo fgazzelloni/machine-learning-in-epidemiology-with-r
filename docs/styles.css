@@ -1,0 +1,220 @@
+:root {
+  --brand: #1f3a5f;
+  --brand-strong: #102845;
+  --accent: #d97706;
+  --accent-soft: #fef3c7;
+  --panel: #f8fafc;
+  --panel-strong: #eef3f8;
+  --text: #1f2937;
+  --muted: #5f6f82;
+  --border: #dfe7ef;
+  --shadow: rgba(15, 23, 42, 0.08);
+}
+
+body {
+  color: var(--text);
+  background: #ffffff;
+  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.65;
+}
+
+.navbar {
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 1px 2px var(--shadow);
+  background: rgba(255, 255, 255, 0.96);
+}
+
+.navbar-title {
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--brand-strong);
+}
+
+.navbar .nav-link,
+.navbar .nav-item {
+  font-weight: 500;
+}
+
+#quarto-document-content {
+  max-width: 1100px;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  margin: 0 auto;
+}
+
+.quarto-title-block {
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.quarto-title {
+  color: var(--brand-strong);
+  font-weight: 800;
+}
+
+.sidebar nav[role="doc-toc"] {
+  padding-top: 0.75rem;
+}
+
+.card-grid,
+.resource-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+  gap: 1.25rem;
+  margin: 1.5rem 0 2rem;
+}
+
+.resource-group {
+  margin: 2rem 0;
+}
+
+.resource-group > h3,
+.resource-group > h4 {
+  margin-bottom: 0.85rem;
+  color: var(--brand-strong);
+}
+
+.session-card,
+.resource-card {
+  background: linear-gradient(180deg, #ffffff 0%, var(--panel) 100%);
+  border: 1px solid var(--border);
+  border-radius: 0.9rem;
+  padding: 1.4rem 1.25rem;
+  box-shadow: 0 8px 18px var(--shadow);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  margin-bottom: 1rem;
+}
+
+.session-card:hover,
+.resource-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 22px rgba(31, 58, 95, 0.1);
+}
+
+.session-card h3,
+.resource-card h3,
+.session-card h4,
+.resource-card h4 {
+  color: var(--brand);
+  margin-top: 0;
+}
+
+.resource-card ul {
+  margin-bottom: 0;
+  padding-left: 1.1rem;
+}
+
+.card-grid a,
+.resource-grid a,
+.main-content a {
+  color: var(--brand);
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+blockquote {
+  border-left: 4px solid var(--accent);
+  background: var(--accent-soft);
+  border-radius: 0.35rem;
+  padding: 0.8rem 1rem;
+  color: var(--text);
+}
+
+pre,
+code {
+  font-size: 0.93em;
+}
+
+main.content .math.display {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+pre {
+  border-radius: 0.75rem;
+  border: 1px solid var(--border);
+  background: #f7f8fa;
+}
+
+code {
+  color: var(--brand-strong);
+}
+
+.table {
+  width: 100%;
+  overflow-x: auto;
+}
+
+main.content img {
+  display: block;
+  width: 85%;
+  max-width: 100%;
+  height: auto;
+  margin: 1rem auto;
+}
+
+main.content .quarto-figure {
+  width: 100%;
+  max-width: 100%;
+  margin: 1rem auto;
+}
+
+main.content .quarto-figure > figure {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+}
+
+main.content .quarto-figure figcaption {
+  width: 85%;
+  max-width: 100%;
+  margin: 0 auto 1rem;
+}
+
+@media (max-width: 768px) {
+  body {
+    font-size: 16px;
+  }
+
+  .session-card,
+  .resource-card {
+    padding: 1rem;
+  }
+
+  .navbar .navbar-brand {
+    font-size: 1rem;
+  }
+}
+
+/* Keep the reading column inside Quarto's responsive grid. */
+#quarto-content > *, main.content, .cell, .cell-output, .cell-output-display,
+.cell-output-stdout, .sourceCode, .session-card, .resource-card {
+  min-width: 0;
+  max-width: 100%;
+}
+main.content { overflow-wrap: anywhere; }
+.cell-output-stdout, .cell-output-stderr { overflow-x: auto; }
+pre { max-width: 100%; overflow-x: auto; }
+.cell-output-stdout pre { white-space: pre; }
+div.sourceCode { overflow-x: auto; }
+main.content table { display: block; max-width: 100%; overflow-x: auto; }
+.navbar .nav-link, .navbar .navbar-brand, .navbar #quarto-search,
+.navbar .quarto-search-button { color: var(--brand-strong); }
+.navbar .nav-link:hover, .navbar .nav-link:focus,
+.navbar .nav-link.active { color: var(--brand); text-decoration: underline; }
+.navbar { --bs-navbar-color: #102845; --bs-navbar-active-color: #102845;
+  --bs-navbar-hover-color: #1f3a5f; --bs-navbar-toggler-border-color: #5f6f82; }
+main.content a:not(.btn), .sidebar-item a { color: var(--brand); }
+.btn-primary { background-color: var(--brand); border-color: var(--brand); color: white; }
+.btn-primary:hover, .btn-primary:focus { background-color: var(--brand-strong); color: white; }
+.btn-outline-primary { color: var(--brand); border-color: var(--brand); }
+.btn-outline-primary:hover { background-color: var(--brand); color: white; }
+main.content .btn { white-space: normal; margin: .25rem .3rem .25rem 0; }
+main.content h1, main.content h2, main.content h3 { color: var(--brand-strong); }
+@media (prefers-reduced-motion: reduce) {
+  .session-card, .resource-card { transition: none; }
+}

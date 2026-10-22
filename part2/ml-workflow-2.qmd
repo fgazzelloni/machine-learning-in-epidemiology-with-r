@@ -25,15 +25,25 @@ execute:
 knitr::read_chunk("R/02-trees-and-evaluation.R")
 ```
 
-## From the September introduction to the article workflow
+## From the 28 September 2026 introduction to the article workflow {#from-the-september-introduction-to-the-article-workflow}
 
 In Part 1, we explored how learning works and applied it to West Nile surveillance.
 In this session, we use the heart-disease data from
 [Wright et al.](https://arxiv.org/html/2602.16352v1) and follow the order of their
-published examples. Open `part2.Rproj` and keep this folder as the working directory.
+published examples. Open `machine-learning-in-epidemiology-with-r.Rproj` from
+the repository root in RStudio. This single project contains both parts.
+In a fresh project session, run the following in the Console before using the
+Part 2 scripts:
 
-The authors' companion repository is currently unavailable. This workshop
-implements the published examples and documents the missing setup choices in
+```{r}
+#| eval: false
+setwd("part2")
+```
+
+The scripts use `part2/` as their working directory. Quarto runs this notebook
+from its own folder when rendering.
+
+This workshop implements the published examples. Implementation details are documented in
 [the replication record](references/replication-notes.qmd).
 The frozen data and transformation details are in [the data guide](data/guide.qmd).
 

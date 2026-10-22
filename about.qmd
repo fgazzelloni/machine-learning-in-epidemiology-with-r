@@ -16,7 +16,7 @@ This experience connects directly to the workshop’s practical approach to mach
 
 This workshop is designed as a guided progression through two connected learning experiences:
 
-- **Part 1 — September 2026:** foundations of machine learning, the idea of learning itself, gradient descent, and a West Nile virus prediction workflow.
+- **Part 1 — 28 September 2026:** foundations of machine learning, the idea of learning itself, gradient descent, and a West Nile virus prediction workflow.
 - **Part 2 — 23 October 2026:** a heart-disease workflow inspired by Wright et al., including trees, neural networks, evaluation, resampling and tuning.
 
 The materials are organised so that participants can move from conceptual understanding to code-based practice without losing sight of the data, the modelling assumptions and the interpretation of results.
@@ -28,6 +28,6 @@ The repository keeps the two session tracks easy to navigate while preserving th
 - [Workshop home](index.qmd)
 - [Part 1 materials](part1/guide.qmd)
 - [Part 2 materials](part2/guide.qmd)
-- [Original September workshop repository](https://github.com/fgazzelloni/Intro-to-ml-in-epidemiology-with-r)
+- [Original 28 September 2026 workshop repository](https://github.com/fgazzelloni/Intro-to-ml-in-epidemiology-with-r)
 
-This new repository is a workshop organization and teaching resource for the current series. The original September repository and published website remain separate and are not replaced by these materials.
+This new repository is a workshop organization and teaching resource for the current series. The original 28 September 2026 workshop repository and published website remain separate and are not replaced by these materials.

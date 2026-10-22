@@ -2,7 +2,7 @@
 
 ## Completed
 
-- Raw ARFF checksum agrees with the saved OpenML metadata.
+- The original data file uses ARFF (Attribute–Relation File Format), a text format that describes column names and types, followed by one patient per row. “Raw” means the downloaded file before workshop preparation. Its checksum (a fingerprint of the file contents) matches the saved OpenML metadata, confirming that the file has not changed.
 - 270 complete rows; 13 predictors; target counts 150 absent and 120 present.
 - Train/test split: 180/90 disjoint rows covering all patients.
 - Default/deep/pruned trees, confusion matrix, five classification measures and three evaluation plots.
@@ -27,10 +27,6 @@ Only their smaller smoke runs were executed. They are not reported as complete r
 ## Environment notes
 
 The installed mlr3learners/XGBoost combination completed the runs but emitted
-XGBoost deprecation warnings about legacy parameter passing. A future XGBoost
-release may require an updated mlr3learners version. MBO invoked its built-in
+XGBoost deprecation warnings about legacy parameter passing. MBO invoked its built-in
 random-forest surrogate fallback during this run. ARF ran sequentially without
-a registered parallel backend. Neither warning was treated as a model result.
-
-The authors' companion repository returned 404. Unpublished seeds, data
-preparation and environment cannot be verified; see the replication record.
+a registered parallel backend.

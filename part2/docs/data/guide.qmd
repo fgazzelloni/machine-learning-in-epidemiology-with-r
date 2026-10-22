@@ -1,0 +1,6 @@
+---
+title: "Part 2 — Heart-disease data"
+guide-page: true
+---
+
+{{< include README.md >}}

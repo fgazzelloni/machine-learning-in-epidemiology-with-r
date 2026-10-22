@@ -70,6 +70,33 @@ ul.task-list li input[type="checkbox"] {
 
 
 <link rel="stylesheet" href="styles.css">
+<script>
+(function () {
+  function updateLinks() {
+    document.querySelectorAll('a[href]').forEach(function (link) {
+      var href = link.getAttribute('href').trim();
+      if (!href || /^(#|javascript:|mailto:|tel:)/i.test(href) ||
+          link.hasAttribute('download') || link.getAttribute('role') === 'tab' ||
+          link.hasAttribute('data-bs-toggle')) return;
+      var destination = new URL(href, document.baseURI);
+      if (destination.origin === location.origin &&
+          destination.pathname === location.pathname &&
+          destination.search === location.search && destination.hash) return;
+      link.target = '_blank';
+      link.relList.add('noopener', 'noreferrer');
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', updateLinks);
+  } else {
+    updateLinks();
+  }
+  new MutationObserver(updateLinks).observe(document.documentElement, {
+    childList: true, subtree: true
+  });
+})();
+</script>
+
 </head>
 
 <body class="nav-sidebar floating nav-fixed quarto-light">
@@ -267,7 +294,7 @@ ul.task-list li input[type="checkbox"] {
 <h2 class="anchored" data-anchor-id="the-two-part-learning-journey">The two-part learning journey</h2>
 <p>This workshop is designed as a guided progression through two connected learning experiences:</p>
 <ul>
-<li><strong>Part 1 — September 2026:</strong> foundations of machine learning, the idea of learning itself, gradient descent, and a West Nile virus prediction workflow.</li>
+<li><strong>Part 1 — 28 September 2026:</strong> foundations of machine learning, the idea of learning itself, gradient descent, and a West Nile virus prediction workflow.</li>
 <li><strong>Part 2 — 23 October 2026:</strong> a heart-disease workflow inspired by Wright et al., including trees, neural networks, evaluation, resampling and tuning.</li>
 </ul>
 <p>The materials are organised so that participants can move from conceptual understanding to code-based practice without losing sight of the data, the modelling assumptions and the interpretation of results.</p>
@@ -279,9 +306,9 @@ ul.task-list li input[type="checkbox"] {
 <li><a href="./index.html">Workshop home</a></li>
 <li><a href="./part1/guide.html">Part 1 materials</a></li>
 <li><a href="./part2/guide.html">Part 2 materials</a></li>
-<li><a href="https://github.com/fgazzelloni/Intro-to-ml-in-epidemiology-with-r">Original September workshop repository</a></li>
+<li><a href="https://github.com/fgazzelloni/Intro-to-ml-in-epidemiology-with-r">Original 28 September 2026 workshop repository</a></li>
 </ul>
-<p>This new repository is a workshop organization and teaching resource for the current series. The original September repository and published website remain separate and are not replaced by these materials.</p>
+<p>This new repository is a workshop organization and teaching resource for the current series. The original 28 September 2026 workshop repository and published website remain separate and are not replaced by these materials.</p>
 
 
 </section>

@@ -1,6 +1,6 @@
 project:
   type: website
-  output-dir: _site
+  output-dir: docs
   render:
     - index.qmd
     - about.qmd
@@ -17,18 +17,17 @@ project:
     - part2/ml-workflow-2.qmd
 
   resources:
+    - machine-learning-in-epidemiology-with-r.Rproj
     - part1/presentation/**
     - part1/R/**
     - part1/exercises/**
     - part1/solutions/**
     - part1/app.R
-    - part1/*.Rproj
     - part1/install-packages.R
     - part1/check-setup.R
     - part1/data/raw/**
     - part1/data/processed/**
     - part2/R/**
-    - part2/*.Rproj
     - part2/install-packages.R
     - part2/check-setup.R
     - part2/data/raw/**
@@ -93,6 +92,7 @@ website:
 
 format:
   html:
+    include-in-header: includes/new-tab-links.html
     theme: flatly
     css: styles.css
     toc: true

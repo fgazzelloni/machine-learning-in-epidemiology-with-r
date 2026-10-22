@@ -4,7 +4,7 @@
     "href": "part2/workshop-part-2-trees-to-neural-networks.html",
     "title": "Machine Learning in Epidemiology with R — Part 2",
     "section": "",
-    "text": "In Part 1, we explored how learning works and applied it to West Nile surveillance. In this session, we use the heart-disease data from Wright et al. and follow the order of their published examples. Open part2.Rproj and keep this folder as the working directory.\nThe authors’ companion repository is currently unavailable. This workshop implements the published examples and documents the missing setup choices in the replication record. The frozen data and transformation details are in the data guide.",
+    "text": "In Part 1, we explored how learning works and applied it to West Nile surveillance. In this session, we use the heart-disease data from Wright et al. and follow the order of their published examples. Open part2.Rproj and keep this folder as the working directory.\nThis workshop implements the published examples. Implementation details are documented in the replication record. The frozen data and transformation details are in the data guide.",
     "crumbs": [
       "Home",
       "Part 2",
@@ -16,7 +16,7 @@
     "href": "part2/workshop-part-2-trees-to-neural-networks.html#from-the-september-introduction-to-the-article-workflow",
     "title": "Machine Learning in Epidemiology with R — Part 2",
     "section": "",
-    "text": "In Part 1, we explored how learning works and applied it to West Nile surveillance. In this session, we use the heart-disease data from Wright et al. and follow the order of their published examples. Open part2.Rproj and keep this folder as the working directory.\nThe authors’ companion repository is currently unavailable. This workshop implements the published examples and documents the missing setup choices in the replication record. The frozen data and transformation details are in the data guide.",
+    "text": "In Part 1, we explored how learning works and applied it to West Nile surveillance. In this session, we use the heart-disease data from Wright et al. and follow the order of their published examples. Open part2.Rproj and keep this folder as the working directory.\nThis workshop implements the published examples. Implementation details are documented in the replication record. The frozen data and transformation details are in the data guide.",
     "crumbs": [
       "Home",
       "Part 2",
@@ -136,7 +136,7 @@
     "href": "part2/outputs/validation.html",
     "title": "Part 2 — Validation record",
     "section": "",
-    "text": "Raw ARFF checksum agrees with the saved OpenML metadata.\n270 complete rows; 13 predictors; target counts 150 absent and 120 present.\nTrain/test split: 180/90 disjoint rows covering all patients.\nDefault/deep/pruned trees, confusion matrix, five classification measures and three evaluation plots.\nThree-fold CV, 100 subsampling repetitions and 40 bootstrap repetitions at the article’s settings.\nNeural network with 22 inputs and the article’s architecture/training settings: early stopping after 27 epochs; test accuracy 0.8556. TensorFlow 2.21.0, Python Keras 3.12.4, R keras3 1.5.1.\nBayesian tuning: all 30 configurations, ten-fold inner CV; held-out accuracy 0.7889.\nRandom search: all 500 configurations, ten-fold inner CV; held-out accuracy 0.8111.\nGrid and nested-CV execution paths: reduced smoke runs (grid resolution 2, two folds; nested two evaluations and two inner/outer folds).\nARF/FORDE/FORGE: 270 synthetic observations, saved separately from real data.\nR scripts parse, notebook executes and renders with its results and figures.\n\nThese are locally observed results, not replacements for the article’s reported results. The notebook reruns the core workflow; saved network and tuning outputs come from separate runs. Package versions for the completed full runs are in the accompanying session-info files.",
+    "text": "The original data file uses ARFF (Attribute–Relation File Format), a text format that describes column names and types, followed by one patient per row. “Raw” means the downloaded file before workshop preparation. Its checksum (a fingerprint of the file contents) matches the saved OpenML metadata, confirming that the file has not changed.\n270 complete rows; 13 predictors; target counts 150 absent and 120 present.\nTrain/test split: 180/90 disjoint rows covering all patients.\nDefault/deep/pruned trees, confusion matrix, five classification measures and three evaluation plots.\nThree-fold CV, 100 subsampling repetitions and 40 bootstrap repetitions at the article’s settings.\nNeural network with 22 inputs and the article’s architecture/training settings: early stopping after 27 epochs; test accuracy 0.8556. TensorFlow 2.21.0, Python Keras 3.12.4, R keras3 1.5.1.\nBayesian tuning: all 30 configurations, ten-fold inner CV; held-out accuracy 0.7889.\nRandom search: all 500 configurations, ten-fold inner CV; held-out accuracy 0.8111.\nGrid and nested-CV execution paths: reduced smoke runs (grid resolution 2, two folds; nested two evaluations and two inner/outer folds).\nARF/FORDE/FORGE: 270 synthetic observations, saved separately from real data.\nR scripts parse, notebook executes and renders with its results and figures.\n\nThese are locally observed results, not replacements for the article’s reported results. The notebook reruns the core workflow; saved network and tuning outputs come from separate runs. Package versions for the completed full runs are in the accompanying session-info files.",
     "crumbs": [
       "Home",
       "Part 2",
@@ -148,7 +148,7 @@
     "href": "part2/outputs/validation.html#completed",
     "title": "Part 2 — Validation record",
     "section": "",
-    "text": "Raw ARFF checksum agrees with the saved OpenML metadata.\n270 complete rows; 13 predictors; target counts 150 absent and 120 present.\nTrain/test split: 180/90 disjoint rows covering all patients.\nDefault/deep/pruned trees, confusion matrix, five classification measures and three evaluation plots.\nThree-fold CV, 100 subsampling repetitions and 40 bootstrap repetitions at the article’s settings.\nNeural network with 22 inputs and the article’s architecture/training settings: early stopping after 27 epochs; test accuracy 0.8556. TensorFlow 2.21.0, Python Keras 3.12.4, R keras3 1.5.1.\nBayesian tuning: all 30 configurations, ten-fold inner CV; held-out accuracy 0.7889.\nRandom search: all 500 configurations, ten-fold inner CV; held-out accuracy 0.8111.\nGrid and nested-CV execution paths: reduced smoke runs (grid resolution 2, two folds; nested two evaluations and two inner/outer folds).\nARF/FORDE/FORGE: 270 synthetic observations, saved separately from real data.\nR scripts parse, notebook executes and renders with its results and figures.\n\nThese are locally observed results, not replacements for the article’s reported results. The notebook reruns the core workflow; saved network and tuning outputs come from separate runs. Package versions for the completed full runs are in the accompanying session-info files.",
+    "text": "The original data file uses ARFF (Attribute–Relation File Format), a text format that describes column names and types, followed by one patient per row. “Raw” means the downloaded file before workshop preparation. Its checksum (a fingerprint of the file contents) matches the saved OpenML metadata, confirming that the file has not changed.\n270 complete rows; 13 predictors; target counts 150 absent and 120 present.\nTrain/test split: 180/90 disjoint rows covering all patients.\nDefault/deep/pruned trees, confusion matrix, five classification measures and three evaluation plots.\nThree-fold CV, 100 subsampling repetitions and 40 bootstrap repetitions at the article’s settings.\nNeural network with 22 inputs and the article’s architecture/training settings: early stopping after 27 epochs; test accuracy 0.8556. TensorFlow 2.21.0, Python Keras 3.12.4, R keras3 1.5.1.\nBayesian tuning: all 30 configurations, ten-fold inner CV; held-out accuracy 0.7889.\nRandom search: all 500 configurations, ten-fold inner CV; held-out accuracy 0.8111.\nGrid and nested-CV execution paths: reduced smoke runs (grid resolution 2, two folds; nested two evaluations and two inner/outer folds).\nARF/FORDE/FORGE: 270 synthetic observations, saved separately from real data.\nR scripts parse, notebook executes and renders with its results and figures.\n\nThese are locally observed results, not replacements for the article’s reported results. The notebook reruns the core workflow; saved network and tuning outputs come from separate runs. Package versions for the completed full runs are in the accompanying session-info files.",
     "crumbs": [
       "Home",
       "Part 2",
@@ -172,7 +172,7 @@
     "href": "part2/outputs/validation.html#environment-notes",
     "title": "Part 2 — Validation record",
     "section": "Environment notes",
-    "text": "Environment notes\nThe installed mlr3learners/XGBoost combination completed the runs but emitted XGBoost deprecation warnings about legacy parameter passing. A future XGBoost release may require an updated mlr3learners version. MBO invoked its built-in random-forest surrogate fallback during this run. ARF ran sequentially without a registered parallel backend. Neither warning was treated as a model result.\nThe authors’ companion repository returned 404. Unpublished seeds, data preparation and environment cannot be verified; see the replication record.",
+    "text": "Environment notes\nThe installed mlr3learners/XGBoost combination completed the runs but emitted XGBoost deprecation warnings about legacy parameter passing. MBO invoked its built-in random-forest surrogate fallback during this run. ARF ran sequentially without a registered parallel backend.\n",
     "crumbs": [
       "Home",
       "Part 2",
@@ -184,7 +184,7 @@
     "href": "part2/data/guide.html",
     "title": "Part 2 — Heart-disease data",
     "section": "",
-    "text": "Source: OpenML heart-statlog, ID 53, version 1. Downloaded 12 October 2026 from the URL in the saved OpenML metadata. The metadata lists the licence as Public. The original data are attributed to Janosi, Steinbrunn, Pfisterer and Detrano (1988), as cited by the article.\nThe snapshot has 270 patients, 13 predictors and a binary target: 150 absent, 120 present. It is the OpenML Statlog heart dataset matching the article’s sample size, predictor definitions and outcome; the inaccessible companion repository prevents verification against the authors’ own prepared data file.\nraw/heart-statlog.arff is unchanged. SHA-256: e16082cc6158f29be2e7b081953cd6edf342760d135bccdb64e191d0834d6300. raw/openml-53-metadata.json preserves the source metadata. processed/heart.csv is regenerated by R/01-data.R.",
+    "text": "Source: OpenML heart-statlog, ID 53, version 1. Downloaded 12 October 2026 from the URL in the saved OpenML metadata. The metadata lists the licence as Public. The original data are attributed to Janosi, Steinbrunn, Pfisterer and Detrano (1988), as cited by the article.\nThe snapshot has 270 patients, 13 predictors and a binary target: 150 absent, 120 present. It is the OpenML Statlog heart dataset matching the article’s sample size, predictor definitions and outcome.\nraw/heart-statlog.arff is unchanged. SHA-256: e16082cc6158f29be2e7b081953cd6edf342760d135bccdb64e191d0834d6300. raw/openml-53-metadata.json preserves the source metadata. processed/heart.csv is regenerated by R/01-data.R.",
     "crumbs": [
       "Home",
       "Part 2",
@@ -236,7 +236,7 @@
     "href": "part1/guide.html",
     "title": "Part 1 — Session guide",
     "section": "",
-    "text": "September 2026 session: how a model learns, followed by a West Nile virus prediction workflow.",
+    "text": "28 September 2026 session: how a model learns, followed by a West Nile virus prediction workflow.",
     "crumbs": [
       "Home",
       "Part 1",
@@ -248,7 +248,7 @@
     "href": "part1/guide.html#follow-the-session",
     "title": "Part 1 — Session guide",
     "section": "Follow the session",
-    "text": "Follow the session\n\nOpen part1.Rproj in RStudio; keep part1/ as the working directory.\nRun source(\"install-packages.R\"), then source(\"check-setup.R\").\nStart with the teaching notebook.\nWork through the student practice script.\nTry the exercise and compare it with the solution.\n\nSlide viewer · PowerPoint · Rendered notebook\nThe gradient descent app is an optional interactive demonstration. See the data guide and sources for the evidence behind the teaching example.\nThe student practice requires rpart and rpart.plot. To run every section of the instructor notebook, also install ggplot2, dplyr, data.table, maps, pROC, mlr3, mlr3learners and ranger.\nFrom this folder, render the teaching notebook with quarto render. Its output is docs/index.html. The copied rendered files are the September snapshot; copying them does not rerun the models.\nSeries guide · Part 2",
+    "text": "Follow the session\n\nOpen part1.Rproj in RStudio; keep part1/ as the working directory.\nRun source(\"install-packages.R\"), then source(\"check-setup.R\").\nStart with the teaching notebook.\nWork through the student practice script.\nTry the exercise and compare it with the solution.\n\nSlide viewer · PowerPoint · Rendered notebook\nThe gradient descent app is an optional interactive demonstration. See the data guide and sources for the evidence behind the teaching example.\nThe student practice requires rpart and rpart.plot. To run every section of the instructor notebook, also install ggplot2, dplyr, data.table, maps, pROC, mlr3, mlr3learners and ranger.\nFrom this folder, render the teaching notebook with quarto render. Its output is docs/index.html. The copied rendered files are the 28 September 2026 snapshot; copying them does not rerun the models.\nSeries guide · Part 2",
     "crumbs": [
       "Home",
       "Part 1",
@@ -293,7 +293,7 @@
     "href": "index.html",
     "title": "Machine Learning in Epidemiology with R",
     "section": "",
-    "text": "Learn machine learning through epidemiological examples, from model fundamentals to an article-based prediction workflow.\n\n\nPart 1 — September 2026\nHow models learn, gradient descent, and West Nile virus prediction.\nExplore Part 1 · Open the notebook\n\n\nPart 2 — 23 October 2026\nAn article-based heart-disease workflow with trees, neural networks, and model evaluation.\nExplore Part 2 · Open the notebook\n\n\nBrowse the workshop resources, or start with a session above.",
+    "text": "Learn machine learning through epidemiological examples, from model fundamentals to an article-based prediction workflow.\n\n\nPart 1 — 28 September 2026\nHow models learn, gradient descent, and West Nile virus prediction.\nExplore Part 1 · Open the notebook\n\n\nPart 2 — 23 October 2026\nAn article-based heart-disease workflow with trees, neural networks, and model evaluation.\nExplore Part 2 · Open the notebook\n\n\nBrowse the workshop resources, or start with a session above.",
     "crumbs": [
       "Home"
     ]
@@ -325,7 +325,7 @@
     "href": "about.html#the-two-part-learning-journey",
     "title": "About",
     "section": "The two-part learning journey",
-    "text": "The two-part learning journey\nThis workshop is designed as a guided progression through two connected learning experiences:\n\nPart 1 — September 2026: foundations of machine learning, the idea of learning itself, gradient descent, and a West Nile virus prediction workflow.\nPart 2 — 23 October 2026: a heart-disease workflow inspired by Wright et al., including trees, neural networks, evaluation, resampling and tuning.\n\nThe materials are organised so that participants can move from conceptual understanding to code-based practice without losing sight of the data, the modelling assumptions and the interpretation of results.",
+    "text": "The two-part learning journey\nThis workshop is designed as a guided progression through two connected learning experiences:\n\nPart 1 — 28 September 2026: foundations of machine learning, the idea of learning itself, gradient descent, and a West Nile virus prediction workflow.\nPart 2 — 23 October 2026: a heart-disease workflow inspired by Wright et al., including trees, neural networks, evaluation, resampling and tuning.\n\nThe materials are organised so that participants can move from conceptual understanding to code-based practice without losing sight of the data, the modelling assumptions and the interpretation of results.",
     "crumbs": [
       "Home",
       "About"
@@ -336,7 +336,7 @@
     "href": "about.html#workshop-materials-and-next-steps",
     "title": "About",
     "section": "Workshop materials and next steps",
-    "text": "Workshop materials and next steps\nThe repository keeps the two session tracks easy to navigate while preserving the source files, notebook structure and project-level working directories.\n\nWorkshop home\nPart 1 materials\nPart 2 materials\nOriginal September workshop repository\n\nThis new repository is a workshop organization and teaching resource for the current series. The original September repository and published website remain separate and are not replaced by these materials.",
+    "text": "Workshop materials and next steps\nThe repository keeps the two session tracks easy to navigate while preserving the source files, notebook structure and project-level working directories.\n\nWorkshop home\nPart 1 materials\nPart 2 materials\nOriginal 28 September 2026 workshop repository\n\nThis new repository is a workshop organization and teaching resource for the current series. The original 28 September 2026 workshop repository and published website remain separate and are not replaced by these materials.",
     "crumbs": [
       "Home",
       "About"
@@ -361,14 +361,14 @@
     "href": "guide.html#repository-structure",
     "title": "Series guide",
     "section": "Repository structure",
-    "text": "Repository structure\n.\n├── index.qmd                     # workshop home\n├── about.qmd                    # instructor profile\n├── resources.qmd                 # source article and book\n├── part1/                       # September workshop\n│   ├── README.md\n│   ├── part1.Rproj\n│   ├── ml-workflow.qmd\n│   ├── R/\n│   ├── data/\n│   ├── presentation/\n│   ├── outputs/\n│   └── references/\n├── part2/                       # October workshop\n│   ├── README.md\n│   ├── part2.Rproj\n│   ├── ml-workflow-2.qmd\n│   ├── R/\n│   ├── data/\n│   ├── outputs/\n│   └── references/\n└── _site/                       # rendered Quarto output"
+    "text": "Repository structure\n.\n├── index.qmd                     # workshop home\n├── about.qmd                    # instructor profile\n├── resources.qmd                 # source article and book\n├── part1/                       # 28 September 2026 workshop\n│   ├── README.md\n│   ├── part1.Rproj\n│   ├── ml-workflow.qmd\n│   ├── R/\n│   ├── data/\n│   ├── presentation/\n│   ├── outputs/\n│   └── references/\n├── part2/                       # October workshop\n│   ├── README.md\n│   ├── part2.Rproj\n│   ├── ml-workflow-2.qmd\n│   ├── R/\n│   ├── data/\n│   ├── outputs/\n│   └── references/\n└── _site/                       # rendered Quarto output"
   },
   {
     "objectID": "guide.html#notes",
     "href": "guide.html#notes",
     "title": "Series guide",
     "section": "Notes",
-    "text": "Notes\n\nOpen the session project in RStudio and keep that folder as the working directory.\nThe original September repository and its published website remain separate.\nPart 1 preserves the September teaching materials; Part 2 retains the article workflow and validation notes for locally observed results."
+    "text": "Notes\n\nOpen the session project in RStudio and keep that folder as the working directory.\nThe original 28 September 2026 workshop repository and its published website remain separate.\nPart 1 preserves the 28 September 2026 teaching materials; Part 2 retains the article workflow and validation notes for locally observed results."
   },
   {
     "objectID": "part1/data/guide.html",
@@ -447,7 +447,7 @@
     "href": "part2/guide.html#scope-and-provenance",
     "title": "Part 2 — Session guide",
     "section": "Scope and provenance",
-    "text": "Scope and provenance\nThe companion repository cited by the article currently returns 404. These scripts implement the published examples with explicit setup choices; they are not a verified copy of that repository. The data guide and replication record document what is specified, what was reconstructed and what has been tested. The article’s printed scores are not guaranteed for a different split or environment.\nSeries guide · Part 1",
+    "text": "Scope and provenance\nThese scripts implement the published examples. The data guide and replication record document data preparation, implementation choices and completed checks. The article’s printed scores are not guaranteed for a different split or environment.\nSeries guide · Part 1",
     "crumbs": [
       "Home",
       "Part 2",
@@ -459,7 +459,7 @@
     "href": "part2/references/replication-notes.html",
     "title": "Part 2 — Source and replication record",
     "section": "",
-    "text": "Wright et al. (2026), Machine Learning in Epidemiology, arXiv v1.\nCompanion repository cited in the article: returned HTTP 404 on 12 October 2026, including authenticated GitHub API access.\nOpenML dataset 53, version 1; saved metadata and raw data are in data/raw/.\nThis is an implementation of the article’s published workflow, not a verified copy of the unavailable companion code. New explanatory prose and scripts were written for this workshop. Models and settings follow the published examples.",
+    "text": "Wright et al. (2026), Machine Learning in Epidemiology, arXiv v1.\nOpenML dataset 53, version 1; saved metadata and raw data are in data/raw/.\nThis workshop implements the article’s published workflow with teaching scripts and explanatory notes. Models and settings follow the published examples.",
     "crumbs": [
       "Home",
       "Part 2",
@@ -470,8 +470,8 @@
     "objectID": "part2/references/replication-notes.html#changes-required-to-make-the-examples-runnable",
     "href": "part2/references/replication-notes.html#changes-required-to-make-the-examples-runnable",
     "title": "Part 2 — Source and replication record",
-    "section": "Changes required to make the examples runnable",
-    "text": "Changes required to make the examples runnable\nThe paper omits data preparation, seeds, train/test objects in some snippets and parts of tuning code (shown as ellipses). The scripts add these definitions, use heart_task consistently and set explicit local seeds. Keras uses keras3 instead of the article’s older keras interface, retaining the architecture and training settings. Data encoding/scaling choices are recorded in the data guide. Random-forest threading is fixed to one for reproducibility. The initial forest uses the learner default; the resampling examples use 100 trees, as printed. Tuning is restricted to the training task; nested CV uses an outer and inner 10-fold design. The article’s full grid has up to 10,000 configurations and is not run during a normal notebook render.\nThe article reports a 100% neural-network test accuracy. That is a reported result for its run, not an expected or guaranteed workshop result. Our outputs are saved separately. Matching all printed numeric results requires the missing original seeds, split, preprocessing and software environment.",
+    "section": "Workshop implementation",
+    "text": "Workshop implementation\nThe scripts define data preparation, train/test objects and tuning code, use heart_task consistently and set explicit seeds. Keras uses keras3 instead of the article’s older keras interface, retaining the architecture and training settings. Data encoding/scaling choices are recorded in the data guide. Random-forest threading is fixed to one for reproducibility. The initial forest uses the learner default; the resampling examples use 100 trees, as printed. Tuning is restricted to the training task; nested CV uses an outer and inner 10-fold design. The article’s full grid has up to 10,000 configurations and is not run during a normal notebook render.\nThe article reports a 100% neural-network test accuracy. That is a reported result for its run, not an expected or guaranteed workshop result. Our outputs are saved separately. Results depend on the random seed, data split, preprocessing and software versions.",
     "crumbs": [
       "Home",
       "Part 2",

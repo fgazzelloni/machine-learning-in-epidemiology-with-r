@@ -1,12 +1,10 @@
 # Source and replication record
 
 - Wright et al. (2026), [Machine Learning in Epidemiology, arXiv v1](https://arxiv.org/html/2602.16352v1).
-- [Companion repository cited in the article](https://github.com/bips-hb/epi-handbook-ml): returned HTTP 404 on 12 October 2026, including authenticated GitHub API access.
 - [OpenML dataset 53](https://www.openml.org/d/53), version 1; saved metadata and raw data are in `data/raw/`.
 
-This is an implementation of the article's published workflow, not a verified
-copy of the unavailable companion code. New explanatory prose and scripts were
-written for this workshop. Models and settings follow the published examples.
+This workshop implements the article's published workflow with teaching scripts
+and explanatory notes. Models and settings follow the published examples.
 
 | Article section | Workshop implementation | Status |
 | --- | --- | --- |
@@ -18,11 +16,10 @@ written for this workshop. Models and settings follow the published examples.
 | 5 | Notebook discussion | No executable iml example is printed in the paper |
 | 6.2.5 | `R/05-synthetic-data.R` | ARF, FORDE and FORGE |
 
-## Changes required to make the examples runnable
+## Workshop implementation
 
-The paper omits data preparation, seeds, train/test objects in some snippets
-and parts of tuning code (shown as ellipses). The scripts add these definitions,
-use `heart_task` consistently and set explicit local seeds. Keras uses `keras3`
+The scripts define data preparation, train/test objects and tuning code,
+use `heart_task` consistently and set explicit seeds. Keras uses `keras3`
 instead of the article's older `keras` interface, retaining the architecture
 and training settings. Data encoding/scaling choices are recorded in the data guide.
 Random-forest threading is fixed to one for reproducibility. The initial forest
@@ -33,8 +30,7 @@ not run during a normal notebook render.
 
 The article reports a 100% neural-network test accuracy. That is a reported
 result for its run, not an expected or guaranteed workshop result. Our outputs
-are saved separately. Matching all printed numeric results requires the missing
-original seeds, split, preprocessing and software environment.
+are saved separately. Results depend on the random seed, data split, preprocessing and software versions.
 
 ## Validation
 

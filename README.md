@@ -6,19 +6,18 @@ A two-part R-Ladies Rome workshop series led by Federica Gazzelloni.
 
 - [Part 1 README](part1/README.md)
 - [Part 2 README](part2/README.md)
-- [Part 1 project](part1/part1.Rproj)
-- [Part 2 project](part2/part2.Rproj)
+- [RStudio project for both parts](machine-learning-in-epidemiology-with-r.Rproj)
 
 ## Repository structure
 
 ```text
 .
+├── machine-learning-in-epidemiology-with-r.Rproj
 ├── index.qmd                     # workshop home
 ├── about.qmd                    # instructor profile
 ├── resources.qmd                 # source article and book
-├── part1/                       # September workshop
+├── part1/                       # 28 September 2026 workshop
 │   ├── README.md
-│   ├── part1.Rproj
 │   ├── ml-workflow.qmd
 │   ├── R/
 │   ├── data/
@@ -27,17 +26,17 @@ A two-part R-Ladies Rome workshop series led by Federica Gazzelloni.
 │   └── references/
 ├── part2/                       # October workshop
 │   ├── README.md
-│   ├── part2.Rproj
 │   ├── ml-workflow-2.qmd
 │   ├── R/
 │   ├── data/
 │   ├── outputs/
 │   └── references/
-└── _site/                       # rendered Quarto output
+└── docs/                       # rendered Quarto output
 ```
 
 ## Notes
 
-- Open the session project in RStudio and keep that folder as the working directory.
-- The original September repository and its published website remain separate.
-- Part 1 preserves the September teaching materials; Part 2 retains the article workflow and validation notes for locally observed results.
+- Open `machine-learning-in-epidemiology-with-r.Rproj` in RStudio. This single project contains both parts.
+- From a fresh project session, run `setwd("part1")` or `setwd("part2")` before running that part’s scripts; their paths are relative to the session folder.
+- The original 28 September 2026 workshop repository and its published website remain separate.
+- Part 1 preserves the 28 September 2026 teaching materials; Part 2 retains the article workflow and validation notes for locally observed results.

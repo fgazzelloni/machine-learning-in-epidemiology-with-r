@@ -70,6 +70,33 @@ ul.task-list li input[type="checkbox"] {
 
 
 <link rel="stylesheet" href="styles.css">
+<script>
+(function () {
+  function updateLinks() {
+    document.querySelectorAll('a[href]').forEach(function (link) {
+      var href = link.getAttribute('href').trim();
+      if (!href || /^(#|javascript:|mailto:|tel:)/i.test(href) ||
+          link.hasAttribute('download') || link.getAttribute('role') === 'tab' ||
+          link.hasAttribute('data-bs-toggle')) return;
+      var destination = new URL(href, document.baseURI);
+      if (destination.origin === location.origin &&
+          destination.pathname === location.pathname &&
+          destination.search === location.search && destination.hash) return;
+      link.target = '_blank';
+      link.relList.add('noopener', 'noreferrer');
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', updateLinks);
+  } else {
+    updateLinks();
+  }
+  new MutationObserver(updateLinks).observe(document.documentElement, {
+    childList: true, subtree: true
+  });
+})();
+</script>
+
 </head>
 
 <body class="nav-sidebar floating nav-fixed quarto-light">
@@ -274,7 +301,7 @@ ul.task-list li input[type="checkbox"] {
 ├── index.qmd                     # workshop home
 ├── about.qmd                    # instructor profile
 ├── resources.qmd                 # source article and book
-├── part1/                       # September workshop
+├── part1/                       # 28 September 2026 workshop
 │   ├── README.md
 │   ├── part1.Rproj
 │   ├── ml-workflow.qmd
@@ -297,8 +324,8 @@ ul.task-list li input[type="checkbox"] {
 <h2 class="anchored" data-anchor-id="notes">Notes</h2>
 <ul>
 <li>Open the session project in RStudio and keep that folder as the working directory.</li>
-<li>The original September repository and its published website remain separate.</li>
-<li>Part 1 preserves the September teaching materials; Part 2 retains the article workflow and validation notes for locally observed results.</li>
+<li>The original 28 September 2026 workshop repository and its published website remain separate.</li>
+<li>Part 1 preserves the 28 September 2026 teaching materials; Part 2 retains the article workflow and validation notes for locally observed results.</li>
 </ul>
 
 

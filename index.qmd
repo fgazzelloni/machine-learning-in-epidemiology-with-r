@@ -14,7 +14,7 @@ Learn machine learning through epidemiological examples, from model fundamentals
 <div class="card-grid">
 
 ::: {.session-card}
-### Part 1 — September 2026
+### Part 1 — 28 September 2026
 
 How models learn, gradient descent, and West Nile virus prediction.
 

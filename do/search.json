@@ -1,0 +1,86 @@
+[
+  {
+    "objectID": "part2/outputs/validation.html",
+    "href": "part2/outputs/validation.html",
+    "title": "Part 2 — Validation record",
+    "section": "",
+    "text": "The original data file uses ARFF (Attribute–Relation File Format), a text format that describes column names and types, followed by one patient per row. “Raw” means the downloaded file before workshop preparation. Its checksum (a fingerprint of the file contents) matches the saved OpenML metadata, confirming that the file has not changed.\n270 complete rows; 13 predictors; target counts 150 absent and 120 present.\nTrain/test split: 180/90 disjoint rows covering all patients.\nDefault/deep/pruned trees, confusion matrix, five classification measures and three evaluation plots.\nThree-fold CV, 100 subsampling repetitions and 40 bootstrap repetitions at the article’s settings.\nNeural network with 22 inputs and the article’s architecture/training settings: early stopping after 27 epochs; test accuracy 0.8556. TensorFlow 2.21.0, Python Keras 3.12.4, R keras3 1.5.1.\nBayesian tuning: all 30 configurations, ten-fold inner CV; held-out accuracy 0.7889.\nRandom search: all 500 configurations, ten-fold inner CV; held-out accuracy 0.8111.\nGrid and nested-CV execution paths: reduced smoke runs (grid resolution 2, two folds; nested two evaluations and two inner/outer folds).\nARF/FORDE/FORGE: 270 synthetic observations, saved separately from real data.\nR scripts parse, notebook executes and renders with its results and figures.\n\nThese are locally observed results, not replacements for the article’s reported results. The notebook reruns the core workflow; saved network and tuning outputs come from separate runs. Package versions for the completed full runs are in the accompanying session-info files.",
+    "crumbs": [
+      "Home",
+      "Part 2",
+      "Validation"
+    ]
+  },
+  {
+    "objectID": "part2/outputs/validation.html#completed",
+    "href": "part2/outputs/validation.html#completed",
+    "title": "Part 2 — Validation record",
+    "section": "",
+    "text": "The original data file uses ARFF (Attribute–Relation File Format), a text format that describes column names and types, followed by one patient per row. “Raw” means the downloaded file before workshop preparation. Its checksum (a fingerprint of the file contents) matches the saved OpenML metadata, confirming that the file has not changed.\n270 complete rows; 13 predictors; target counts 150 absent and 120 present.\nTrain/test split: 180/90 disjoint rows covering all patients.\nDefault/deep/pruned trees, confusion matrix, five classification measures and three evaluation plots.\nThree-fold CV, 100 subsampling repetitions and 40 bootstrap repetitions at the article’s settings.\nNeural network with 22 inputs and the article’s architecture/training settings: early stopping after 27 epochs; test accuracy 0.8556. TensorFlow 2.21.0, Python Keras 3.12.4, R keras3 1.5.1.\nBayesian tuning: all 30 configurations, ten-fold inner CV; held-out accuracy 0.7889.\nRandom search: all 500 configurations, ten-fold inner CV; held-out accuracy 0.8111.\nGrid and nested-CV execution paths: reduced smoke runs (grid resolution 2, two folds; nested two evaluations and two inner/outer folds).\nARF/FORDE/FORGE: 270 synthetic observations, saved separately from real data.\nR scripts parse, notebook executes and renders with its results and figures.\n\nThese are locally observed results, not replacements for the article’s reported results. The notebook reruns the core workflow; saved network and tuning outputs come from separate runs. Package versions for the completed full runs are in the accompanying session-info files.",
+    "crumbs": [
+      "Home",
+      "Part 2",
+      "Validation"
+    ]
+  },
+  {
+    "objectID": "part2/outputs/validation.html#not-executed-at-full-budget",
+    "href": "part2/outputs/validation.html#not-executed-at-full-budget",
+    "title": "Part 2 — Validation record",
+    "section": "Not executed at full budget",
+    "text": "Not executed at full budget\nThe resolution-10 grid (up to 10,000 configurations) and the 10 x 10 nested-CV workflow with 100 evaluations per inner search remain available in the script. Only their smaller smoke runs were executed. They are not reported as complete replications.",
+    "crumbs": [
+      "Home",
+      "Part 2",
+      "Validation"
+    ]
+  },
+  {
+    "objectID": "part2/outputs/validation.html#environment-notes",
+    "href": "part2/outputs/validation.html#environment-notes",
+    "title": "Part 2 — Validation record",
+    "section": "Environment notes",
+    "text": "Environment notes\nThe installed mlr3learners/XGBoost combination completed the runs but emitted XGBoost deprecation warnings about legacy parameter passing. MBO invoked its built-in random-forest surrogate fallback during this run. ARF ran sequentially without a registered parallel backend.\n",
+    "crumbs": [
+      "Home",
+      "Part 2",
+      "Validation"
+    ]
+  },
+  {
+    "objectID": "part2/references/replication-notes.html",
+    "href": "part2/references/replication-notes.html",
+    "title": "Part 2 — Source and replication record",
+    "section": "",
+    "text": "Wright et al. (2026), Machine Learning in Epidemiology, arXiv v1.\nOpenML dataset 53, version 1; saved metadata and raw data are in data/raw/.\nThis workshop implements the article’s published workflow with teaching scripts and explanatory notes. Models and settings follow the published examples.",
+    "crumbs": [
+      "Home",
+      "Part 2",
+      "Replication record"
+    ]
+  },
+  {
+    "objectID": "part2/references/replication-notes.html#changes-required-to-make-the-examples-runnable",
+    "href": "part2/references/replication-notes.html#changes-required-to-make-the-examples-runnable",
+    "title": "Part 2 — Source and replication record",
+    "section": "Workshop implementation",
+    "text": "Workshop implementation\nThe scripts define data preparation, train/test objects and tuning code, use heart_task consistently and set explicit seeds. Keras uses keras3 instead of the article’s older keras interface, retaining the architecture and training settings. Data encoding/scaling choices are recorded in the data guide. Random-forest threading is fixed to one for reproducibility. The initial forest uses the learner default; the resampling examples use 100 trees, as printed. Tuning is restricted to the training task; nested CV uses an outer and inner 10-fold design. The article’s full grid has up to 10,000 configurations and is not run during a normal notebook render.\nThe article reports a 100% neural-network test accuracy. That is a reported result for its run, not an expected or guaranteed workshop result. Our outputs are saved separately. Results depend on the random seed, data split, preprocessing and software versions.",
+    "crumbs": [
+      "Home",
+      "Part 2",
+      "Replication record"
+    ]
+  },
+  {
+    "objectID": "part2/references/replication-notes.html#validation",
+    "href": "part2/references/replication-notes.html#validation",
+    "title": "Part 2 — Source and replication record",
+    "section": "Validation",
+    "text": "Validation\nSee the validation record for completed runs, observed scores, environment warnings and the two full-budget runs still outstanding.",
+    "crumbs": [
+      "Home",
+      "Part 2",
+      "Replication record"
+    ]
+  }
+]

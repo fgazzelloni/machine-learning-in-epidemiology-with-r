@@ -70,6 +70,33 @@ ul.task-list li input[type="checkbox"] {
 
 
 <link rel="stylesheet" href="../styles.css">
+<script>
+(function () {
+  function updateLinks() {
+    document.querySelectorAll('a[href]').forEach(function (link) {
+      var href = link.getAttribute('href').trim();
+      if (!href || /^(#|javascript:|mailto:|tel:)/i.test(href) ||
+          link.hasAttribute('download') || link.getAttribute('role') === 'tab' ||
+          link.hasAttribute('data-bs-toggle')) return;
+      var destination = new URL(href, document.baseURI);
+      if (destination.origin === location.origin &&
+          destination.pathname === location.pathname &&
+          destination.search === location.search && destination.hash) return;
+      link.target = '_blank';
+      link.relList.add('noopener', 'noreferrer');
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', updateLinks);
+  } else {
+    updateLinks();
+  }
+  new MutationObserver(updateLinks).observe(document.documentElement, {
+    childList: true, subtree: true
+  });
+})();
+</script>
+
 </head>
 
 <body class="nav-sidebar floating nav-fixed quarto-light">
@@ -256,7 +283,7 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>September 2026 session: how a model learns, followed by a West Nile virus prediction workflow.</p>
+<p>28 September 2026 session: how a model learns, followed by a West Nile virus prediction workflow.</p>
 <section id="follow-the-session" class="level2">
 <h2 class="anchored" data-anchor-id="follow-the-session">Follow the session</h2>
 <ol type="1">
@@ -269,7 +296,7 @@ ul.task-list li input[type="checkbox"] {
 <p><a href="presentation/index.html">Slide viewer</a> · <a href="presentation/introduction-to-ml-in-epidemiology-with-r.pptx">PowerPoint</a> · <a href="index.html">Rendered notebook</a></p>
 <p>The <a href="app.R">gradient descent app</a> is an optional interactive demonstration. See the <a href="data/guide.html">data guide</a> and <a href="references/sources.html">sources</a> for the evidence behind the teaching example.</p>
 <p>The student practice requires <code>rpart</code> and <code>rpart.plot</code>. To run every section of the instructor notebook, also install <code>ggplot2</code>, <code>dplyr</code>, <code>data.table</code>, <code>maps</code>, <code>pROC</code>, <code>mlr3</code>, <code>mlr3learners</code> and <code>ranger</code>.</p>
-<p>From this folder, render the teaching notebook with <code>quarto render</code>. Its output is <code>docs/index.html</code>. The copied rendered files are the September snapshot; copying them does not rerun the models.</p>
+<p>From this folder, render the teaching notebook with <code>quarto render</code>. Its output is <code>docs/index.html</code>. The copied rendered files are the 28 September 2026 snapshot; copying them does not rerun the models.</p>
 <p><a href="../guide.html">Series guide</a> · <a href="../part2/guide.html">Part 2</a></p>
 
 
