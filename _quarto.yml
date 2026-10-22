@@ -99,6 +99,7 @@ format:
     css: styles.css
     toc: true
     toc-depth: 3
+    toc-location: right
     page-layout: article
     code-copy: true
     code-overflow: wrap
