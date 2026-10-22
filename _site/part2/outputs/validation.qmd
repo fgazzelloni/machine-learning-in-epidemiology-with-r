@@ -1,6 +1,0 @@
----
-title: "Part 2 — Validation record"
-guide-page: true
----
-
-{{< include VALIDATION.md >}}

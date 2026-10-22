@@ -20,6 +20,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -67,9 +102,6 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-
-
-<link rel="stylesheet" href="../styles.css">
 <script>
 (function () {
   function updateLinks() {
@@ -97,6 +129,8 @@ ul.task-list li input[type="checkbox"] {
 })();
 </script>
 
+
+<link rel="stylesheet" href="../styles.css">
 </head>
 
 <body class="nav-sidebar floating nav-fixed quarto-light">
@@ -129,7 +163,7 @@ ul.task-list li input[type="checkbox"] {
 <span class="menu-text">Part 2</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../resources.qmd"> 
+    <a class="nav-link" href="../resources.html"> 
 <span class="menu-text">Resources</span></a>
   </li>  
   <li class="nav-item">
@@ -223,13 +257,13 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../part2/references/replication-notes.qmd" class="sidebar-item-text sidebar-link">
+  <a href="../part2/references/replication-notes.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Replication record</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../part2/outputs/validation.qmd" class="sidebar-item-text sidebar-link">
+  <a href="../part2/outputs/validation.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Validation</span></a>
   </div>
 </li>
@@ -237,7 +271,7 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../resources.qmd" class="sidebar-item-text sidebar-link">
+  <a href="../resources.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Resources</span></a>
   </div>
 </li>
@@ -257,7 +291,10 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#keras-setup" id="toc-keras-setup" class="nav-link active" data-scroll-target="#keras-setup">Keras setup</a></li>
+  <li><a href="#optional-extensions" id="toc-optional-extensions" class="nav-link active" data-scroll-target="#optional-extensions">Optional extensions</a>
+  <ul class="collapse">
+  <li><a href="#keras-setup" id="toc-keras-setup" class="nav-link" data-scroll-target="#keras-setup">Keras setup</a></li>
+  </ul></li>
   <li><a href="#scope-and-provenance" id="toc-scope-and-provenance" class="nav-link" data-scroll-target="#scope-and-provenance">Scope and provenance</a></li>
   </ul>
 </nav>
@@ -284,13 +321,14 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>Friday, 23 October 2026. We use the 270-patient heart-disease dataset matching Wright et al.&nbsp;(2026), with 13 predictors and an absent/present outcome.</p>
+<p>We use the 270-patient heart-disease dataset matching Wright et al.&nbsp;(2026), with 13 predictors and an absent/present outcome.</p>
 <ol type="1">
-<li>Open <code>part2.Rproj</code>; keep <code>part2/</code> as the working directory.</li>
+<li>Open <code>machine-learning-in-epidemiology-with-r.Rproj</code> from the repository root in RStudio, then run <code>setwd("part2")</code> in the Console. Open the project afresh before switching parts so the Console starts at the repository root.</li>
 <li>Run <code>source("install-packages.R")</code> once, then <code>source("check-setup.R")</code>.</li>
 <li>Follow <a href="../part2/workshop-part-2-trees-to-neural-networks.html">ml-workflow-2.qmd</a>.</li>
-<li>Run the scripts in <code>R/</code> in article order.</li>
+<li>Follow sections 1–4 during the main session. Use sections 5–8 as extensions.</li>
 </ol>
+<p>The main session covers the data, trees, a neural-network demonstration using saved results, and evaluation. Resampling, tuning, interpretation and synthetic data provide follow-up practice. Full neural-network training is optional.</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -321,11 +359,18 @@ ul.task-list li input[type="checkbox"] {
 </tr>
 </tbody>
 </table>
-<p>Render the core notebook with <code>quarto render</code>. Neural-network, full tuning and synthetic-data scripts are separate runs. Full tuning retains the article budgets and can take much longer than the two-hour session.</p>
-<section id="keras-setup" class="level2">
-<h2 class="anchored" data-anchor-id="keras-setup">Keras setup</h2>
-<p>Install the R dependencies, then configure a supported Python backend using <code>keras3::install_keras()</code> in a fresh R session. Alternatively, select an existing compatible Python environment before loading Keras. See the <a href="https://keras3.posit.co/articles/getting_started.html">official Keras for R setup guide</a>. Backend installation is a separate step from installing the R package.</p>
+<p>Render the complete website with <code>quarto render</code> from the repository root; output is written to <code>_site/</code>. Neural-network, full tuning and synthetic-data scripts are separate runs. Full tuning retains the article budgets and can take much longer than the two-hour session.</p>
+<section id="optional-extensions" class="level2">
+<h2 class="anchored" data-anchor-id="optional-extensions">Optional extensions</h2>
+<p>From <code>part2/</code>, install only the dependencies you need:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> install-optional-packages.R neural</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> install-optional-packages.R tuning</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> install-optional-packages.R synthetic</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<section id="keras-setup" class="level3">
+<h3 class="anchored" data-anchor-id="keras-setup">Keras setup</h3>
+<p>Install the neural-network dependency with <code>Rscript install-optional-packages.R neural</code>, then configure a supported Python backend using <code>keras3::install_keras()</code> in a fresh R session. Alternatively, select an existing compatible Python environment before loading Keras. See the <a href="https://keras3.posit.co/articles/getting_started.html">official Keras for R setup guide</a>. Backend installation is a separate step from installing the R package.</p>
 <p>The core workflow, neural network, full random/MBO searches and synthetic-data example have been run. See <a href="outputs/validation.html">validation results</a> for the results and remaining full-budget checks.</p>
+</section>
 </section>
 <section id="scope-and-provenance" class="level2">
 <h2 class="anchored" data-anchor-id="scope-and-provenance">Scope and provenance</h2>

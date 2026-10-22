@@ -1,6 +1,7 @@
 project:
   type: website
-  output-dir: docs
+  output-dir: _site
+  execute-dir: file
   render:
     - index.qmd
     - about.qmd
@@ -28,6 +29,7 @@ project:
     - part1/data/raw/**
     - part1/data/processed/**
     - part2/R/**
+    - part2/install-optional-packages.R
     - part2/install-packages.R
     - part2/check-setup.R
     - part2/data/raw/**

@@ -25,7 +25,7 @@ execute:
 knitr::read_chunk("R/02-trees-and-evaluation.R")
 ```
 
-## From the 28 September 2026 introduction to the article workflow {#from-the-september-introduction-to-the-article-workflow}
+## From Part 1 to the heart-disease workflow {#from-the-september-introduction-to-the-article-workflow}
 
 In Part 1, we explored how learning works and applied it to West Nile surveillance.
 In this session, we use the heart-disease data from
@@ -47,6 +47,12 @@ This workshop implements the published examples. Implementation details are docu
 [the replication record](references/replication-notes.qmd).
 The frozen data and transformation details are in [the data guide](data/guide.qmd).
 
+## Session route
+
+During the main session, work through sections 1–4: understand the data, fit and prune a tree, explore a neural network using saved results, and evaluate predictions. Allow time to discuss each checkpoint.
+
+Sections 5–8 are extensions for follow-up study. Full neural-network training, tuning and synthetic-data generation run separately; they are not required to follow the main session.
+
 ## 1. Meet the data
 
 The task is to distinguish existing heart disease from its absence using clinical
@@ -64,6 +70,8 @@ str(heart)
 There are 270 patients and 13 predictors. The outcome is `heart_disease`, and
 `present` is the positive class. Examine age, chest pain, cholesterol and exercise
 measurements before discussing what information a learner receives.
+
+**Checkpoint:** Which column is the outcome? What does one row represent, and why is this a classification task?
 
 ## 2. Fit and prune a tree — article section 2.1.3
 
@@ -85,21 +93,21 @@ The article uses `cp = 0.031`; we retain that value for the replication.
 
 ![Classification tree pruned using cp = 0.031.](figures/03-pruned-tree.png){fig-align="center"}
 
-## 3. Train a neural network — article section 2.2.3
+**Checkpoint:** Compare the default and pruned trees. How could pruning help predictions on new patients?
+
+## 3. Explore a neural network — article section 2.2.3
 
 The [network script](R/03-neural-network.R) retains the published 64/32-unit
 architecture, dropout of 0.4, sigmoid output, Adam learning rate of 0.002,
 binary cross-entropy, 50 epochs, batches of 32, 20% validation and early stopping
 with patience 10. The data guide explains how we construct 22 inputs.
 
-Run this after configuring Keras. It is separate from the default render because
-it needs a Python backend.
+For the live demonstration, inspect the architecture and saved loss plot below. To train the network yourself, install the optional neural-network dependencies and configure Keras first. Training runs separately because it needs a Python backend.
 
 ```{r, code=readLines("R/03-neural-network.R"), eval=FALSE}
 ```
 
 The script saves training and validation loss and the observed test accuracy.
-The paper's reported accuracy is not substituted for a local result.
 When a saved network run is available, its results appear below; these files
 come from the separate network script, rather than the core notebook render.
 
@@ -112,6 +120,8 @@ if (file.exists("outputs/neural-accuracy.csv")) {
   knitr::include_graphics("figures/05-neural-loss.png")
 }
 ```
+
+**Checkpoint:** Why do we monitor validation loss as well as training loss? What might it mean if training loss falls while validation loss rises?
 
 ## 4. Evaluate predictions — article section 3.1
 
@@ -131,7 +141,9 @@ of our seeded run.
 Discuss sensitivity, specificity, positive and negative predictive value, accuracy
 and the consequences of choosing a threshold. A good score does not establish causation.
 
-## 5. Resample — article section 3.2
+**Checkpoint:** What does a false negative mean here? How would changing the probability threshold affect sensitivity and specificity?
+
+## 5. Extension: Resample — article section 3.2
 
 The next examples use a 100-tree forest, 3-fold cross-validation, 100 repeated
 subsamples and 40 bootstrap repetitions. The core script retains those counts.
@@ -142,10 +154,10 @@ subsamples and 40 bootstrap repetitions. The core script retains those counts.
 Training and test AUC answer different questions. Resampling estimates how
 performance changes when the training sample changes.
 
-## 6. Tune within the training data — article section 4
+## 6. Extension: Tune within the training data — article section 4
 
-The [tuning script](R/04-tuning.R) supplies the missing objects in the published
-snippets and retains their search ranges and budgets. Run one method at a time
+The [tuning script](R/04-tuning.R) defines the training objects and
+uses the article’s search ranges and budgets. Run one method at a time
 from a terminal in this folder:
 
 ```bash
@@ -161,14 +173,11 @@ MBO evaluates 30. Nested tuning uses 100 configurations per inner search,
 can inspect the code before running the full searches outside the live session.
 The test set is excluded from search selection.
 
-## 7. Interpret — article section 5
+## 7. Extension: Interpret — article section 5
 
-Discuss local explanations, feature effects and feature importance. The article
-explains these methods but prints no executable interpretation example.
-We do not introduce a different analysis and label it as replicated article code.
-Predictive importance describes a fitted model; it does not identify a causal effect.
+Feature importance describes how much a predictor contributes to a fitted model. Feature effects describe how predictions vary with a predictor, while local explanations focus on one prediction. Discuss what each approach can tell us about this example. Predictive importance does not identify a causal effect. This section is a conceptual discussion.
 
-## 8. Generate synthetic observations — article section 6.2.5
+## 8. Extension: Generate synthetic observations — article section 6.2.5
 
 The [synthetic-data script](R/05-synthetic-data.R) follows the adversarial random
 forest, density estimation and sampling sequence. Its output is labelled synthetic.

@@ -12,10 +12,10 @@ You are the guide to the Machine Learning in Epidemiology with R workshop reposi
 This repository organizes a two-part R-Ladies Rome workshop led by Federica Gazzelloni. It combines conceptual instruction with reproducible R workflows in applied epidemiology.
 
 - The root Quarto project is the workshop website. `index.qmd` introduces the two sessions, `about.qmd` profiles the instructor, and `resources.qmd` contains the curated article and book references.
-- Part 1 (28 September 2026) introduces machine-learning foundations and gradient descent, then applies them to West Nile virus prediction. Its notebook, practice script, exercise, solution, slides, data, and saved outputs support the original teaching session.
-- Part 2 (23 October 2026) follows an article-based heart-disease workflow. Its notebook and ordered R scripts cover data, trees, neural networks, evaluation, resampling, tuning, and synthetic data.
-- Each part has its own RStudio project, setup scripts, and README. Participants should open the project for their session and use that session folder as the working directory.
-- The original 28 September 2026 workshop repository and published site remain separate. This repository organizes the current two-part series; it does not replace or redirect the original.
+- Part 1 introduces machine-learning foundations and gradient descent, then applies them to West Nile virus prediction. Its notebook, practice script, exercise, solution, slides, data, and saved outputs support the original teaching session.
+- Part 2 follows an article-based heart-disease workflow. Its notebook and ordered R scripts cover data, trees, neural networks, evaluation, resampling, tuning, and synthetic data.
+- Both parts share the root RStudio project. Each part has setup scripts and a README; scripts run from the relevant session folder.
+- The original Part 1 workshop repository and published site remain separate. This repository organizes the current two-part series; it does not replace or redirect the original.
 
 ## How to explain the materials
 
@@ -32,7 +32,7 @@ When discussing Part 2, keep evidence and limitations explicit. Separate publish
 - Preserve methodological distinctions, reproducibility details, and caveats even when simplifying prose.
 - Use calm, informative language, not promotional claims or inflated promises.
 - Avoid repeating setup instructions, instructor biography, or resource inventories across pages. Link to the page that owns the detail.
-- Keep session dates and names consistent with the existing materials. Do not invent results, requirements, or provenance.
+- Keep session dates on the homepage and notebook title blocks; use Part 1 and Part 2 elsewhere. Keep names consistent with the existing materials. Do not invent results, requirements, or provenance.
 
 ## Working boundaries
 
@@ -49,4 +49,4 @@ When discussing Part 2, keep evidence and limitations explicit. Separate publish
 - Check desktop and mobile layouts, navigation contrast and presentation slide navigation. A successful render alone does not establish visual correctness.
 - Follow internal links in the rendered site, including guides, downloadable files and all 12 Part 1 slides. Website navigation should open rendered HTML rather than raw Markdown.
 - Show each Part 2 script section at its corresponding teaching step. Preserve the article settings, saved evidence and distinctions between completed runs and smoke tests.
-- Preserve the original 28 September 2026 workshop repository and its saved public URLs. Work on this new series repository without renaming or redirecting the original files.
+- Preserve the original Part 1 workshop repository and its saved public URLs. Work on this new series repository without renaming or redirecting the original files.

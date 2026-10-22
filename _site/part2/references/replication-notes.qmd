@@ -1,6 +1,0 @@
----
-title: "Part 2 — Source and replication record"
-guide-page: true
----
-
-{{< include replication-notes.md >}}

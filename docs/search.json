@@ -293,7 +293,7 @@
     "href": "index.html",
     "title": "Machine Learning in Epidemiology with R",
     "section": "",
-    "text": "Learn machine learning through epidemiological examples, from model fundamentals to an article-based prediction workflow.\n\n\nPart 1 — 28 September 2026\nHow models learn, gradient descent, and West Nile virus prediction.\nExplore Part 1 · Open the notebook\n\n\nPart 2 — 23 October 2026\nAn article-based heart-disease workflow with trees, neural networks, and model evaluation.\nExplore Part 2 · Open the notebook\n\n\nBrowse the workshop resources, or start with a session above.",
+    "text": "Visit the live site: https://fgazzelloni.github.io/machine-learning-in-epidemiology-with-r/\nLearn machine learning through epidemiological examples, from model fundamentals to an article-based prediction workflow.\n\n\nPart 1 — 28 September 2026\nHow models learn, gradient descent, and West Nile virus prediction.\nExplore Part 1 · Open the notebook\n\n\nPart 2 — 23 October 2026\nAn article-based heart-disease workflow with trees, neural networks, and model evaluation.\nExplore Part 2 · Open the notebook\n\n\nBrowse the workshop resources, or start with a session above.",
     "crumbs": [
       "Home"
     ]

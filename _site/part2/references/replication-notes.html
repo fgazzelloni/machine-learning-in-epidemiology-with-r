@@ -67,9 +67,6 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-
-
-<link rel="stylesheet" href="../../styles.css">
 <script>
 (function () {
   function updateLinks() {
@@ -97,6 +94,8 @@ ul.task-list li input[type="checkbox"] {
 })();
 </script>
 
+
+<link rel="stylesheet" href="../../styles.css">
 </head>
 
 <body class="nav-sidebar floating nav-fixed quarto-light">
@@ -257,7 +256,7 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#changes-required-to-make-the-examples-runnable" id="toc-changes-required-to-make-the-examples-runnable" class="nav-link active" data-scroll-target="#changes-required-to-make-the-examples-runnable">Workshop implementation</a></li>
+  <li><a href="#workshop-implementation" id="toc-workshop-implementation" class="nav-link active" data-scroll-target="#workshop-implementation">Workshop implementation</a></li>
   <li><a href="#validation" id="toc-validation" class="nav-link" data-scroll-target="#validation">Validation</a></li>
   </ul>
 </nav>
@@ -340,8 +339,8 @@ ul.task-list li input[type="checkbox"] {
 </tr>
 </tbody>
 </table>
-<section id="changes-required-to-make-the-examples-runnable" class="level2">
-<h2 class="anchored" data-anchor-id="changes-required-to-make-the-examples-runnable">Workshop implementation</h2>
+<section id="workshop-implementation" class="level2">
+<h2 class="anchored" data-anchor-id="workshop-implementation">Workshop implementation</h2>
 <p>The scripts define data preparation, train/test objects and tuning code, use <code>heart_task</code> consistently and set explicit seeds. Keras uses <code>keras3</code> instead of the article’s older <code>keras</code> interface, retaining the architecture and training settings. Data encoding/scaling choices are recorded in the data guide. Random-forest threading is fixed to one for reproducibility. The initial forest uses the learner default; the resampling examples use 100 trees, as printed. Tuning is restricted to the training task; nested CV uses an outer and inner 10-fold design. The article’s full grid has up to 10,000 configurations and is not run during a normal notebook render.</p>
 <p>The article reports a 100% neural-network test accuracy. That is a reported result for its run, not an expected or guaranteed workshop result. Our outputs are saved separately. Results depend on the random seed, data split, preprocessing and software versions.</p>
 </section>

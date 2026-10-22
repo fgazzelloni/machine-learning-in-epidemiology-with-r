@@ -104,9 +104,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
-
-
-<link rel="stylesheet" href="../styles.css">
 <script>
 (function () {
   function updateLinks() {
@@ -134,6 +131,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 })();
 </script>
 
+
+<link rel="stylesheet" href="../styles.css">
 </head>
 
 <body class="nav-sidebar floating nav-fixed quarto-light">
@@ -290,15 +289,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#from-the-september-introduction-to-the-article-workflow" id="toc-from-the-september-introduction-to-the-article-workflow" class="nav-link active" data-scroll-target="#from-the-september-introduction-to-the-article-workflow">From the 28 September 2026 introduction to the article workflow</a></li>
+  <li><a href="#from-the-september-introduction-to-the-article-workflow" id="toc-from-the-september-introduction-to-the-article-workflow" class="nav-link active" data-scroll-target="#from-the-september-introduction-to-the-article-workflow">From Part 1 to the heart-disease workflow</a></li>
+  <li><a href="#session-route" id="toc-session-route" class="nav-link" data-scroll-target="#session-route">Session route</a></li>
   <li><a href="#meet-the-data" id="toc-meet-the-data" class="nav-link" data-scroll-target="#meet-the-data">1. Meet the data</a></li>
   <li><a href="#fit-and-prune-a-tree-article-section-2.1.3" id="toc-fit-and-prune-a-tree-article-section-2.1.3" class="nav-link" data-scroll-target="#fit-and-prune-a-tree-article-section-2.1.3">2. Fit and prune a tree — article section 2.1.3</a></li>
-  <li><a href="#train-a-neural-network-article-section-2.2.3" id="toc-train-a-neural-network-article-section-2.2.3" class="nav-link" data-scroll-target="#train-a-neural-network-article-section-2.2.3">3. Train a neural network — article section 2.2.3</a></li>
+  <li><a href="#explore-a-neural-network-article-section-2.2.3" id="toc-explore-a-neural-network-article-section-2.2.3" class="nav-link" data-scroll-target="#explore-a-neural-network-article-section-2.2.3">3. Explore a neural network — article section 2.2.3</a></li>
   <li><a href="#evaluate-predictions-article-section-3.1" id="toc-evaluate-predictions-article-section-3.1" class="nav-link" data-scroll-target="#evaluate-predictions-article-section-3.1">4. Evaluate predictions — article section 3.1</a></li>
-  <li><a href="#resample-article-section-3.2" id="toc-resample-article-section-3.2" class="nav-link" data-scroll-target="#resample-article-section-3.2">5. Resample — article section 3.2</a></li>
-  <li><a href="#tune-within-the-training-data-article-section-4" id="toc-tune-within-the-training-data-article-section-4" class="nav-link" data-scroll-target="#tune-within-the-training-data-article-section-4">6. Tune within the training data — article section 4</a></li>
-  <li><a href="#interpret-article-section-5" id="toc-interpret-article-section-5" class="nav-link" data-scroll-target="#interpret-article-section-5">7. Interpret — article section 5</a></li>
-  <li><a href="#generate-synthetic-observations-article-section-6.2.5" id="toc-generate-synthetic-observations-article-section-6.2.5" class="nav-link" data-scroll-target="#generate-synthetic-observations-article-section-6.2.5">8. Generate synthetic observations — article section 6.2.5</a></li>
+  <li><a href="#extension-resample-article-section-3.2" id="toc-extension-resample-article-section-3.2" class="nav-link" data-scroll-target="#extension-resample-article-section-3.2">5. Extension: Resample — article section 3.2</a></li>
+  <li><a href="#extension-tune-within-the-training-data-article-section-4" id="toc-extension-tune-within-the-training-data-article-section-4" class="nav-link" data-scroll-target="#extension-tune-within-the-training-data-article-section-4">6. Extension: Tune within the training data — article section 4</a></li>
+  <li><a href="#extension-interpret-article-section-5" id="toc-extension-interpret-article-section-5" class="nav-link" data-scroll-target="#extension-interpret-article-section-5">7. Extension: Interpret — article section 5</a></li>
+  <li><a href="#extension-generate-synthetic-observations-article-section-6.2.5" id="toc-extension-generate-synthetic-observations-article-section-6.2.5" class="nav-link" data-scroll-target="#extension-generate-synthetic-observations-article-section-6.2.5">8. Extension: Generate synthetic observations — article section 6.2.5</a></li>
   <li><a href="#reproducibility" id="toc-reproducibility" class="nav-link" data-scroll-target="#reproducibility">Reproducibility</a></li>
   </ul>
 </nav>
@@ -343,9 +343,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <section id="from-the-september-introduction-to-the-article-workflow" class="level2">
-<h2 class="anchored" data-anchor-id="from-the-september-introduction-to-the-article-workflow">From the 28 September 2026 introduction to the article workflow</h2>
-<p>In Part 1, we explored how learning works and applied it to West Nile surveillance. In this session, we use the heart-disease data from <a href="https://arxiv.org/html/2602.16352v1">Wright et al.</a> and follow the order of their published examples. Open <code>part2.Rproj</code> and keep this folder as the working directory.</p>
+<h2 class="anchored" data-anchor-id="from-the-september-introduction-to-the-article-workflow">From Part 1 to the heart-disease workflow</h2>
+<p>In Part 1, we explored how learning works and applied it to West Nile surveillance. In this session, we use the heart-disease data from <a href="https://arxiv.org/html/2602.16352v1">Wright et al.</a> and follow the order of their published examples. Open <code>machine-learning-in-epidemiology-with-r.Rproj</code> from the repository root in RStudio. This single project contains both parts. In a fresh project session, run the following in the Console before using the Part 2 scripts:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">setwd</span>(<span class="st">"part2"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p>The scripts use <code>part2/</code> as their working directory. Quarto runs this notebook from its own folder when rendering.</p>
 <p>This workshop implements the published examples. Implementation details are documented in <a href="../part2/references/replication-notes.html">the replication record</a>. The frozen data and transformation details are in <a href="../part2/data/guide.html">the data guide</a>.</p>
+</section>
+<section id="session-route" class="level2">
+<h2 class="anchored" data-anchor-id="session-route">Session route</h2>
+<p>During the main session, work through sections 1–4: understand the data, fit and prune a tree, explore a neural network using saved results, and evaluate predictions. Allow time to discuss each checkpoint.</p>
+<p>Sections 5–8 are extensions for follow-up study. Full neural-network training, tuning and synthetic-data generation run separately; they are not required to follow the main session.</p>
 </section>
 <section id="meet-the-data" class="level2">
 <h2 class="anchored" data-anchor-id="meet-the-data">1. Meet the data</h2>
@@ -353,47 +365,47 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Article section 1 and appendix: heart-statlog, OpenML 53, version 1.</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Run from part2/. All preprocessing choices are listed in data/README.md.</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>arff <span class="ot">&lt;-</span> <span class="fu">readLines</span>(<span class="st">"data/raw/heart-statlog.arff"</span>)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>start <span class="ot">&lt;-</span> <span class="fu">grep</span>(<span class="st">"^@data"</span>, arff, <span class="at">ignore.case =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>heart <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="at">text =</span> <span class="fu">paste</span>(arff[(start <span class="sc">+</span> <span class="dv">1</span>)<span class="sc">:</span><span class="fu">length</span>(arff)], <span class="at">collapse =</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>),</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>                  <span class="at">header =</span> <span class="cn">FALSE</span>, <span class="at">strip.white =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(heart) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"age"</span>, <span class="st">"sex"</span>, <span class="st">"chest_pain"</span>, <span class="st">"resting_blood_pressure"</span>,</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">"serum_cholesterol"</span>, <span class="st">"fasting_blood_sugar"</span>, <span class="st">"resting_ecg"</span>, <span class="st">"max_heart_rate"</span>,</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">"exercise_induced_angina"</span>, <span class="st">"ST_depression"</span>, <span class="st">"ST_slope"</span>, <span class="st">"num_major_vessels"</span>,</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="st">"thal"</span>, <span class="st">"heart_disease"</span>)</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">stopifnot</span>(<span class="fu">nrow</span>(heart) <span class="sc">==</span> <span class="dv">270</span>L, <span class="fu">ncol</span>(heart) <span class="sc">==</span> <span class="dv">14</span>L, <span class="sc">!</span><span class="fu">anyNA</span>(heart))</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>heart<span class="sc">$</span>sex <span class="ot">&lt;-</span> <span class="fu">factor</span>(heart<span class="sc">$</span>sex, <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="fu">c</span>(<span class="st">"female"</span>, <span class="st">"male"</span>))</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>heart<span class="sc">$</span>chest_pain <span class="ot">&lt;-</span> <span class="fu">factor</span>(heart<span class="sc">$</span>chest_pain, <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>,</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="st">"typical angina"</span>, <span class="st">"atypical angina"</span>, <span class="st">"non-anginal pain"</span>, <span class="st">"asymptomatic"</span>))</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>heart<span class="sc">$</span>fasting_blood_sugar <span class="ot">&lt;-</span> <span class="fu">factor</span>(heart<span class="sc">$</span>fasting_blood_sugar, <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="fu">c</span>(<span class="st">"false"</span>, <span class="st">"true"</span>))</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>heart<span class="sc">$</span>resting_ecg <span class="ot">&lt;-</span> <span class="fu">factor</span>(heart<span class="sc">$</span>resting_ecg, <span class="dv">0</span><span class="sc">:</span><span class="dv">2</span>,</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="st">"normal"</span>, <span class="st">"ST-T wave abnormality"</span>, <span class="st">"left ventricular hypertrophy"</span>))</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>heart<span class="sc">$</span>exercise_induced_angina <span class="ot">&lt;-</span> <span class="fu">factor</span>(heart<span class="sc">$</span>exercise_induced_angina, <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="fu">c</span>(<span class="st">"no"</span>, <span class="st">"yes"</span>))</span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>heart<span class="sc">$</span>ST_slope <span class="ot">&lt;-</span> <span class="fu">factor</span>(heart<span class="sc">$</span>ST_slope, <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="fu">c</span>(<span class="st">"upsloping"</span>, <span class="st">"flat"</span>, <span class="st">"downsloping"</span>))</span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>heart<span class="sc">$</span>thal <span class="ot">&lt;-</span> <span class="fu">factor</span>(heart<span class="sc">$</span>thal, <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">6</span>, <span class="dv">7</span>), <span class="fu">c</span>(<span class="st">"normal"</span>, <span class="st">"fixed defect"</span>, <span class="st">"reversible defect"</span>))</span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>heart<span class="sc">$</span>heart_disease <span class="ot">&lt;-</span> <span class="fu">factor</span>(heart<span class="sc">$</span>heart_disease, <span class="fu">c</span>(<span class="st">"absent"</span>, <span class="st">"present"</span>))</span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>numeric_columns <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"age"</span>, <span class="st">"resting_blood_pressure"</span>, <span class="st">"serum_cholesterol"</span>,</span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"max_heart_rate"</span>, <span class="st">"ST_depression"</span>, <span class="st">"num_major_vessels"</span>)</span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>heart[numeric_columns] <span class="ot">&lt;-</span> <span class="fu">lapply</span>(heart[numeric_columns], as.numeric)</span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="fu">stopifnot</span>(<span class="sc">!</span><span class="fu">anyNA</span>(heart), <span class="fu">identical</span>(<span class="fu">as.integer</span>(<span class="fu">table</span>(heart<span class="sc">$</span>heart_disease)), <span class="fu">c</span>(<span class="dv">150</span>L, <span class="dv">120</span>L)))</span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="st">"outputs"</span>, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="st">"figures"</span>, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(heart, <span class="st">"data/processed/heart.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Article section 1 and appendix: heart-statlog, OpenML 53, version 1.</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Run from part2/. All preprocessing choices are listed in data/README.md.</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>arff <span class="ot">&lt;-</span> <span class="fu">readLines</span>(<span class="st">"data/raw/heart-statlog.arff"</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>start <span class="ot">&lt;-</span> <span class="fu">grep</span>(<span class="st">"^@data"</span>, arff, <span class="at">ignore.case =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>heart <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="at">text =</span> <span class="fu">paste</span>(arff[(start <span class="sc">+</span> <span class="dv">1</span>)<span class="sc">:</span><span class="fu">length</span>(arff)], <span class="at">collapse =</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>),</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>                  <span class="at">header =</span> <span class="cn">FALSE</span>, <span class="at">strip.white =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(heart) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"age"</span>, <span class="st">"sex"</span>, <span class="st">"chest_pain"</span>, <span class="st">"resting_blood_pressure"</span>,</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">"serum_cholesterol"</span>, <span class="st">"fasting_blood_sugar"</span>, <span class="st">"resting_ecg"</span>, <span class="st">"max_heart_rate"</span>,</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">"exercise_induced_angina"</span>, <span class="st">"ST_depression"</span>, <span class="st">"ST_slope"</span>, <span class="st">"num_major_vessels"</span>,</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="st">"thal"</span>, <span class="st">"heart_disease"</span>)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="fu">stopifnot</span>(<span class="fu">nrow</span>(heart) <span class="sc">==</span> <span class="dv">270</span>L, <span class="fu">ncol</span>(heart) <span class="sc">==</span> <span class="dv">14</span>L, <span class="sc">!</span><span class="fu">anyNA</span>(heart))</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>heart<span class="sc">$</span>sex <span class="ot">&lt;-</span> <span class="fu">factor</span>(heart<span class="sc">$</span>sex, <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="fu">c</span>(<span class="st">"female"</span>, <span class="st">"male"</span>))</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>heart<span class="sc">$</span>chest_pain <span class="ot">&lt;-</span> <span class="fu">factor</span>(heart<span class="sc">$</span>chest_pain, <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>,</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="st">"typical angina"</span>, <span class="st">"atypical angina"</span>, <span class="st">"non-anginal pain"</span>, <span class="st">"asymptomatic"</span>))</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>heart<span class="sc">$</span>fasting_blood_sugar <span class="ot">&lt;-</span> <span class="fu">factor</span>(heart<span class="sc">$</span>fasting_blood_sugar, <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="fu">c</span>(<span class="st">"false"</span>, <span class="st">"true"</span>))</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>heart<span class="sc">$</span>resting_ecg <span class="ot">&lt;-</span> <span class="fu">factor</span>(heart<span class="sc">$</span>resting_ecg, <span class="dv">0</span><span class="sc">:</span><span class="dv">2</span>,</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="st">"normal"</span>, <span class="st">"ST-T wave abnormality"</span>, <span class="st">"left ventricular hypertrophy"</span>))</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>heart<span class="sc">$</span>exercise_induced_angina <span class="ot">&lt;-</span> <span class="fu">factor</span>(heart<span class="sc">$</span>exercise_induced_angina, <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="fu">c</span>(<span class="st">"no"</span>, <span class="st">"yes"</span>))</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>heart<span class="sc">$</span>ST_slope <span class="ot">&lt;-</span> <span class="fu">factor</span>(heart<span class="sc">$</span>ST_slope, <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="fu">c</span>(<span class="st">"upsloping"</span>, <span class="st">"flat"</span>, <span class="st">"downsloping"</span>))</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>heart<span class="sc">$</span>thal <span class="ot">&lt;-</span> <span class="fu">factor</span>(heart<span class="sc">$</span>thal, <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">6</span>, <span class="dv">7</span>), <span class="fu">c</span>(<span class="st">"normal"</span>, <span class="st">"fixed defect"</span>, <span class="st">"reversible defect"</span>))</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>heart<span class="sc">$</span>heart_disease <span class="ot">&lt;-</span> <span class="fu">factor</span>(heart<span class="sc">$</span>heart_disease, <span class="fu">c</span>(<span class="st">"absent"</span>, <span class="st">"present"</span>))</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>numeric_columns <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"age"</span>, <span class="st">"resting_blood_pressure"</span>, <span class="st">"serum_cholesterol"</span>,</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"max_heart_rate"</span>, <span class="st">"ST_depression"</span>, <span class="st">"num_major_vessels"</span>)</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>heart[numeric_columns] <span class="ot">&lt;-</span> <span class="fu">lapply</span>(heart[numeric_columns], as.numeric)</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="fu">stopifnot</span>(<span class="sc">!</span><span class="fu">anyNA</span>(heart), <span class="fu">identical</span>(<span class="fu">as.integer</span>(<span class="fu">table</span>(heart<span class="sc">$</span>heart_disease)), <span class="fu">c</span>(<span class="dv">150</span>L, <span class="dv">120</span>L)))</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="st">"outputs"</span>, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="st">"figures"</span>, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(heart, <span class="st">"data/processed/heart.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(heart)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(heart)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 270  14</code></pre>
 </div>
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(heart<span class="sc">$</span>heart_disease)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(heart<span class="sc">$</span>heart_disease)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -402,7 +414,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(heart)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(heart)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>'data.frame':   270 obs. of  14 variables:
@@ -423,6 +435,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>There are 270 patients and 13 predictors. The outcome is <code>heart_disease</code>, and <code>present</code> is the positive class. Examine age, chest pain, cholesterol and exercise measurements before discussing what information a learner receives.</p>
+<p><strong>Checkpoint:</strong> Which column is the outcome? What does one row represent, and why is this a classification task?</p>
 </section>
 <section id="fit-and-prune-a-tree-article-section-2.1.3" class="level2">
 <h2 class="anchored" data-anchor-id="fit-and-prune-a-tree-article-section-2.1.3">2. Fit and prune a tree — article section 2.1.3</h2>
@@ -430,27 +443,27 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Article sections 2.1, 3.1 and 3.2. Local seeds make this run reproducible.</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"R/01-data.R"</span>)</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlr3)</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlr3learners)</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlr3viz)</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">20261023</span>)</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co"># These first trees illustrate fitting and pruning on all observations,</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co"># as in the article; they do not estimate generalisation performance.</span></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>cart <span class="ot">&lt;-</span> rpart<span class="sc">::</span><span class="fu">rpart</span>(heart_disease <span class="sc">~</span> ., <span class="at">data =</span> heart)</span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="fu">png</span>(<span class="st">"figures/01-tree.png"</span>, <span class="at">width =</span> <span class="dv">1500</span>, <span class="at">height =</span> <span class="dv">1000</span>, <span class="at">res =</span> <span class="dv">150</span>)</span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>rpart.plot<span class="sc">::</span><span class="fu">rpart.plot</span>(cart)</span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="fu">invisible</span>(<span class="fu">dev.off</span>())</span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>deep_cart <span class="ot">&lt;-</span> rpart<span class="sc">::</span><span class="fu">rpart</span>(heart_disease <span class="sc">~</span> ., <span class="at">data =</span> heart,</span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>                         <span class="at">control =</span> rpart<span class="sc">::</span><span class="fu">rpart.control</span>(<span class="at">minsplit =</span> <span class="dv">2</span>))</span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="fu">png</span>(<span class="st">"figures/02-complexity.png"</span>, <span class="at">width =</span> <span class="dv">1200</span>, <span class="at">height =</span> <span class="dv">900</span>, <span class="at">res =</span> <span class="dv">150</span>)</span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>rpart<span class="sc">::</span><span class="fu">plotcp</span>(deep_cart)</span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="fu">invisible</span>(<span class="fu">dev.off</span>())</span>
-<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>pruned_cart <span class="ot">&lt;-</span> rpart<span class="sc">::</span><span class="fu">prune</span>(deep_cart, <span class="at">cp =</span> <span class="fl">0.031</span>)</span>
-<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="fu">png</span>(<span class="st">"figures/03-pruned-tree.png"</span>, <span class="at">width =</span> <span class="dv">1500</span>, <span class="at">height =</span> <span class="dv">1000</span>, <span class="at">res =</span> <span class="dv">150</span>)</span>
-<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>rpart.plot<span class="sc">::</span><span class="fu">rpart.plot</span>(pruned_cart)</span>
-<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a><span class="fu">invisible</span>(<span class="fu">dev.off</span>())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Article sections 2.1, 3.1 and 3.2. Local seeds make this run reproducible.</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"R/01-data.R"</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlr3)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlr3learners)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlr3viz)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">20261023</span>)</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co"># These first trees illustrate fitting and pruning on all observations,</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co"># as in the article; they do not estimate generalisation performance.</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>cart <span class="ot">&lt;-</span> rpart<span class="sc">::</span><span class="fu">rpart</span>(heart_disease <span class="sc">~</span> ., <span class="at">data =</span> heart)</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="fu">png</span>(<span class="st">"figures/01-tree.png"</span>, <span class="at">width =</span> <span class="dv">1500</span>, <span class="at">height =</span> <span class="dv">1000</span>, <span class="at">res =</span> <span class="dv">150</span>)</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>rpart.plot<span class="sc">::</span><span class="fu">rpart.plot</span>(cart)</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="fu">invisible</span>(<span class="fu">dev.off</span>())</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>deep_cart <span class="ot">&lt;-</span> rpart<span class="sc">::</span><span class="fu">rpart</span>(heart_disease <span class="sc">~</span> ., <span class="at">data =</span> heart,</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>                         <span class="at">control =</span> rpart<span class="sc">::</span><span class="fu">rpart.control</span>(<span class="at">minsplit =</span> <span class="dv">2</span>))</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="fu">png</span>(<span class="st">"figures/02-complexity.png"</span>, <span class="at">width =</span> <span class="dv">1200</span>, <span class="at">height =</span> <span class="dv">900</span>, <span class="at">res =</span> <span class="dv">150</span>)</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>rpart<span class="sc">::</span><span class="fu">plotcp</span>(deep_cart)</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="fu">invisible</span>(<span class="fu">dev.off</span>())</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>pruned_cart <span class="ot">&lt;-</span> rpart<span class="sc">::</span><span class="fu">prune</span>(deep_cart, <span class="at">cp =</span> <span class="fl">0.031</span>)</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a><span class="fu">png</span>(<span class="st">"figures/03-pruned-tree.png"</span>, <span class="at">width =</span> <span class="dv">1500</span>, <span class="at">height =</span> <span class="dv">1000</span>, <span class="at">res =</span> <span class="dv">150</span>)</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>rpart.plot<span class="sc">::</span><span class="fu">rpart.plot</span>(pruned_cart)</span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a><span class="fu">invisible</span>(<span class="fu">dev.off</span>())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <div class="quarto-figure quarto-figure-center">
@@ -472,73 +485,74 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <figcaption>Classification tree pruned using cp = 0.031.</figcaption>
 </figure>
 </div>
+<p><strong>Checkpoint:</strong> Compare the default and pruned trees. How could pruning help predictions on new patients?</p>
 </section>
-<section id="train-a-neural-network-article-section-2.2.3" class="level2">
-<h2 class="anchored" data-anchor-id="train-a-neural-network-article-section-2.2.3">3. Train a neural network — article section 2.2.3</h2>
+<section id="explore-a-neural-network-article-section-2.2.3" class="level2">
+<h2 class="anchored" data-anchor-id="explore-a-neural-network-article-section-2.2.3">3. Explore a neural network — article section 2.2.3</h2>
 <p>The <a href="R/03-neural-network.R">network script</a> retains the published 64/32-unit architecture, dropout of 0.4, sigmoid output, Adam learning rate of 0.002, binary cross-entropy, 50 epochs, batches of 32, 20% validation and early stopping with patience 10. The data guide explains how we construct 22 inputs.</p>
-<p>Run this after configuring Keras. It is separate from the default render because it needs a Python backend.</p>
+<p>For the live demonstration, inspect the architecture and saved loss plot below. To train the network yourself, install the optional neural-network dependencies and configure Keras first. Training runs separately because it needs a Python backend.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Article section 2.2.3, using the current keras3 interface.</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"R/01-data.R"</span>)</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlr3)</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(keras3)</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="fu">set_random_seed</span>(<span class="dv">20261023</span>)</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>heart_task <span class="ot">&lt;-</span> <span class="fu">as_task_classif</span>(heart, <span class="at">target =</span> <span class="st">"heart_disease"</span>, <span class="at">positive =</span> <span class="st">"present"</span>, <span class="at">id =</span> <span class="st">"heart"</span>)</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">20261023</span>)</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>split <span class="ot">&lt;-</span> <span class="fu">partition</span>(heart_task, <span class="at">ratio =</span> <span class="dv">2</span><span class="sc">/</span><span class="dv">3</span>)</span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Binary predictors use 0/1; remaining nominal predictors use all indicators.</span></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co"># This explicit reconstruction yields the article's 22 input columns.</span></span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>x_data <span class="ot">&lt;-</span> heart[, <span class="fu">setdiff</span>(<span class="fu">names</span>(heart), <span class="st">"heart_disease"</span>)]</span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (nm <span class="cf">in</span> <span class="fu">c</span>(<span class="st">"sex"</span>, <span class="st">"fasting_blood_sugar"</span>, <span class="st">"exercise_induced_angina"</span>)) {</span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>  x_data[[nm]] <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(x_data[[nm]]) <span class="sc">-</span> <span class="dv">1</span>L</span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>nominal <span class="ot">&lt;-</span> <span class="fu">names</span>(x_data)[<span class="fu">vapply</span>(x_data, is.factor, <span class="fu">logical</span>(<span class="dv">1</span>))]</span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>contrasts_full <span class="ot">&lt;-</span> <span class="fu">lapply</span>(x_data[nominal], <span class="cf">function</span>(x) <span class="fu">contrasts</span>(x, <span class="at">contrasts =</span> <span class="cn">FALSE</span>))</span>
-<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> . <span class="sc">-</span> <span class="dv">1</span>, <span class="at">data =</span> x_data, <span class="at">contrasts.arg =</span> contrasts_full)</span>
-<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a><span class="fu">stopifnot</span>(<span class="fu">ncol</span>(x) <span class="sc">==</span> <span class="dv">22</span>L, <span class="fu">all</span>(<span class="fu">is.finite</span>(x)))</span>
-<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Added for numerical stability: fit numeric scaling on inner training rows only.</span></span>
-<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Keras takes the final 20% of supplied training rows for validation.</span></span>
-<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>inner_n <span class="ot">&lt;-</span> <span class="fu">floor</span>(<span class="fu">length</span>(split<span class="sc">$</span>train) <span class="sc">*</span> <span class="fl">0.8</span>)</span>
-<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>fit_rows <span class="ot">&lt;-</span> split<span class="sc">$</span>train[<span class="fu">seq_len</span>(inner_n)]</span>
-<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>continuous <span class="ot">&lt;-</span> <span class="fu">names</span>(x_data)[<span class="fu">vapply</span>(x_data, is.numeric, <span class="fu">logical</span>(<span class="dv">1</span>))]</span>
-<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>continuous <span class="ot">&lt;-</span> <span class="fu">setdiff</span>(continuous, <span class="fu">c</span>(<span class="st">"sex"</span>, <span class="st">"fasting_blood_sugar"</span>, <span class="st">"exercise_induced_angina"</span>))</span>
-<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>centre <span class="ot">&lt;-</span> <span class="fu">colMeans</span>(x[fit_rows, continuous, <span class="at">drop =</span> <span class="cn">FALSE</span>])</span>
-<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>spread <span class="ot">&lt;-</span> <span class="fu">apply</span>(x[fit_rows, continuous, <span class="at">drop =</span> <span class="cn">FALSE</span>], <span class="dv">2</span>, sd)</span>
-<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a><span class="fu">stopifnot</span>(<span class="fu">all</span>(spread <span class="sc">&gt;</span> <span class="dv">0</span>))</span>
-<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>x[, continuous] <span class="ot">&lt;-</span> <span class="fu">sweep</span>(<span class="fu">sweep</span>(x[, continuous, <span class="at">drop =</span> <span class="cn">FALSE</span>], <span class="dv">2</span>, centre), <span class="dv">2</span>, spread, <span class="st">"/"</span>)</span>
-<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(heart<span class="sc">$</span>heart_disease <span class="sc">==</span> <span class="st">"present"</span>)</span>
-<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>network <span class="ot">&lt;-</span> <span class="fu">keras_model_sequential</span>(<span class="at">input_shape =</span> <span class="fu">c</span>(<span class="dv">22</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">64</span>, <span class="at">activation =</span> <span class="st">"relu"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dropout</span>(<span class="at">rate =</span> <span class="fl">0.4</span>) <span class="sc">|&gt;</span></span>
-<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">32</span>, <span class="at">activation =</span> <span class="st">"relu"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dropout</span>(<span class="at">rate =</span> <span class="fl">0.4</span>) <span class="sc">|&gt;</span></span>
-<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">1</span>, <span class="at">activation =</span> <span class="st">"sigmoid"</span>)</span>
-<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a><span class="fu">compile</span>(network, <span class="at">optimizer =</span> <span class="fu">optimizer_adam</span>(<span class="at">learning_rate =</span> <span class="fl">0.002</span>),</span>
-<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a>        <span class="at">loss =</span> <span class="st">"binary_crossentropy"</span>, <span class="at">metrics =</span> <span class="st">"accuracy"</span>)</span>
-<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a>training <span class="ot">&lt;-</span> <span class="fu">fit</span>(network, x[split<span class="sc">$</span>train, ], y[split<span class="sc">$</span>train], <span class="at">epochs =</span> <span class="dv">50</span>,</span>
-<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a>  <span class="at">batch_size =</span> <span class="dv">32</span>, <span class="at">validation_split =</span> <span class="fl">0.2</span>, <span class="at">verbose =</span> <span class="dv">0</span>,</span>
-<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a>  <span class="at">callbacks =</span> <span class="fu">list</span>(<span class="fu">callback_early_stopping</span>(<span class="at">patience =</span> <span class="dv">10</span>, <span class="at">restore_best_weights =</span> <span class="cn">TRUE</span>)))</span>
-<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a>prob <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">predict</span>(network, x[split<span class="sc">$</span>test, ], <span class="at">verbose =</span> <span class="dv">0</span>))</span>
-<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a>class <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(prob <span class="sc">&gt;=</span> <span class="fl">0.5</span>, <span class="st">"present"</span>, <span class="st">"absent"</span>)</span>
-<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a>accuracy <span class="ot">&lt;-</span> <span class="fu">mean</span>(class <span class="sc">==</span> <span class="fu">as.character</span>(heart<span class="sc">$</span>heart_disease[split<span class="sc">$</span>test]))</span>
-<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(accuracy)</span>
-<span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(<span class="fu">data.frame</span>(<span class="at">row_id =</span> split<span class="sc">$</span>test, <span class="at">truth =</span> heart<span class="sc">$</span>heart_disease[split<span class="sc">$</span>test],</span>
-<span id="cb9-46"><a href="#cb9-46" aria-hidden="true" tabindex="-1"></a>  <span class="at">probability_present =</span> prob, <span class="at">prediction =</span> class), <span class="st">"outputs/neural-predictions.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb9-47"><a href="#cb9-47" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(<span class="fu">data.frame</span>(<span class="at">accuracy =</span> accuracy), <span class="st">"outputs/neural-accuracy.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb9-48"><a href="#cb9-48" aria-hidden="true" tabindex="-1"></a>curves <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">epoch =</span> <span class="fu">seq_along</span>(training<span class="sc">$</span>metrics<span class="sc">$</span>loss),</span>
-<span id="cb9-49"><a href="#cb9-49" aria-hidden="true" tabindex="-1"></a>  <span class="at">loss =</span> training<span class="sc">$</span>metrics<span class="sc">$</span>loss, <span class="at">val_loss =</span> training<span class="sc">$</span>metrics<span class="sc">$</span>val_loss)</span>
-<span id="cb9-50"><a href="#cb9-50" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(curves, <span class="st">"outputs/neural-loss.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb9-51"><a href="#cb9-51" aria-hidden="true" tabindex="-1"></a><span class="fu">png</span>(<span class="st">"figures/05-neural-loss.png"</span>, <span class="at">width =</span> <span class="dv">1200</span>, <span class="at">height =</span> <span class="dv">900</span>, <span class="at">res =</span> <span class="dv">150</span>)</span>
-<span id="cb9-52"><a href="#cb9-52" aria-hidden="true" tabindex="-1"></a><span class="fu">matplot</span>(curves<span class="sc">$</span>epoch, curves[, <span class="fu">c</span>(<span class="st">"loss"</span>, <span class="st">"val_loss"</span>)], <span class="at">type =</span> <span class="st">"l"</span>, <span class="at">lty =</span> <span class="dv">1</span>,</span>
-<span id="cb9-53"><a href="#cb9-53" aria-hidden="true" tabindex="-1"></a>        <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"steelblue"</span>, <span class="st">"firebrick"</span>), <span class="at">xlab =</span> <span class="st">"Epoch"</span>, <span class="at">ylab =</span> <span class="st">"Binary cross-entropy"</span>)</span>
-<span id="cb9-54"><a href="#cb9-54" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topright"</span>, <span class="fu">c</span>(<span class="st">"Training"</span>, <span class="st">"Validation"</span>), <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"steelblue"</span>, <span class="st">"firebrick"</span>), <span class="at">lty =</span> <span class="dv">1</span>)</span>
-<span id="cb9-55"><a href="#cb9-55" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()</span>
-<span id="cb9-56"><a href="#cb9-56" aria-hidden="true" tabindex="-1"></a><span class="fu">capture.output</span>(<span class="fu">sessionInfo</span>(), <span class="at">file =</span> <span class="st">"outputs/session-info-neural.txt"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Article section 2.2.3, using the current keras3 interface.</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"R/01-data.R"</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlr3)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(keras3)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="fu">set_random_seed</span>(<span class="dv">20261023</span>)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>heart_task <span class="ot">&lt;-</span> <span class="fu">as_task_classif</span>(heart, <span class="at">target =</span> <span class="st">"heart_disease"</span>, <span class="at">positive =</span> <span class="st">"present"</span>, <span class="at">id =</span> <span class="st">"heart"</span>)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">20261023</span>)</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>split <span class="ot">&lt;-</span> <span class="fu">partition</span>(heart_task, <span class="at">ratio =</span> <span class="dv">2</span><span class="sc">/</span><span class="dv">3</span>)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Binary predictors use 0/1; remaining nominal predictors use all indicators.</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="co"># This explicit reconstruction yields the article's 22 input columns.</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>x_data <span class="ot">&lt;-</span> heart[, <span class="fu">setdiff</span>(<span class="fu">names</span>(heart), <span class="st">"heart_disease"</span>)]</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (nm <span class="cf">in</span> <span class="fu">c</span>(<span class="st">"sex"</span>, <span class="st">"fasting_blood_sugar"</span>, <span class="st">"exercise_induced_angina"</span>)) {</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  x_data[[nm]] <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(x_data[[nm]]) <span class="sc">-</span> <span class="dv">1</span>L</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>nominal <span class="ot">&lt;-</span> <span class="fu">names</span>(x_data)[<span class="fu">vapply</span>(x_data, is.factor, <span class="fu">logical</span>(<span class="dv">1</span>))]</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>contrasts_full <span class="ot">&lt;-</span> <span class="fu">lapply</span>(x_data[nominal], <span class="cf">function</span>(x) <span class="fu">contrasts</span>(x, <span class="at">contrasts =</span> <span class="cn">FALSE</span>))</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> . <span class="sc">-</span> <span class="dv">1</span>, <span class="at">data =</span> x_data, <span class="at">contrasts.arg =</span> contrasts_full)</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a><span class="fu">stopifnot</span>(<span class="fu">ncol</span>(x) <span class="sc">==</span> <span class="dv">22</span>L, <span class="fu">all</span>(<span class="fu">is.finite</span>(x)))</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Added for numerical stability: fit numeric scaling on inner training rows only.</span></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Keras takes the final 20% of supplied training rows for validation.</span></span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>inner_n <span class="ot">&lt;-</span> <span class="fu">floor</span>(<span class="fu">length</span>(split<span class="sc">$</span>train) <span class="sc">*</span> <span class="fl">0.8</span>)</span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>fit_rows <span class="ot">&lt;-</span> split<span class="sc">$</span>train[<span class="fu">seq_len</span>(inner_n)]</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>continuous <span class="ot">&lt;-</span> <span class="fu">names</span>(x_data)[<span class="fu">vapply</span>(x_data, is.numeric, <span class="fu">logical</span>(<span class="dv">1</span>))]</span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>continuous <span class="ot">&lt;-</span> <span class="fu">setdiff</span>(continuous, <span class="fu">c</span>(<span class="st">"sex"</span>, <span class="st">"fasting_blood_sugar"</span>, <span class="st">"exercise_induced_angina"</span>))</span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>centre <span class="ot">&lt;-</span> <span class="fu">colMeans</span>(x[fit_rows, continuous, <span class="at">drop =</span> <span class="cn">FALSE</span>])</span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>spread <span class="ot">&lt;-</span> <span class="fu">apply</span>(x[fit_rows, continuous, <span class="at">drop =</span> <span class="cn">FALSE</span>], <span class="dv">2</span>, sd)</span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a><span class="fu">stopifnot</span>(<span class="fu">all</span>(spread <span class="sc">&gt;</span> <span class="dv">0</span>))</span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>x[, continuous] <span class="ot">&lt;-</span> <span class="fu">sweep</span>(<span class="fu">sweep</span>(x[, continuous, <span class="at">drop =</span> <span class="cn">FALSE</span>], <span class="dv">2</span>, centre), <span class="dv">2</span>, spread, <span class="st">"/"</span>)</span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(heart<span class="sc">$</span>heart_disease <span class="sc">==</span> <span class="st">"present"</span>)</span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>network <span class="ot">&lt;-</span> <span class="fu">keras_model_sequential</span>(<span class="at">input_shape =</span> <span class="fu">c</span>(<span class="dv">22</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">64</span>, <span class="at">activation =</span> <span class="st">"relu"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dropout</span>(<span class="at">rate =</span> <span class="fl">0.4</span>) <span class="sc">|&gt;</span></span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">32</span>, <span class="at">activation =</span> <span class="st">"relu"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dropout</span>(<span class="at">rate =</span> <span class="fl">0.4</span>) <span class="sc">|&gt;</span></span>
+<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">1</span>, <span class="at">activation =</span> <span class="st">"sigmoid"</span>)</span>
+<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a><span class="fu">compile</span>(network, <span class="at">optimizer =</span> <span class="fu">optimizer_adam</span>(<span class="at">learning_rate =</span> <span class="fl">0.002</span>),</span>
+<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a>        <span class="at">loss =</span> <span class="st">"binary_crossentropy"</span>, <span class="at">metrics =</span> <span class="st">"accuracy"</span>)</span>
+<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a>training <span class="ot">&lt;-</span> <span class="fu">fit</span>(network, x[split<span class="sc">$</span>train, ], y[split<span class="sc">$</span>train], <span class="at">epochs =</span> <span class="dv">50</span>,</span>
+<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a>  <span class="at">batch_size =</span> <span class="dv">32</span>, <span class="at">validation_split =</span> <span class="fl">0.2</span>, <span class="at">verbose =</span> <span class="dv">0</span>,</span>
+<span id="cb10-40"><a href="#cb10-40" aria-hidden="true" tabindex="-1"></a>  <span class="at">callbacks =</span> <span class="fu">list</span>(<span class="fu">callback_early_stopping</span>(<span class="at">patience =</span> <span class="dv">10</span>, <span class="at">restore_best_weights =</span> <span class="cn">TRUE</span>)))</span>
+<span id="cb10-41"><a href="#cb10-41" aria-hidden="true" tabindex="-1"></a>prob <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">predict</span>(network, x[split<span class="sc">$</span>test, ], <span class="at">verbose =</span> <span class="dv">0</span>))</span>
+<span id="cb10-42"><a href="#cb10-42" aria-hidden="true" tabindex="-1"></a>class <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(prob <span class="sc">&gt;=</span> <span class="fl">0.5</span>, <span class="st">"present"</span>, <span class="st">"absent"</span>)</span>
+<span id="cb10-43"><a href="#cb10-43" aria-hidden="true" tabindex="-1"></a>accuracy <span class="ot">&lt;-</span> <span class="fu">mean</span>(class <span class="sc">==</span> <span class="fu">as.character</span>(heart<span class="sc">$</span>heart_disease[split<span class="sc">$</span>test]))</span>
+<span id="cb10-44"><a href="#cb10-44" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(accuracy)</span>
+<span id="cb10-45"><a href="#cb10-45" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(<span class="fu">data.frame</span>(<span class="at">row_id =</span> split<span class="sc">$</span>test, <span class="at">truth =</span> heart<span class="sc">$</span>heart_disease[split<span class="sc">$</span>test],</span>
+<span id="cb10-46"><a href="#cb10-46" aria-hidden="true" tabindex="-1"></a>  <span class="at">probability_present =</span> prob, <span class="at">prediction =</span> class), <span class="st">"outputs/neural-predictions.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb10-47"><a href="#cb10-47" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(<span class="fu">data.frame</span>(<span class="at">accuracy =</span> accuracy), <span class="st">"outputs/neural-accuracy.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb10-48"><a href="#cb10-48" aria-hidden="true" tabindex="-1"></a>curves <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">epoch =</span> <span class="fu">seq_along</span>(training<span class="sc">$</span>metrics<span class="sc">$</span>loss),</span>
+<span id="cb10-49"><a href="#cb10-49" aria-hidden="true" tabindex="-1"></a>  <span class="at">loss =</span> training<span class="sc">$</span>metrics<span class="sc">$</span>loss, <span class="at">val_loss =</span> training<span class="sc">$</span>metrics<span class="sc">$</span>val_loss)</span>
+<span id="cb10-50"><a href="#cb10-50" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(curves, <span class="st">"outputs/neural-loss.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb10-51"><a href="#cb10-51" aria-hidden="true" tabindex="-1"></a><span class="fu">png</span>(<span class="st">"figures/05-neural-loss.png"</span>, <span class="at">width =</span> <span class="dv">1200</span>, <span class="at">height =</span> <span class="dv">900</span>, <span class="at">res =</span> <span class="dv">150</span>)</span>
+<span id="cb10-52"><a href="#cb10-52" aria-hidden="true" tabindex="-1"></a><span class="fu">matplot</span>(curves<span class="sc">$</span>epoch, curves[, <span class="fu">c</span>(<span class="st">"loss"</span>, <span class="st">"val_loss"</span>)], <span class="at">type =</span> <span class="st">"l"</span>, <span class="at">lty =</span> <span class="dv">1</span>,</span>
+<span id="cb10-53"><a href="#cb10-53" aria-hidden="true" tabindex="-1"></a>        <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"steelblue"</span>, <span class="st">"firebrick"</span>), <span class="at">xlab =</span> <span class="st">"Epoch"</span>, <span class="at">ylab =</span> <span class="st">"Binary cross-entropy"</span>)</span>
+<span id="cb10-54"><a href="#cb10-54" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topright"</span>, <span class="fu">c</span>(<span class="st">"Training"</span>, <span class="st">"Validation"</span>), <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"steelblue"</span>, <span class="st">"firebrick"</span>), <span class="at">lty =</span> <span class="dv">1</span>)</span>
+<span id="cb10-55"><a href="#cb10-55" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()</span>
+<span id="cb10-56"><a href="#cb10-56" aria-hidden="true" tabindex="-1"></a><span class="fu">capture.output</span>(<span class="fu">sessionInfo</span>(), <span class="at">file =</span> <span class="st">"outputs/session-info-neural.txt"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-<p>The script saves training and validation loss and the observed test accuracy. The paper’s reported accuracy is not substituted for a local result. When a saved network run is available, its results appear below; these files come from the separate network script, rather than the core notebook render.</p>
+<p>The script saves training and validation loss and the observed test accuracy. When a saved network run is available, its results appear below; these files come from the separate network script, rather than the core notebook render.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output cell-output-stdout">
 <pre><code>   accuracy
@@ -553,6 +567,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
+<p><strong>Checkpoint:</strong> Why do we monitor validation loss as well as training loss? What might it mean if training loss falls while validation loss rises?</p>
 </section>
 <section id="evaluate-predictions-article-section-3.1" class="level2">
 <h2 class="anchored" data-anchor-id="evaluate-predictions-article-section-3.1">4. Evaluate predictions — article section 3.1</h2>
@@ -560,17 +575,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The article alternates task and heart_task; use one name consistently.</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>heart_task <span class="ot">&lt;-</span> <span class="fu">as_task_classif</span>(heart, <span class="at">target =</span> <span class="st">"heart_disease"</span>, <span class="at">positive =</span> <span class="st">"present"</span>, <span class="at">id =</span> <span class="st">"heart"</span>)</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">20261023</span>)</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>split <span class="ot">&lt;-</span> <span class="fu">partition</span>(heart_task, <span class="at">ratio =</span> <span class="dv">2</span><span class="sc">/</span><span class="dv">3</span>)</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(<span class="fu">data.frame</span>(<span class="at">row_id =</span> <span class="fu">c</span>(split<span class="sc">$</span>train, split<span class="sc">$</span>test),</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">subset =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"train"</span>, <span class="st">"test"</span>), <span class="fu">c</span>(<span class="fu">length</span>(split<span class="sc">$</span>train), <span class="fu">length</span>(split<span class="sc">$</span>test)))), <span class="st">"outputs/split.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>forest <span class="ot">&lt;-</span> <span class="fu">lrn</span>(<span class="st">"classif.ranger"</span>, <span class="at">predict_type =</span> <span class="st">"prob"</span>, <span class="at">num.threads =</span> <span class="dv">1</span>)</span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>forest<span class="sc">$</span><span class="fu">train</span>(heart_task, <span class="at">row_ids =</span> split<span class="sc">$</span>train)</span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>forest_pred <span class="ot">&lt;-</span> forest<span class="sc">$</span><span class="fu">predict</span>(heart_task, <span class="at">row_ids =</span> split<span class="sc">$</span>test)</span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>measures <span class="ot">&lt;-</span> <span class="fu">msrs</span>(<span class="fu">c</span>(<span class="st">"classif.tpr"</span>, <span class="st">"classif.tnr"</span>, <span class="st">"classif.ppv"</span>, <span class="st">"classif.npv"</span>, <span class="st">"classif.acc"</span>))</span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(forest_pred<span class="sc">$</span>confusion)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The article alternates task and heart_task; use one name consistently.</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>heart_task <span class="ot">&lt;-</span> <span class="fu">as_task_classif</span>(heart, <span class="at">target =</span> <span class="st">"heart_disease"</span>, <span class="at">positive =</span> <span class="st">"present"</span>, <span class="at">id =</span> <span class="st">"heart"</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">20261023</span>)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>split <span class="ot">&lt;-</span> <span class="fu">partition</span>(heart_task, <span class="at">ratio =</span> <span class="dv">2</span><span class="sc">/</span><span class="dv">3</span>)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(<span class="fu">data.frame</span>(<span class="at">row_id =</span> <span class="fu">c</span>(split<span class="sc">$</span>train, split<span class="sc">$</span>test),</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">subset =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"train"</span>, <span class="st">"test"</span>), <span class="fu">c</span>(<span class="fu">length</span>(split<span class="sc">$</span>train), <span class="fu">length</span>(split<span class="sc">$</span>test)))), <span class="st">"outputs/split.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>forest <span class="ot">&lt;-</span> <span class="fu">lrn</span>(<span class="st">"classif.ranger"</span>, <span class="at">predict_type =</span> <span class="st">"prob"</span>, <span class="at">num.threads =</span> <span class="dv">1</span>)</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>forest<span class="sc">$</span><span class="fu">train</span>(heart_task, <span class="at">row_ids =</span> split<span class="sc">$</span>train)</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>forest_pred <span class="ot">&lt;-</span> forest<span class="sc">$</span><span class="fu">predict</span>(heart_task, <span class="at">row_ids =</span> split<span class="sc">$</span>test)</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>measures <span class="ot">&lt;-</span> <span class="fu">msrs</span>(<span class="fu">c</span>(<span class="st">"classif.tpr"</span>, <span class="st">"classif.tnr"</span>, <span class="st">"classif.ppv"</span>, <span class="st">"classif.npv"</span>, <span class="st">"classif.acc"</span>))</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(forest_pred<span class="sc">$</span>confusion)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>         truth
@@ -580,7 +595,7 @@ response  present absent
 </div>
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(forest_pred<span class="sc">$</span><span class="fu">score</span>(measures))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(forest_pred<span class="sc">$</span><span class="fu">score</span>(measures))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>classif.tpr classif.tnr classif.ppv classif.npv classif.acc 
@@ -588,13 +603,13 @@ response  present absent
 </div>
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(<span class="fu">as.data.frame</span>(forest_pred<span class="sc">$</span>confusion), <span class="st">"outputs/confusion.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(<span class="fu">data.frame</span>(<span class="at">measure =</span> <span class="fu">names</span>(forest_pred<span class="sc">$</span><span class="fu">score</span>(measures)),</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">value =</span> <span class="fu">unname</span>(forest_pred<span class="sc">$</span><span class="fu">score</span>(measures))), <span class="st">"outputs/holdout-measures.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (kind <span class="cf">in</span> <span class="fu">c</span>(<span class="st">"roc"</span>, <span class="st">"threshold"</span>, <span class="st">"prc"</span>)) {</span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  ggplot2<span class="sc">::</span><span class="fu">ggsave</span>(<span class="fu">paste0</span>(<span class="st">"figures/04-"</span>, kind, <span class="st">".png"</span>),</span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    ggplot2<span class="sc">::</span><span class="fu">autoplot</span>(forest_pred, <span class="at">type =</span> kind), <span class="at">width =</span> <span class="dv">7</span>, <span class="at">height =</span> <span class="dv">5</span>)</span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(<span class="fu">as.data.frame</span>(forest_pred<span class="sc">$</span>confusion), <span class="st">"outputs/confusion.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(<span class="fu">data.frame</span>(<span class="at">measure =</span> <span class="fu">names</span>(forest_pred<span class="sc">$</span><span class="fu">score</span>(measures)),</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">value =</span> <span class="fu">unname</span>(forest_pred<span class="sc">$</span><span class="fu">score</span>(measures))), <span class="st">"outputs/holdout-measures.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (kind <span class="cf">in</span> <span class="fu">c</span>(<span class="st">"roc"</span>, <span class="st">"threshold"</span>, <span class="st">"prc"</span>)) {</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  ggplot2<span class="sc">::</span><span class="fu">ggsave</span>(<span class="fu">paste0</span>(<span class="st">"figures/04-"</span>, kind, <span class="st">".png"</span>),</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    ggplot2<span class="sc">::</span><span class="fu">autoplot</span>(forest_pred, <span class="at">type =</span> kind), <span class="at">width =</span> <span class="dv">7</span>, <span class="at">height =</span> <span class="dv">5</span>)</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <div class="quarto-figure quarto-figure-center">
@@ -616,22 +631,23 @@ response  present absent
 </figure>
 </div>
 <p>Discuss sensitivity, specificity, positive and negative predictive value, accuracy and the consequences of choosing a threshold. A good score does not establish causation.</p>
+<p><strong>Checkpoint:</strong> What does a false negative mean here? How would changing the probability threshold affect sensitivity and specificity?</p>
 </section>
-<section id="resample-article-section-3.2" class="level2">
-<h2 class="anchored" data-anchor-id="resample-article-section-3.2">5. Resample — article section 3.2</h2>
+<section id="extension-resample-article-section-3.2" class="level2">
+<h2 class="anchored" data-anchor-id="extension-resample-article-section-3.2">5. Extension: Resample — article section 3.2</h2>
 <p>The next examples use a 100-tree forest, 3-fold cross-validation, 100 repeated subsamples and 40 bootstrap repetitions. The core script retains those counts.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Section 3.2 uses a 100-tree forest, rather than the learner default above.</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>forest100 <span class="ot">&lt;-</span> <span class="fu">lrn</span>(<span class="st">"classif.ranger"</span>, <span class="at">predict_type =</span> <span class="st">"prob"</span>, <span class="at">num.trees =</span> <span class="dv">100</span>, <span class="at">num.threads =</span> <span class="dv">1</span>)</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">20261024</span>)</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>forest100<span class="sc">$</span><span class="fu">train</span>(heart_task, <span class="at">row_ids =</span> split<span class="sc">$</span>train)</span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>auc <span class="ot">&lt;-</span> <span class="fu">msr</span>(<span class="st">"classif.auc"</span>)</span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>auc_by_subset <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">subset =</span> <span class="fu">c</span>(<span class="st">"train"</span>, <span class="st">"test"</span>), <span class="at">auc =</span> <span class="fu">c</span>(</span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  forest100<span class="sc">$</span><span class="fu">predict</span>(heart_task, <span class="at">row_ids =</span> split<span class="sc">$</span>train)<span class="sc">$</span><span class="fu">score</span>(auc),</span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>  forest100<span class="sc">$</span><span class="fu">predict</span>(heart_task, <span class="at">row_ids =</span> split<span class="sc">$</span>test)<span class="sc">$</span><span class="fu">score</span>(auc)))</span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(auc_by_subset)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Section 3.2 uses a 100-tree forest, rather than the learner default above.</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>forest100 <span class="ot">&lt;-</span> <span class="fu">lrn</span>(<span class="st">"classif.ranger"</span>, <span class="at">predict_type =</span> <span class="st">"prob"</span>, <span class="at">num.trees =</span> <span class="dv">100</span>, <span class="at">num.threads =</span> <span class="dv">1</span>)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">20261024</span>)</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>forest100<span class="sc">$</span><span class="fu">train</span>(heart_task, <span class="at">row_ids =</span> split<span class="sc">$</span>train)</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>auc <span class="ot">&lt;-</span> <span class="fu">msr</span>(<span class="st">"classif.auc"</span>)</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>auc_by_subset <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">subset =</span> <span class="fu">c</span>(<span class="st">"train"</span>, <span class="st">"test"</span>), <span class="at">auc =</span> <span class="fu">c</span>(</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  forest100<span class="sc">$</span><span class="fu">predict</span>(heart_task, <span class="at">row_ids =</span> split<span class="sc">$</span>train)<span class="sc">$</span><span class="fu">score</span>(auc),</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  forest100<span class="sc">$</span><span class="fu">predict</span>(heart_task, <span class="at">row_ids =</span> split<span class="sc">$</span>test)<span class="sc">$</span><span class="fu">score</span>(auc)))</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(auc_by_subset)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>  subset       auc
@@ -640,12 +656,12 @@ response  present absent
 </div>
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(auc_by_subset, <span class="st">"outputs/train-test-auc.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">20261025</span>)</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>cv3 <span class="ot">&lt;-</span> <span class="fu">resample</span>(heart_task, forest100, <span class="fu">rsmp</span>(<span class="st">"cv"</span>, <span class="at">folds =</span> <span class="dv">3</span>))</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(cv3<span class="sc">$</span><span class="fu">score</span>(auc)[, <span class="fu">c</span>(<span class="st">"iteration"</span>, <span class="st">"classif.auc"</span>), <span class="at">with =</span> <span class="cn">FALSE</span>],</span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"outputs/cv3.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(cv3<span class="sc">$</span><span class="fu">aggregate</span>(auc))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(auc_by_subset, <span class="st">"outputs/train-test-auc.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">20261025</span>)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>cv3 <span class="ot">&lt;-</span> <span class="fu">resample</span>(heart_task, forest100, <span class="fu">rsmp</span>(<span class="st">"cv"</span>, <span class="at">folds =</span> <span class="dv">3</span>))</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(cv3<span class="sc">$</span><span class="fu">score</span>(auc)[, <span class="fu">c</span>(<span class="st">"iteration"</span>, <span class="st">"classif.auc"</span>), <span class="at">with =</span> <span class="cn">FALSE</span>],</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"outputs/cv3.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(cv3<span class="sc">$</span><span class="fu">aggregate</span>(auc))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>classif.auc 
@@ -653,14 +669,14 @@ response  present absent
 </div>
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Same repeat counts as section 3.2; no reduced demonstration budgets.</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">20261026</span>)</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>subsampling <span class="ot">&lt;-</span> <span class="fu">resample</span>(heart_task, forest100, <span class="fu">rsmp</span>(<span class="st">"subsampling"</span>, <span class="at">ratio =</span> <span class="dv">2</span><span class="sc">/</span><span class="dv">3</span>, <span class="at">repeats =</span> <span class="dv">100</span>))</span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">20261027</span>)</span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>bootstrap <span class="ot">&lt;-</span> <span class="fu">resample</span>(heart_task, forest100, <span class="fu">rsmp</span>(<span class="st">"bootstrap"</span>, <span class="at">repeats =</span> <span class="dv">40</span>))</span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>resampling_scores <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">method =</span> <span class="fu">c</span>(<span class="st">"cv3"</span>, <span class="st">"subsampling100"</span>, <span class="st">"bootstrap40"</span>),</span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">auc =</span> <span class="fu">c</span>(cv3<span class="sc">$</span><span class="fu">aggregate</span>(auc), subsampling<span class="sc">$</span><span class="fu">aggregate</span>(auc), bootstrap<span class="sc">$</span><span class="fu">aggregate</span>(auc)))</span>
-<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(resampling_scores)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Same repeat counts as section 3.2; no reduced demonstration budgets.</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">20261026</span>)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>subsampling <span class="ot">&lt;-</span> <span class="fu">resample</span>(heart_task, forest100, <span class="fu">rsmp</span>(<span class="st">"subsampling"</span>, <span class="at">ratio =</span> <span class="dv">2</span><span class="sc">/</span><span class="dv">3</span>, <span class="at">repeats =</span> <span class="dv">100</span>))</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">20261027</span>)</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>bootstrap <span class="ot">&lt;-</span> <span class="fu">resample</span>(heart_task, forest100, <span class="fu">rsmp</span>(<span class="st">"bootstrap"</span>, <span class="at">repeats =</span> <span class="dv">40</span>))</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>resampling_scores <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">method =</span> <span class="fu">c</span>(<span class="st">"cv3"</span>, <span class="st">"subsampling100"</span>, <span class="st">"bootstrap40"</span>),</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">auc =</span> <span class="fu">c</span>(cv3<span class="sc">$</span><span class="fu">aggregate</span>(auc), subsampling<span class="sc">$</span><span class="fu">aggregate</span>(auc), bootstrap<span class="sc">$</span><span class="fu">aggregate</span>(auc)))</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(resampling_scores)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>          method       auc
@@ -670,41 +686,41 @@ response  present absent
 </div>
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(resampling_scores, <span class="st">"outputs/resampling-summary.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">capture.output</span>(<span class="fu">sessionInfo</span>(), <span class="at">file =</span> <span class="st">"outputs/session-info-core.txt"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(resampling_scores, <span class="st">"outputs/resampling-summary.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">capture.output</span>(<span class="fu">sessionInfo</span>(), <span class="at">file =</span> <span class="st">"outputs/session-info-core.txt"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <p>Training and test AUC answer different questions. Resampling estimates how performance changes when the training sample changes.</p>
 </section>
-<section id="tune-within-the-training-data-article-section-4" class="level2">
-<h2 class="anchored" data-anchor-id="tune-within-the-training-data-article-section-4">6. Tune within the training data — article section 4</h2>
-<p>The <a href="R/04-tuning.R">tuning script</a> supplies the missing objects in the published snippets and retains their search ranges and budgets. Run one method at a time from a terminal in this folder:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> R/04-tuning.R grid_search</span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> R/04-tuning.R random_search</span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> R/04-tuning.R mbo</span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> R/04-tuning.R nested</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<section id="extension-tune-within-the-training-data-article-section-4" class="level2">
+<h2 class="anchored" data-anchor-id="extension-tune-within-the-training-data-article-section-4">6. Extension: Tune within the training data — article section 4</h2>
+<p>The <a href="R/04-tuning.R">tuning script</a> defines the training objects and uses the article’s search ranges and budgets. Run one method at a time from a terminal in this folder:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> R/04-tuning.R grid_search</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> R/04-tuning.R random_search</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> R/04-tuning.R mbo</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> R/04-tuning.R nested</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The grid uses resolution 10; random search evaluates 500 configurations; MBO evaluates 30. Nested tuning uses 100 configurations per inner search, 10 inner folds and 10 outer folds. These are substantial runs, so the workshop can inspect the code before running the full searches outside the live session. The test set is excluded from search selection.</p>
 </section>
-<section id="interpret-article-section-5" class="level2">
-<h2 class="anchored" data-anchor-id="interpret-article-section-5">7. Interpret — article section 5</h2>
-<p>Discuss local explanations, feature effects and feature importance. The article explains these methods but prints no executable interpretation example. We do not introduce a different analysis and label it as replicated article code. Predictive importance describes a fitted model; it does not identify a causal effect.</p>
+<section id="extension-interpret-article-section-5" class="level2">
+<h2 class="anchored" data-anchor-id="extension-interpret-article-section-5">7. Extension: Interpret — article section 5</h2>
+<p>Feature importance describes how much a predictor contributes to a fitted model. Feature effects describe how predictions vary with a predictor, while local explanations focus on one prediction. Discuss what each approach can tell us about this example. Predictive importance does not identify a causal effect. This section is a conceptual discussion.</p>
 </section>
-<section id="generate-synthetic-observations-article-section-6.2.5" class="level2">
-<h2 class="anchored" data-anchor-id="generate-synthetic-observations-article-section-6.2.5">8. Generate synthetic observations — article section 6.2.5</h2>
+<section id="extension-generate-synthetic-observations-article-section-6.2.5" class="level2">
+<h2 class="anchored" data-anchor-id="extension-generate-synthetic-observations-article-section-6.2.5">8. Extension: Generate synthetic observations — article section 6.2.5</h2>
 <p>The <a href="R/05-synthetic-data.R">synthetic-data script</a> follows the adversarial random forest, density estimation and sampling sequence. Its output is labelled synthetic.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Article section 6.2.5: adversarial random forests.</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"R/01-data.R"</span>)</span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(arf)</span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">20261023</span>)</span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>generator <span class="ot">&lt;-</span> <span class="fu">adversarial_rf</span>(heart)</span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>density <span class="ot">&lt;-</span> <span class="fu">forde</span>(generator, heart)</span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>synthetic_heart <span class="ot">&lt;-</span> <span class="fu">forge</span>(density, <span class="at">n_synth =</span> <span class="fu">nrow</span>(heart))</span>
-<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="fu">stopifnot</span>(<span class="fu">nrow</span>(synthetic_heart) <span class="sc">==</span> <span class="fu">nrow</span>(heart))</span>
-<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(synthetic_heart, <span class="st">"outputs/synthetic-heart.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a><span class="fu">capture.output</span>(<span class="fu">sessionInfo</span>(), <span class="at">file =</span> <span class="st">"outputs/session-info-synthetic.txt"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Article section 6.2.5: adversarial random forests.</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"R/01-data.R"</span>)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(arf)</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">20261023</span>)</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>generator <span class="ot">&lt;-</span> <span class="fu">adversarial_rf</span>(heart)</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>density <span class="ot">&lt;-</span> <span class="fu">forde</span>(generator, heart)</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>synthetic_heart <span class="ot">&lt;-</span> <span class="fu">forge</span>(density, <span class="at">n_synth =</span> <span class="fu">nrow</span>(heart))</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="fu">stopifnot</span>(<span class="fu">nrow</span>(synthetic_heart) <span class="sc">==</span> <span class="fu">nrow</span>(heart))</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(synthetic_heart, <span class="st">"outputs/synthetic-heart.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a><span class="fu">capture.output</span>(<span class="fu">sessionInfo</span>(), <span class="at">file =</span> <span class="st">"outputs/session-info-synthetic.txt"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <p>Synthetic rows are generated examples, not additional observed patients.</p>
