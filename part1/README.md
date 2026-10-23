@@ -10,7 +10,7 @@ This session covers how a model learns, followed by a West Nile virus prediction
 4. Work through the [student practice script](R/workshop.R).
 5. Try the [exercise](exercises/workshop-exercise.R) and compare it with the [solution](solutions/workshop-exercise.R).
 
-[Slide viewer](presentation/index.html) · [PowerPoint](presentation/introduction-to-ml-in-epidemiology-with-r.pptx) · [Rendered notebook](docs/index.html)
+[Slide viewer](presentation/index.html) · [PDF](presentation/introduction-to-ml-in-epidemiology-with-r.pdf) · [Rendered notebook](docs/index.html)
 
 The [gradient descent app](app.R) is an optional interactive demonstration.
 See the [data guide](data/README.md) and [sources](references/sources.md) for the evidence behind the teaching example.

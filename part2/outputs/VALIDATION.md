@@ -15,7 +15,10 @@
 - R scripts parse, notebook executes and renders with its results and figures.
 
 These are locally observed results, not replacements for the article's reported results.
-The notebook reruns the core workflow; saved network and tuning outputs come from separate runs.
+The original notebook reran the core workflow; saved network and tuning outputs came from separate runs.
+The teaching route was revised on 23 October 2026: the current notebook reads saved
+forest and network results when rendered. Students fit the network interactively;
+the tree, forest and resampling script remains a separate extension.
 Package versions for the completed full runs are in the accompanying session-info files.
 
 ## Not executed at full budget
@@ -30,3 +33,12 @@ The installed mlr3learners/XGBoost combination completed the runs but emitted
 XGBoost deprecation warnings about legacy parameter passing. MBO invoked its built-in
 random-forest surrogate fallback during this run. ARF ran sequentially without
 a registered parallel backend.
+
+## Teaching-route checks — 23 October 2026
+
+- The revised notebook and supporting pages render successfully using saved results; no forest or network is trained during rendering.
+- The live notebook blocks match the corresponding sections of `R/03-neural-network.R`.
+- The saved split contains 180 training patients and 90 test patients, with no overlap. Both models use these same test patients.
+- Neural-network preparation produces 22 numerical inputs. Scaling uses only the 144 fitting patients, keeping the 36 validation patients and 90 test patients separate.
+- Saved Keras predictions can be evaluated with `mlr3::PredictionClassif`: accuracy 85.6%, sensitivity 78.4%, specificity 90.6%. Forest accuracy is 83.3%, sensitivity 81.1%, specificity 84.9%.
+- The revised live training path has not been retrained during this review. The current command-line R session did not locate a configured Keras Python backend. Confirm Keras setup before the live session; the historical training results above remain saved-run results.

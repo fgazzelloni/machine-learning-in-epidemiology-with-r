@@ -22,7 +22,7 @@ How models learn, gradient descent, and West Nile virus prediction.
 ::: {.session-card}
 ### Part 2 — 23 October 2026
 
-An article-based heart-disease workflow with trees, neural networks, and model evaluation.
+Read heart-data random forest results, then fit and evaluate a neural network with Keras and mlr3.
 
 [Explore Part 2](part2/guide.qmd) · [Open the notebook](part2/ml-workflow-2.qmd)
 :::

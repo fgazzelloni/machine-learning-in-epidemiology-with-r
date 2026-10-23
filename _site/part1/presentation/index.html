@@ -3,41 +3,42 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Introduction to Machine Learning in Epidemiology with R, an R-Ladies Rome workshop by Federica Gazzelloni.">
+  <meta name="description" content="Part 1 of the R workshop by Federica Gazzelloni.">
   <meta property="og:title" content="Introduction to Machine Learning in Epidemiology with R">
-  <meta property="og:description" content="R-Ladies Rome workshop presentation by Federica Gazzelloni.">
   <meta property="og:image" content="slides/slide-1.png">
   <title>Introduction to Machine Learning in Epidemiology with R</title>
-  <link rel="stylesheet" href="styles.css?v=2">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <main class="presentation" aria-label="Workshop presentation">
+  <main class="presentation" aria-label="Part 1 workshop presentation">
     <header class="presentation__header">
       <h1>Introduction to Machine Learning in Epidemiology with R</h1>
       <nav class="presentation__links" aria-label="Presentation links">
         <a href="../index.html">Workshop notebook</a>
-        <a href="introduction-to-ml-in-epidemiology-with-r.pptx">Download PowerPoint</a>
+        <a href="introduction-to-ml-in-epidemiology-with-r.pdf" download>Download PDF</a>
       </nav>
     </header>
 
-    <section class="stage" aria-live="polite">
+    <section class="stage" aria-label="Slides">
       <button class="nav-button nav-button--previous" type="button" aria-label="Previous slide">&#8592;</button>
       <figure>
-        <img id="slide" src="slides/slide-1.png" alt="Slide 1: Introduction to Machine Learning in Epidemiology with R">
-        <figcaption id="slide-status">Slide 1 of 12</figcaption>
+        <img id="slide" src="slides/slide-1.png" width="1600" height="900" alt="Slide 1: Introduction to Machine Learning in Epidemiology with R">
+        <figcaption id="slide-status" role="status" aria-live="polite" aria-atomic="true">Slide 1 of 12 · Part 1</figcaption>
       </figure>
       <button class="nav-button nav-button--next" type="button" aria-label="Next slide">&#8594;</button>
     </section>
 
     <footer class="presentation__footer">
-      <p>Use the arrow keys or swipe to move through the presentation.</p>
-      <button id="fullscreen" type="button">Full screen</button>
+      <div class="presentation__tools">
+        <p>Use arrow keys or swipe. Part 1 contains 12 slides.</p>
+        <label for="slide-picker">Go to slide</label>
+        <select id="slide-picker" aria-label="Go to slide"></select>
+        <details id="slide-transcript"><summary>Slide text</summary><p id="slide-text"></p></details>
+      </div>
+      <button id="fullscreen" type="button" aria-pressed="false">Full screen</button>
     </footer>
   </main>
-
-  <noscript>
-    <p class="noscript">JavaScript is required for slide navigation. You can still open each image in the <a href="slides/">slides folder</a>.</p>
-  </noscript>
-  <script src="presentation.js?v=2"></script>
+  <noscript><p class="noscript">JavaScript is required for navigation. <a href="introduction-to-ml-in-epidemiology-with-r.pdf">Read the PDF presentation</a>.</p></noscript>
+  <script src="presentation.js"></script>
 </body>
 </html>

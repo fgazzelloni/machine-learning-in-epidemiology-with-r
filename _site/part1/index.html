@@ -113,11 +113,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           link.hasAttribute('download') || link.getAttribute('role') === 'tab' ||
           link.hasAttribute('data-bs-toggle')) return;
       var destination = new URL(href, document.baseURI);
-      if (destination.origin === location.origin &&
-          destination.pathname === location.pathname &&
-          destination.search === location.search && destination.hash) return;
-      link.target = '_blank';
-      link.relList.add('noopener', 'noreferrer');
+      var external = /^https?:$/.test(destination.protocol) &&
+          destination.origin !== location.origin;
+      if (external) {
+        link.target = '_blank';
+        link.relList.add('noopener', 'noreferrer');
+      } else {
+        link.removeAttribute('target');
+        link.relList.remove('noopener', 'noreferrer');
+      }
     });
   }
   if (document.readyState === 'loading') {
@@ -390,7 +394,7 @@ window.Quarto = {
 </section>
 <section id="slide-presentation" class="level2">
 <h2 class="anchored" data-anchor-id="slide-presentation">Slide presentation</h2>
-<p><a href="presentation/index.html" class="btn btn-primary">Open the 12-slide presentation</a> <a href="presentation/introduction-to-ml-in-epidemiology-with-r.pptx" class="btn btn-outline-primary">Download the editable PowerPoint</a></p>
+<p><a href="presentation/index.html" class="btn btn-primary">Open the Part 1 presentation</a> <a href="presentation/introduction-to-ml-in-epidemiology-with-r.pdf" class="btn btn-outline-primary" download="introduction-to-ml-in-epidemiology-with-r.pdf">Download the PDF</a></p>
 <p>The slide deck introduces the broader multi-model workflow. The model-performance and variable-importance values shown in the deck are illustrative. The executable notebook below contains the observed results.</p>
 <p>By the end, we should be able to answer four questions:</p>
 <ol type="1">
@@ -738,20 +742,24 @@ b_{t+1}=b_t-\eta\frac{\partial \operatorname{MSE}}{\partial b},
 <span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Keep useful columns</span></span>
 <span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>wnv <span class="ot">&lt;-</span> wnv <span class="sc">%&gt;%</span></span>
 <span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(week <span class="sc">&gt;=</span> <span class="dv">18</span>, week <span class="sc">&lt;=</span> <span class="dv">44</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(state, region, year, week, </span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>         cases_last4, active_weeks_last8, </span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>         activity_next_4w)</span>
-<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Rename columns</span></span>
-<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(wnv) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"state"</span>, <span class="st">"region"</span>, <span class="st">"year"</span>, <span class="st">"week"</span>,</span>
-<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>                <span class="st">"recent_cases"</span>, <span class="st">"recent_active_weeks"</span>, <span class="st">"outcome"</span>)</span>
-<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare the target for classification</span></span>
-<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>wnv<span class="sc">$</span>region <span class="ot">&lt;-</span> <span class="fu">factor</span>(wnv<span class="sc">$</span>region)</span>
-<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>wnv<span class="sc">$</span>outcome <span class="ot">&lt;-</span> <span class="fu">factor</span>(wnv<span class="sc">$</span>outcome, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"no"</span>, <span class="st">"yes"</span>))</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>    state, region, year, week,</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>    cases_last4, active_weeks_last8,</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>    activity_next_4w</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Rename columns</span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(wnv) <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>  <span class="st">"state"</span>, <span class="st">"region"</span>, <span class="st">"year"</span>, <span class="st">"week"</span>,</span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>  <span class="st">"recent_cases"</span>, <span class="st">"recent_active_weeks"</span>, <span class="st">"outcome"</span></span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Explore the class distribution</span></span>
-<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(wnv<span class="sc">$</span>outcome)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare the target for classification</span></span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>wnv<span class="sc">$</span>region <span class="ot">&lt;-</span> <span class="fu">factor</span>(wnv<span class="sc">$</span>region)</span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>wnv<span class="sc">$</span>outcome <span class="ot">&lt;-</span> <span class="fu">factor</span>(wnv<span class="sc">$</span>outcome, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"no"</span>, <span class="st">"yes"</span>))</span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Explore the class distribution</span></span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(wnv<span class="sc">$</span>outcome)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -788,9 +796,10 @@ b_{t+1}=b_t-\eta\frac{\partial \operatorname{MSE}}{\partial b},
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">glm</span>(</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  outcome <span class="sc">~</span> week <span class="sc">+</span> recent_cases <span class="sc">+</span> recent_active_weeks <span class="sc">+</span> region,</span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> train,</span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">family =</span> binomial)</span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">family =</span> binomial</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -873,45 +882,56 @@ Actual   no  yes
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>wnv_ml <span class="ot">&lt;-</span> <span class="fu">fread</span>(wnv_path) <span class="sc">|&gt;</span> <span class="co"># Similar to read.csv() and read.delim()</span></span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(week <span class="sc">&gt;=</span> <span class="dv">18</span>, week <span class="sc">&lt;=</span> <span class="dv">44</span>) <span class="sc">|&gt;</span></span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(state, region, year, week,</span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>         cases_lag1, cases_lag2, cases_lag4,</span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>         cases_last4, cases_last8, active_weeks_last8,</span>
-<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>         week_sin, week_cos, activity_next_4w) <span class="sc">|&gt;</span></span>
-<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">region =</span> <span class="fu">factor</span>(region, </span>
-<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>                    <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Northeast"</span>, <span class="st">"South"</span>, </span>
-<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>                               <span class="st">"North Central"</span>, <span class="st">"West"</span>)),</span>
-<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">activity_next_4w =</span> <span class="fu">factor</span>(activity_next_4w, </span>
-<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>                              <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"no"</span>, <span class="st">"yes"</span>)))</span>
-<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>feature_columns <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
-<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>  <span class="st">"region"</span>,</span>
-<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a>  <span class="st">"cases_lag1"</span>,</span>
-<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a>  <span class="st">"cases_lag2"</span>,</span>
-<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a>  <span class="st">"cases_lag4"</span>,</span>
-<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a>  <span class="st">"cases_last4"</span>,</span>
-<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a>  <span class="st">"cases_last8"</span>,</span>
-<span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a>  <span class="st">"active_weeks_last8"</span>,</span>
-<span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a>  <span class="st">"week_sin"</span>,</span>
-<span id="cb29-23"><a href="#cb29-23" aria-hidden="true" tabindex="-1"></a>  <span class="st">"week_cos"</span></span>
-<span id="cb29-24"><a href="#cb29-24" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb29-25"><a href="#cb29-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-26"><a href="#cb29-26" aria-hidden="true" tabindex="-1"></a>train_data <span class="ot">&lt;-</span> wnv_ml <span class="sc">|&gt;</span> <span class="fu">filter</span>(year <span class="sc">&lt;=</span> <span class="dv">2024</span>)</span>
-<span id="cb29-27"><a href="#cb29-27" aria-hidden="true" tabindex="-1"></a>test_data <span class="ot">&lt;-</span> wnv_ml <span class="sc">|&gt;</span> <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2025</span>)</span>
-<span id="cb29-28"><a href="#cb29-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-29"><a href="#cb29-29" aria-hidden="true" tabindex="-1"></a>train_task <span class="ot">&lt;-</span> TaskClassif<span class="sc">$</span><span class="fu">new</span>(</span>
-<span id="cb29-30"><a href="#cb29-30" aria-hidden="true" tabindex="-1"></a>  <span class="at">id =</span> <span class="st">"wnv-train"</span>,</span>
-<span id="cb29-31"><a href="#cb29-31" aria-hidden="true" tabindex="-1"></a>  <span class="at">backend =</span> train_data[, <span class="fu">c</span>(<span class="st">"activity_next_4w"</span>, feature_columns),</span>
-<span id="cb29-32"><a href="#cb29-32" aria-hidden="true" tabindex="-1"></a>                       <span class="at">with =</span> <span class="cn">FALSE</span>],</span>
-<span id="cb29-33"><a href="#cb29-33" aria-hidden="true" tabindex="-1"></a>  <span class="at">target =</span> <span class="st">"activity_next_4w"</span>,</span>
-<span id="cb29-34"><a href="#cb29-34" aria-hidden="true" tabindex="-1"></a>  <span class="at">positive =</span> <span class="st">"yes"</span>)</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>    state, region, year, week,</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>    cases_lag1, cases_lag2, cases_lag4,</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>    cases_last4, cases_last8, active_weeks_last8,</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>    week_sin, week_cos, activity_next_4w</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">region =</span> <span class="fu">factor</span>(region,</span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>      <span class="at">levels =</span> <span class="fu">c</span>(</span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Northeast"</span>, <span class="st">"South"</span>,</span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>        <span class="st">"North Central"</span>, <span class="st">"West"</span></span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">activity_next_4w =</span> <span class="fu">factor</span>(activity_next_4w,</span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a>      <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"no"</span>, <span class="st">"yes"</span>)</span>
+<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a>feature_columns <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a>  <span class="st">"region"</span>,</span>
+<span id="cb29-23"><a href="#cb29-23" aria-hidden="true" tabindex="-1"></a>  <span class="st">"cases_lag1"</span>,</span>
+<span id="cb29-24"><a href="#cb29-24" aria-hidden="true" tabindex="-1"></a>  <span class="st">"cases_lag2"</span>,</span>
+<span id="cb29-25"><a href="#cb29-25" aria-hidden="true" tabindex="-1"></a>  <span class="st">"cases_lag4"</span>,</span>
+<span id="cb29-26"><a href="#cb29-26" aria-hidden="true" tabindex="-1"></a>  <span class="st">"cases_last4"</span>,</span>
+<span id="cb29-27"><a href="#cb29-27" aria-hidden="true" tabindex="-1"></a>  <span class="st">"cases_last8"</span>,</span>
+<span id="cb29-28"><a href="#cb29-28" aria-hidden="true" tabindex="-1"></a>  <span class="st">"active_weeks_last8"</span>,</span>
+<span id="cb29-29"><a href="#cb29-29" aria-hidden="true" tabindex="-1"></a>  <span class="st">"week_sin"</span>,</span>
+<span id="cb29-30"><a href="#cb29-30" aria-hidden="true" tabindex="-1"></a>  <span class="st">"week_cos"</span></span>
+<span id="cb29-31"><a href="#cb29-31" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb29-32"><a href="#cb29-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-33"><a href="#cb29-33" aria-hidden="true" tabindex="-1"></a>train_data <span class="ot">&lt;-</span> wnv_ml <span class="sc">|&gt;</span> <span class="fu">filter</span>(year <span class="sc">&lt;=</span> <span class="dv">2024</span>)</span>
+<span id="cb29-34"><a href="#cb29-34" aria-hidden="true" tabindex="-1"></a>test_data <span class="ot">&lt;-</span> wnv_ml <span class="sc">|&gt;</span> <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2025</span>)</span>
 <span id="cb29-35"><a href="#cb29-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-36"><a href="#cb29-36" aria-hidden="true" tabindex="-1"></a>test_task <span class="ot">&lt;-</span> TaskClassif<span class="sc">$</span><span class="fu">new</span>(</span>
-<span id="cb29-37"><a href="#cb29-37" aria-hidden="true" tabindex="-1"></a>  <span class="at">id =</span> <span class="st">"wnv-test"</span>,</span>
-<span id="cb29-38"><a href="#cb29-38" aria-hidden="true" tabindex="-1"></a>  <span class="at">backend =</span> test_data[, <span class="fu">c</span>(<span class="st">"activity_next_4w"</span>, feature_columns),</span>
-<span id="cb29-39"><a href="#cb29-39" aria-hidden="true" tabindex="-1"></a>                      <span class="at">with =</span> <span class="cn">FALSE</span>],</span>
-<span id="cb29-40"><a href="#cb29-40" aria-hidden="true" tabindex="-1"></a>  <span class="at">target =</span> <span class="st">"activity_next_4w"</span>,</span>
-<span id="cb29-41"><a href="#cb29-41" aria-hidden="true" tabindex="-1"></a>  <span class="at">positive =</span> <span class="st">"yes"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb29-36"><a href="#cb29-36" aria-hidden="true" tabindex="-1"></a>train_task <span class="ot">&lt;-</span> TaskClassif<span class="sc">$</span><span class="fu">new</span>(</span>
+<span id="cb29-37"><a href="#cb29-37" aria-hidden="true" tabindex="-1"></a>  <span class="at">id =</span> <span class="st">"wnv-train"</span>,</span>
+<span id="cb29-38"><a href="#cb29-38" aria-hidden="true" tabindex="-1"></a>  <span class="at">backend =</span> train_data[, <span class="fu">c</span>(<span class="st">"activity_next_4w"</span>, feature_columns),</span>
+<span id="cb29-39"><a href="#cb29-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">with =</span> <span class="cn">FALSE</span></span>
+<span id="cb29-40"><a href="#cb29-40" aria-hidden="true" tabindex="-1"></a>  ],</span>
+<span id="cb29-41"><a href="#cb29-41" aria-hidden="true" tabindex="-1"></a>  <span class="at">target =</span> <span class="st">"activity_next_4w"</span>,</span>
+<span id="cb29-42"><a href="#cb29-42" aria-hidden="true" tabindex="-1"></a>  <span class="at">positive =</span> <span class="st">"yes"</span></span>
+<span id="cb29-43"><a href="#cb29-43" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb29-44"><a href="#cb29-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-45"><a href="#cb29-45" aria-hidden="true" tabindex="-1"></a>test_task <span class="ot">&lt;-</span> TaskClassif<span class="sc">$</span><span class="fu">new</span>(</span>
+<span id="cb29-46"><a href="#cb29-46" aria-hidden="true" tabindex="-1"></a>  <span class="at">id =</span> <span class="st">"wnv-test"</span>,</span>
+<span id="cb29-47"><a href="#cb29-47" aria-hidden="true" tabindex="-1"></a>  <span class="at">backend =</span> test_data[, <span class="fu">c</span>(<span class="st">"activity_next_4w"</span>, feature_columns),</span>
+<span id="cb29-48"><a href="#cb29-48" aria-hidden="true" tabindex="-1"></a>    <span class="at">with =</span> <span class="cn">FALSE</span></span>
+<span id="cb29-49"><a href="#cb29-49" aria-hidden="true" tabindex="-1"></a>  ],</span>
+<span id="cb29-50"><a href="#cb29-50" aria-hidden="true" tabindex="-1"></a>  <span class="at">target =</span> <span class="st">"activity_next_4w"</span>,</span>
+<span id="cb29-51"><a href="#cb29-51" aria-hidden="true" tabindex="-1"></a>  <span class="at">positive =</span> <span class="st">"yes"</span></span>
+<span id="cb29-52"><a href="#cb29-52" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <div class="cell">
@@ -920,36 +940,40 @@ Actual   no  yes
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>learner_logistic <span class="ot">&lt;-</span> <span class="fu">lrn</span>(</span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"classif.log_reg"</span>,</span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">id =</span> <span class="st">"Logistic regression"</span>,</span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">predict_type =</span> <span class="st">"prob"</span>)</span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>learner_tree <span class="ot">&lt;-</span> <span class="fu">lrn</span>(</span>
-<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">"classif.rpart"</span>,</span>
-<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">id =</span> <span class="st">"Decision tree"</span>,</span>
-<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">predict_type =</span> <span class="st">"prob"</span>,</span>
-<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">cp =</span> <span class="fl">0.01</span>,</span>
-<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">maxdepth =</span> <span class="dv">5</span>,</span>
-<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">minsplit =</span> <span class="dv">40</span>,</span>
-<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">xval =</span> <span class="dv">0</span>)</span>
-<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a>learner_forest <span class="ot">&lt;-</span> <span class="fu">lrn</span>(</span>
-<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a>  <span class="st">"classif.ranger"</span>,</span>
-<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">id =</span> <span class="st">"Random forest"</span>,</span>
-<span id="cb30-18"><a href="#cb30-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">predict_type =</span> <span class="st">"prob"</span>,</span>
-<span id="cb30-19"><a href="#cb30-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">num.trees =</span> <span class="dv">500</span>,</span>
-<span id="cb30-20"><a href="#cb30-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">mtry =</span> <span class="dv">3</span>,</span>
-<span id="cb30-21"><a href="#cb30-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">min.node.size =</span> <span class="dv">10</span>,</span>
-<span id="cb30-22"><a href="#cb30-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">importance =</span> <span class="st">"permutation"</span>,</span>
-<span id="cb30-23"><a href="#cb30-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">num.threads =</span> <span class="dv">1</span>,</span>
-<span id="cb30-24"><a href="#cb30-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">seed =</span> <span class="dv">20260927</span>)</span>
-<span id="cb30-25"><a href="#cb30-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-26"><a href="#cb30-26" aria-hidden="true" tabindex="-1"></a>learners <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
-<span id="cb30-27"><a href="#cb30-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">logistic =</span> learner_logistic,</span>
-<span id="cb30-28"><a href="#cb30-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">tree =</span> learner_tree,</span>
-<span id="cb30-29"><a href="#cb30-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">forest =</span> learner_forest)</span>
-<span id="cb30-30"><a href="#cb30-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-31"><a href="#cb30-31" aria-hidden="true" tabindex="-1"></a>fitted <span class="ot">&lt;-</span> <span class="fu">lapply</span>(learners, <span class="cf">function</span>(l) {</span>
-<span id="cb30-32"><a href="#cb30-32" aria-hidden="true" tabindex="-1"></a>  l<span class="sc">$</span><span class="fu">clone</span>(<span class="at">deep =</span> <span class="cn">TRUE</span>)<span class="sc">$</span><span class="fu">train</span>(train_task)</span>
-<span id="cb30-33"><a href="#cb30-33" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">predict_type =</span> <span class="st">"prob"</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>learner_tree <span class="ot">&lt;-</span> <span class="fu">lrn</span>(</span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">"classif.rpart"</span>,</span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">id =</span> <span class="st">"Decision tree"</span>,</span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">predict_type =</span> <span class="st">"prob"</span>,</span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">cp =</span> <span class="fl">0.01</span>,</span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">maxdepth =</span> <span class="dv">5</span>,</span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">minsplit =</span> <span class="dv">40</span>,</span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">xval =</span> <span class="dv">0</span></span>
+<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a>learner_forest <span class="ot">&lt;-</span> <span class="fu">lrn</span>(</span>
+<span id="cb30-18"><a href="#cb30-18" aria-hidden="true" tabindex="-1"></a>  <span class="st">"classif.ranger"</span>,</span>
+<span id="cb30-19"><a href="#cb30-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">id =</span> <span class="st">"Random forest"</span>,</span>
+<span id="cb30-20"><a href="#cb30-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">predict_type =</span> <span class="st">"prob"</span>,</span>
+<span id="cb30-21"><a href="#cb30-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">num.trees =</span> <span class="dv">500</span>,</span>
+<span id="cb30-22"><a href="#cb30-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">mtry =</span> <span class="dv">3</span>,</span>
+<span id="cb30-23"><a href="#cb30-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">min.node.size =</span> <span class="dv">10</span>,</span>
+<span id="cb30-24"><a href="#cb30-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">importance =</span> <span class="st">"permutation"</span>,</span>
+<span id="cb30-25"><a href="#cb30-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">num.threads =</span> <span class="dv">1</span>,</span>
+<span id="cb30-26"><a href="#cb30-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">seed =</span> <span class="dv">20260927</span></span>
+<span id="cb30-27"><a href="#cb30-27" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb30-28"><a href="#cb30-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-29"><a href="#cb30-29" aria-hidden="true" tabindex="-1"></a>learners <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb30-30"><a href="#cb30-30" aria-hidden="true" tabindex="-1"></a>  <span class="at">logistic =</span> learner_logistic,</span>
+<span id="cb30-31"><a href="#cb30-31" aria-hidden="true" tabindex="-1"></a>  <span class="at">tree =</span> learner_tree,</span>
+<span id="cb30-32"><a href="#cb30-32" aria-hidden="true" tabindex="-1"></a>  <span class="at">forest =</span> learner_forest</span>
+<span id="cb30-33"><a href="#cb30-33" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb30-34"><a href="#cb30-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-35"><a href="#cb30-35" aria-hidden="true" tabindex="-1"></a>fitted <span class="ot">&lt;-</span> <span class="fu">lapply</span>(learners, <span class="cf">function</span>(l) {</span>
+<span id="cb30-36"><a href="#cb30-36" aria-hidden="true" tabindex="-1"></a>  l<span class="sc">$</span><span class="fu">clone</span>(<span class="at">deep =</span> <span class="cn">TRUE</span>)<span class="sc">$</span><span class="fu">train</span>(train_task)</span>
+<span id="cb30-37"><a href="#cb30-37" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <div class="cell">
@@ -1020,11 +1044,17 @@ Actual   no  yes
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>summary_table <span class="ot">&lt;-</span> <span class="fu">rbindlist</span>(<span class="fu">lapply</span>(<span class="fu">split</span>(holdout_predictions, <span class="at">by =</span> <span class="st">"model"</span>, <span class="at">keep.by =</span> <span class="cn">TRUE</span>), <span class="cf">function</span>(x) {</span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise_model</span>(x, <span class="at">threshold =</span> <span class="fl">0.5</span>)</span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>}), <span class="at">idcol =</span> <span class="st">"model"</span>)</span>
-<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>summary_table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>summary_table <span class="ot">&lt;-</span> <span class="fu">rbindlist</span>(<span class="fu">lapply</span>(</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">split</span>(holdout_predictions,</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">by =</span> <span class="st">"model"</span>,</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">keep.by =</span> <span class="cn">TRUE</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">function</span>(x) {</span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise_model</span>(x, <span class="at">threshold =</span> <span class="fl">0.5</span>)</span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>), <span class="at">idcol =</span> <span class="st">"model"</span>)</span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>summary_table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>      model threshold sensitivity specificity  accuracy balanced_accuracy    tp
@@ -1055,29 +1085,34 @@ Actual   no  yes
 <div class="cell" data-layout-align="center">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>roc_data <span class="ot">&lt;-</span> <span class="fu">rbindlist</span>(<span class="fu">lapply</span>(<span class="fu">unique</span>(holdout_predictions<span class="sc">$</span>model), </span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>                             <span class="cf">function</span>(m) {</span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>  pred <span class="ot">&lt;-</span> holdout_predictions[model <span class="sc">==</span> m]</span>
-<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>  obj <span class="ot">&lt;-</span> <span class="fu">roc</span>(pred<span class="sc">$</span>truth, pred<span class="sc">$</span>probability, </span>
-<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>             <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"no"</span>, <span class="st">"yes"</span>), <span class="at">quiet =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.table</span>(</span>
-<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">model =</span> m,</span>
-<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">fpr =</span> <span class="fu">rev</span>(obj<span class="sc">$</span>specificities),</span>
-<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">tpr =</span> <span class="fu">rev</span>(obj<span class="sc">$</span>sensitivities)</span>
-<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>}))</span>
-<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(roc_data, <span class="fu">aes</span>(<span class="at">x =</span> <span class="dv">1</span> <span class="sc">-</span> fpr, <span class="at">y =</span> tpr, <span class="at">colour =</span> model)) <span class="sc">+</span></span>
-<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">intercept =</span> <span class="dv">0</span>, <span class="at">slope =</span> <span class="dv">1</span>, </span>
-<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a>              <span class="at">linetype =</span> <span class="dv">2</span>, <span class="at">colour =</span> <span class="st">"grey55"</span>) <span class="sc">+</span></span>
-<span id="cb37-17"><a href="#cb37-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb37-18"><a href="#cb37-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"ROC curves for WNV prediction models"</span>,</span>
-<span id="cb37-19"><a href="#cb37-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"False-positive rate"</span>,</span>
-<span id="cb37-20"><a href="#cb37-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Sensitivity"</span>,</span>
-<span id="cb37-21"><a href="#cb37-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">colour =</span> <span class="st">"Model"</span></span>
-<span id="cb37-22"><a href="#cb37-22" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb37-23"><a href="#cb37-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>roc_data <span class="ot">&lt;-</span> <span class="fu">rbindlist</span>(<span class="fu">lapply</span>(</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>(holdout_predictions<span class="sc">$</span>model),</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">function</span>(m) {</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>    pred <span class="ot">&lt;-</span> holdout_predictions[model <span class="sc">==</span> m]</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>    obj <span class="ot">&lt;-</span> <span class="fu">roc</span>(pred<span class="sc">$</span>truth, pred<span class="sc">$</span>probability,</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"no"</span>, <span class="st">"yes"</span>), <span class="at">quiet =</span> <span class="cn">TRUE</span></span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.table</span>(</span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">model =</span> m,</span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">fpr =</span> <span class="fu">rev</span>(obj<span class="sc">$</span>specificities),</span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>      <span class="at">tpr =</span> <span class="fu">rev</span>(obj<span class="sc">$</span>sensitivities)</span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a>))</span>
+<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(roc_data, <span class="fu">aes</span>(<span class="at">x =</span> <span class="dv">1</span> <span class="sc">-</span> fpr, <span class="at">y =</span> tpr, <span class="at">colour =</span> model)) <span class="sc">+</span></span>
+<span id="cb37-17"><a href="#cb37-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb37-18"><a href="#cb37-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(</span>
+<span id="cb37-19"><a href="#cb37-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">intercept =</span> <span class="dv">0</span>, <span class="at">slope =</span> <span class="dv">1</span>,</span>
+<span id="cb37-20"><a href="#cb37-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">linetype =</span> <span class="dv">2</span>, <span class="at">colour =</span> <span class="st">"grey55"</span></span>
+<span id="cb37-21"><a href="#cb37-21" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb37-22"><a href="#cb37-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb37-23"><a href="#cb37-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"ROC curves for WNV prediction models"</span>,</span>
+<span id="cb37-24"><a href="#cb37-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"False-positive rate"</span>,</span>
+<span id="cb37-25"><a href="#cb37-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Sensitivity"</span>,</span>
+<span id="cb37-26"><a href="#cb37-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">colour =</span> <span class="st">"Model"</span></span>
+<span id="cb37-27"><a href="#cb37-27" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb37-28"><a href="#cb37-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -1110,7 +1145,7 @@ Actual   no  yes
 <span id="cb38-14"><a href="#cb38-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_tile</span>(<span class="at">color =</span> <span class="st">"white"</span>) <span class="sc">+</span></span>
 <span id="cb38-15"><a href="#cb38-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> count), <span class="at">fontface =</span> <span class="st">"bold"</span>) <span class="sc">+</span></span>
 <span id="cb38-16"><a href="#cb38-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_gradient</span>(<span class="at">low =</span> <span class="st">"#F3E8FF"</span>, <span class="at">high =</span> <span class="st">"#6D28D9"</span>) <span class="sc">+</span></span>
-<span id="cb38-17"><a href="#cb38-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> model) <span class="sc">+</span></span>
+<span id="cb38-17"><a href="#cb38-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>model) <span class="sc">+</span></span>
 <span id="cb38-18"><a href="#cb38-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
 <span id="cb38-19"><a href="#cb38-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Confusion matrices on the 2025 holdout set"</span>,</span>
 <span id="cb38-20"><a href="#cb38-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Predicted class"</span>,</span>
@@ -1134,7 +1169,7 @@ Actual   no  yes
 <div class="cell" data-layout-align="center">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>state_predictions <span class="ot">&lt;-</span> holdout_predictions <span class="sc">|&gt;</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>state_predictions <span class="ot">&lt;-</span> holdout_predictions <span class="sc">|&gt;</span></span>
 <span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(state) <span class="sc">|&gt;</span></span>
 <span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">predicted_probability =</span> <span class="fu">mean</span>(probability), <span class="at">.groups =</span> <span class="st">"drop"</span>)</span>
 <span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -1694,8 +1729,8 @@ Actual   no  yes
 <span id="cb41-32"><a href="#cb41-32" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb41-33"><a href="#cb41-33" aria-hidden="true" tabindex="-1"></a><span class="fu">## Slide presentation</span></span>
 <span id="cb41-34"><a href="#cb41-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-35"><a href="#cb41-35" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Open the 12-slide presentation</span><span class="co">](presentation/index.html)</span>{.btn .btn-primary}</span>
-<span id="cb41-36"><a href="#cb41-36" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Download the editable PowerPoint</span><span class="co">](presentation/introduction-to-ml-in-epidemiology-with-r.pptx)</span>{.btn .btn-outline-primary}</span>
+<span id="cb41-35"><a href="#cb41-35" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Open the Part 1 presentation</span><span class="co">](presentation/index.html)</span>{.btn .btn-primary}</span>
+<span id="cb41-36"><a href="#cb41-36" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Download the PDF</span><span class="co">](presentation/introduction-to-ml-in-epidemiology-with-r.pdf)</span>{.btn .btn-outline-primary download="introduction-to-ml-in-epidemiology-with-r.pdf"}</span>
 <span id="cb41-37"><a href="#cb41-37" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb41-38"><a href="#cb41-38" aria-hidden="true" tabindex="-1"></a>The slide deck introduces the broader multi-model workflow. The model-performance and variable-importance values shown in the deck are illustrative. The executable notebook below contains the observed results.</span>
 <span id="cb41-39"><a href="#cb41-39" aria-hidden="true" tabindex="-1"></a></span>
@@ -1996,363 +2031,393 @@ Actual   no  yes
 <span id="cb41-354"><a href="#cb41-354" aria-hidden="true" tabindex="-1"></a><span class="co"># Keep useful columns</span></span>
 <span id="cb41-355"><a href="#cb41-355" aria-hidden="true" tabindex="-1"></a>wnv <span class="ot">&lt;-</span> wnv <span class="sc">%&gt;%</span></span>
 <span id="cb41-356"><a href="#cb41-356" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(week <span class="sc">&gt;=</span> <span class="dv">18</span>, week <span class="sc">&lt;=</span> <span class="dv">44</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb41-357"><a href="#cb41-357" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(state, region, year, week, </span>
-<span id="cb41-358"><a href="#cb41-358" aria-hidden="true" tabindex="-1"></a>         cases_last4, active_weeks_last8, </span>
-<span id="cb41-359"><a href="#cb41-359" aria-hidden="true" tabindex="-1"></a>         activity_next_4w)</span>
-<span id="cb41-360"><a href="#cb41-360" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-361"><a href="#cb41-361" aria-hidden="true" tabindex="-1"></a><span class="co"># Rename columns</span></span>
-<span id="cb41-362"><a href="#cb41-362" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(wnv) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"state"</span>, <span class="st">"region"</span>, <span class="st">"year"</span>, <span class="st">"week"</span>,</span>
-<span id="cb41-363"><a href="#cb41-363" aria-hidden="true" tabindex="-1"></a>                <span class="st">"recent_cases"</span>, <span class="st">"recent_active_weeks"</span>, <span class="st">"outcome"</span>)</span>
-<span id="cb41-364"><a href="#cb41-364" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-365"><a href="#cb41-365" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare the target for classification</span></span>
-<span id="cb41-366"><a href="#cb41-366" aria-hidden="true" tabindex="-1"></a>wnv<span class="sc">$</span>region <span class="ot">&lt;-</span> <span class="fu">factor</span>(wnv<span class="sc">$</span>region)</span>
-<span id="cb41-367"><a href="#cb41-367" aria-hidden="true" tabindex="-1"></a>wnv<span class="sc">$</span>outcome <span class="ot">&lt;-</span> <span class="fu">factor</span>(wnv<span class="sc">$</span>outcome, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"no"</span>, <span class="st">"yes"</span>))</span>
+<span id="cb41-357"><a href="#cb41-357" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(</span>
+<span id="cb41-358"><a href="#cb41-358" aria-hidden="true" tabindex="-1"></a>    state, region, year, week,</span>
+<span id="cb41-359"><a href="#cb41-359" aria-hidden="true" tabindex="-1"></a>    cases_last4, active_weeks_last8,</span>
+<span id="cb41-360"><a href="#cb41-360" aria-hidden="true" tabindex="-1"></a>    activity_next_4w</span>
+<span id="cb41-361"><a href="#cb41-361" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb41-362"><a href="#cb41-362" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-363"><a href="#cb41-363" aria-hidden="true" tabindex="-1"></a><span class="co"># Rename columns</span></span>
+<span id="cb41-364"><a href="#cb41-364" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(wnv) <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb41-365"><a href="#cb41-365" aria-hidden="true" tabindex="-1"></a>  <span class="st">"state"</span>, <span class="st">"region"</span>, <span class="st">"year"</span>, <span class="st">"week"</span>,</span>
+<span id="cb41-366"><a href="#cb41-366" aria-hidden="true" tabindex="-1"></a>  <span class="st">"recent_cases"</span>, <span class="st">"recent_active_weeks"</span>, <span class="st">"outcome"</span></span>
+<span id="cb41-367"><a href="#cb41-367" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb41-368"><a href="#cb41-368" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-369"><a href="#cb41-369" aria-hidden="true" tabindex="-1"></a><span class="co"># Explore the class distribution</span></span>
-<span id="cb41-370"><a href="#cb41-370" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(wnv<span class="sc">$</span>outcome)</span>
-<span id="cb41-371"><a href="#cb41-371" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">prop.table</span>(<span class="fu">table</span>(wnv<span class="sc">$</span>outcome)), <span class="dv">3</span>)</span>
-<span id="cb41-372"><a href="#cb41-372" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb41-373"><a href="#cb41-373" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-374"><a href="#cb41-374" aria-hidden="true" tabindex="-1"></a>We split the data into training and holdout test periods.</span>
-<span id="cb41-375"><a href="#cb41-375" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-378"><a href="#cb41-378" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb41-379"><a href="#cb41-379" aria-hidden="true" tabindex="-1"></a><span class="co"># Split into training and test data</span></span>
-<span id="cb41-380"><a href="#cb41-380" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> <span class="fu">subset</span>(wnv, year <span class="sc">&lt;=</span> <span class="dv">2024</span>)</span>
-<span id="cb41-381"><a href="#cb41-381" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="fu">subset</span>(wnv, year <span class="sc">==</span> <span class="dv">2025</span>)</span>
-<span id="cb41-382"><a href="#cb41-382" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb41-383"><a href="#cb41-383" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-384"><a href="#cb41-384" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
-<span id="cb41-385"><a href="#cb41-385" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-386"><a href="#cb41-386" aria-hidden="true" tabindex="-1"></a><span class="fu"># 8. A simple logistic-regression model</span></span>
+<span id="cb41-369"><a href="#cb41-369" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare the target for classification</span></span>
+<span id="cb41-370"><a href="#cb41-370" aria-hidden="true" tabindex="-1"></a>wnv<span class="sc">$</span>region <span class="ot">&lt;-</span> <span class="fu">factor</span>(wnv<span class="sc">$</span>region)</span>
+<span id="cb41-371"><a href="#cb41-371" aria-hidden="true" tabindex="-1"></a>wnv<span class="sc">$</span>outcome <span class="ot">&lt;-</span> <span class="fu">factor</span>(wnv<span class="sc">$</span>outcome, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"no"</span>, <span class="st">"yes"</span>))</span>
+<span id="cb41-372"><a href="#cb41-372" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-373"><a href="#cb41-373" aria-hidden="true" tabindex="-1"></a><span class="co"># Explore the class distribution</span></span>
+<span id="cb41-374"><a href="#cb41-374" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(wnv<span class="sc">$</span>outcome)</span>
+<span id="cb41-375"><a href="#cb41-375" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">prop.table</span>(<span class="fu">table</span>(wnv<span class="sc">$</span>outcome)), <span class="dv">3</span>)</span>
+<span id="cb41-376"><a href="#cb41-376" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb41-377"><a href="#cb41-377" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-378"><a href="#cb41-378" aria-hidden="true" tabindex="-1"></a>We split the data into training and holdout test periods.</span>
+<span id="cb41-379"><a href="#cb41-379" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-382"><a href="#cb41-382" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb41-383"><a href="#cb41-383" aria-hidden="true" tabindex="-1"></a><span class="co"># Split into training and test data</span></span>
+<span id="cb41-384"><a href="#cb41-384" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> <span class="fu">subset</span>(wnv, year <span class="sc">&lt;=</span> <span class="dv">2024</span>)</span>
+<span id="cb41-385"><a href="#cb41-385" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="fu">subset</span>(wnv, year <span class="sc">==</span> <span class="dv">2025</span>)</span>
+<span id="cb41-386"><a href="#cb41-386" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb41-387"><a href="#cb41-387" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-388"><a href="#cb41-388" aria-hidden="true" tabindex="-1"></a>This is a classic supervised learning setup: a model learns from historical state-week observations and predicts future activity.</span>
+<span id="cb41-388"><a href="#cb41-388" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
 <span id="cb41-389"><a href="#cb41-389" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-392"><a href="#cb41-392" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb41-393"><a href="#cb41-393" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">glm</span>(</span>
-<span id="cb41-394"><a href="#cb41-394" aria-hidden="true" tabindex="-1"></a>  outcome <span class="sc">~</span> week <span class="sc">+</span> recent_cases <span class="sc">+</span> recent_active_weeks <span class="sc">+</span> region,</span>
-<span id="cb41-395"><a href="#cb41-395" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> train,</span>
-<span id="cb41-396"><a href="#cb41-396" aria-hidden="true" tabindex="-1"></a>  <span class="at">family =</span> binomial)</span>
-<span id="cb41-397"><a href="#cb41-397" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-398"><a href="#cb41-398" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model)</span>
-<span id="cb41-399"><a href="#cb41-399" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-400"><a href="#cb41-400" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb41-401"><a href="#cb41-401" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-404"><a href="#cb41-404" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb41-405"><a href="#cb41-405" aria-hidden="true" tabindex="-1"></a><span class="co"># Predict probabilities on unseen data</span></span>
-<span id="cb41-406"><a href="#cb41-406" aria-hidden="true" tabindex="-1"></a>prob_yes <span class="ot">&lt;-</span> <span class="fu">predict</span>(model, <span class="at">newdata =</span> test, <span class="at">type =</span> <span class="st">"response"</span>)</span>
-<span id="cb41-407"><a href="#cb41-407" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-408"><a href="#cb41-408" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert probabilities to class labels</span></span>
-<span id="cb41-409"><a href="#cb41-409" aria-hidden="true" tabindex="-1"></a>predicted <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(prob_yes <span class="sc">&gt;=</span> <span class="fl">0.5</span>, <span class="st">"yes"</span>, <span class="st">"no"</span>)</span>
-<span id="cb41-410"><a href="#cb41-410" aria-hidden="true" tabindex="-1"></a>predicted <span class="ot">&lt;-</span> <span class="fu">factor</span>(predicted, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"no"</span>, <span class="st">"yes"</span>))</span>
+<span id="cb41-390"><a href="#cb41-390" aria-hidden="true" tabindex="-1"></a><span class="fu"># 8. A simple logistic-regression model</span></span>
+<span id="cb41-391"><a href="#cb41-391" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-392"><a href="#cb41-392" aria-hidden="true" tabindex="-1"></a>This is a classic supervised learning setup: a model learns from historical state-week observations and predicts future activity.</span>
+<span id="cb41-393"><a href="#cb41-393" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-396"><a href="#cb41-396" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb41-397"><a href="#cb41-397" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">glm</span>(</span>
+<span id="cb41-398"><a href="#cb41-398" aria-hidden="true" tabindex="-1"></a>  outcome <span class="sc">~</span> week <span class="sc">+</span> recent_cases <span class="sc">+</span> recent_active_weeks <span class="sc">+</span> region,</span>
+<span id="cb41-399"><a href="#cb41-399" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> train,</span>
+<span id="cb41-400"><a href="#cb41-400" aria-hidden="true" tabindex="-1"></a>  <span class="at">family =</span> binomial</span>
+<span id="cb41-401"><a href="#cb41-401" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb41-402"><a href="#cb41-402" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-403"><a href="#cb41-403" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model)</span>
+<span id="cb41-404"><a href="#cb41-404" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb41-405"><a href="#cb41-405" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-408"><a href="#cb41-408" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb41-409"><a href="#cb41-409" aria-hidden="true" tabindex="-1"></a><span class="co"># Predict probabilities on unseen data</span></span>
+<span id="cb41-410"><a href="#cb41-410" aria-hidden="true" tabindex="-1"></a>prob_yes <span class="ot">&lt;-</span> <span class="fu">predict</span>(model, <span class="at">newdata =</span> test, <span class="at">type =</span> <span class="st">"response"</span>)</span>
 <span id="cb41-411"><a href="#cb41-411" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-412"><a href="#cb41-412" aria-hidden="true" tabindex="-1"></a><span class="co"># Compare predictions with reality</span></span>
-<span id="cb41-413"><a href="#cb41-413" aria-hidden="true" tabindex="-1"></a>confusion <span class="ot">&lt;-</span> <span class="fu">table</span>(<span class="at">Actual =</span> test<span class="sc">$</span>outcome, <span class="at">Predicted =</span> predicted)</span>
-<span id="cb41-414"><a href="#cb41-414" aria-hidden="true" tabindex="-1"></a>confusion</span>
+<span id="cb41-412"><a href="#cb41-412" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert probabilities to class labels</span></span>
+<span id="cb41-413"><a href="#cb41-413" aria-hidden="true" tabindex="-1"></a>predicted <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(prob_yes <span class="sc">&gt;=</span> <span class="fl">0.5</span>, <span class="st">"yes"</span>, <span class="st">"no"</span>)</span>
+<span id="cb41-414"><a href="#cb41-414" aria-hidden="true" tabindex="-1"></a>predicted <span class="ot">&lt;-</span> <span class="fu">factor</span>(predicted, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"no"</span>, <span class="st">"yes"</span>))</span>
 <span id="cb41-415"><a href="#cb41-415" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-416"><a href="#cb41-416" aria-hidden="true" tabindex="-1"></a>accuracy <span class="ot">&lt;-</span> <span class="fu">sum</span>(<span class="fu">diag</span>(confusion)) <span class="sc">/</span> <span class="fu">sum</span>(confusion)</span>
-<span id="cb41-417"><a href="#cb41-417" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Accuracy:"</span>, <span class="fu">round</span>(accuracy, <span class="dv">3</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
-<span id="cb41-418"><a href="#cb41-418" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb41-416"><a href="#cb41-416" aria-hidden="true" tabindex="-1"></a><span class="co"># Compare predictions with reality</span></span>
+<span id="cb41-417"><a href="#cb41-417" aria-hidden="true" tabindex="-1"></a>confusion <span class="ot">&lt;-</span> <span class="fu">table</span>(<span class="at">Actual =</span> test<span class="sc">$</span>outcome, <span class="at">Predicted =</span> predicted)</span>
+<span id="cb41-418"><a href="#cb41-418" aria-hidden="true" tabindex="-1"></a>confusion</span>
 <span id="cb41-419"><a href="#cb41-419" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-420"><a href="#cb41-420" aria-hidden="true" tabindex="-1"></a>This workflow shows the classic machine-learning cycle:</span>
-<span id="cb41-421"><a href="#cb41-421" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-422"><a href="#cb41-422" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>learn on training data;</span>
-<span id="cb41-423"><a href="#cb41-423" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>predict on unseen data;</span>
-<span id="cb41-424"><a href="#cb41-424" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>compare predictions to observed outcomes;</span>
-<span id="cb41-425"><a href="#cb41-425" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>evaluate generalisation, not just fit.</span>
-<span id="cb41-426"><a href="#cb41-426" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-427"><a href="#cb41-427" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
-<span id="cb41-428"><a href="#cb41-428" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-429"><a href="#cb41-429" aria-hidden="true" tabindex="-1"></a><span class="fu"># 9. Model comparison in the modern workflow</span></span>
+<span id="cb41-420"><a href="#cb41-420" aria-hidden="true" tabindex="-1"></a>accuracy <span class="ot">&lt;-</span> <span class="fu">sum</span>(<span class="fu">diag</span>(confusion)) <span class="sc">/</span> <span class="fu">sum</span>(confusion)</span>
+<span id="cb41-421"><a href="#cb41-421" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Accuracy:"</span>, <span class="fu">round</span>(accuracy, <span class="dv">3</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb41-422"><a href="#cb41-422" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb41-423"><a href="#cb41-423" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-424"><a href="#cb41-424" aria-hidden="true" tabindex="-1"></a>This workflow shows the classic machine-learning cycle:</span>
+<span id="cb41-425"><a href="#cb41-425" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-426"><a href="#cb41-426" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>learn on training data;</span>
+<span id="cb41-427"><a href="#cb41-427" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>predict on unseen data;</span>
+<span id="cb41-428"><a href="#cb41-428" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>compare predictions to observed outcomes;</span>
+<span id="cb41-429"><a href="#cb41-429" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>evaluate generalisation, not just fit.</span>
 <span id="cb41-430"><a href="#cb41-430" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-431"><a href="#cb41-431" aria-hidden="true" tabindex="-1"></a>The more modern workflow compares multiple learners and uses probabilities directly.</span>
+<span id="cb41-431"><a href="#cb41-431" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
 <span id="cb41-432"><a href="#cb41-432" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-435"><a href="#cb41-435" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb41-436"><a href="#cb41-436" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
-<span id="cb41-437"><a href="#cb41-437" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlr3)</span>
-<span id="cb41-438"><a href="#cb41-438" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlr3learners)</span>
-<span id="cb41-439"><a href="#cb41-439" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb41-440"><a href="#cb41-440" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-443"><a href="#cb41-443" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb41-444"><a href="#cb41-444" aria-hidden="true" tabindex="-1"></a>wnv_ml <span class="ot">&lt;-</span> <span class="fu">fread</span>(wnv_path) <span class="sc">|&gt;</span> <span class="co"># Similar to read.csv() and read.delim()</span></span>
-<span id="cb41-445"><a href="#cb41-445" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(week <span class="sc">&gt;=</span> <span class="dv">18</span>, week <span class="sc">&lt;=</span> <span class="dv">44</span>) <span class="sc">|&gt;</span></span>
-<span id="cb41-446"><a href="#cb41-446" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(state, region, year, week,</span>
-<span id="cb41-447"><a href="#cb41-447" aria-hidden="true" tabindex="-1"></a>         cases_lag1, cases_lag2, cases_lag4,</span>
-<span id="cb41-448"><a href="#cb41-448" aria-hidden="true" tabindex="-1"></a>         cases_last4, cases_last8, active_weeks_last8,</span>
-<span id="cb41-449"><a href="#cb41-449" aria-hidden="true" tabindex="-1"></a>         week_sin, week_cos, activity_next_4w) <span class="sc">|&gt;</span></span>
-<span id="cb41-450"><a href="#cb41-450" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb41-451"><a href="#cb41-451" aria-hidden="true" tabindex="-1"></a>    <span class="at">region =</span> <span class="fu">factor</span>(region, </span>
-<span id="cb41-452"><a href="#cb41-452" aria-hidden="true" tabindex="-1"></a>                    <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Northeast"</span>, <span class="st">"South"</span>, </span>
-<span id="cb41-453"><a href="#cb41-453" aria-hidden="true" tabindex="-1"></a>                               <span class="st">"North Central"</span>, <span class="st">"West"</span>)),</span>
-<span id="cb41-454"><a href="#cb41-454" aria-hidden="true" tabindex="-1"></a>    <span class="at">activity_next_4w =</span> <span class="fu">factor</span>(activity_next_4w, </span>
-<span id="cb41-455"><a href="#cb41-455" aria-hidden="true" tabindex="-1"></a>                              <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"no"</span>, <span class="st">"yes"</span>)))</span>
-<span id="cb41-456"><a href="#cb41-456" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-457"><a href="#cb41-457" aria-hidden="true" tabindex="-1"></a>feature_columns <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
-<span id="cb41-458"><a href="#cb41-458" aria-hidden="true" tabindex="-1"></a>  <span class="st">"region"</span>,</span>
-<span id="cb41-459"><a href="#cb41-459" aria-hidden="true" tabindex="-1"></a>  <span class="st">"cases_lag1"</span>,</span>
-<span id="cb41-460"><a href="#cb41-460" aria-hidden="true" tabindex="-1"></a>  <span class="st">"cases_lag2"</span>,</span>
-<span id="cb41-461"><a href="#cb41-461" aria-hidden="true" tabindex="-1"></a>  <span class="st">"cases_lag4"</span>,</span>
-<span id="cb41-462"><a href="#cb41-462" aria-hidden="true" tabindex="-1"></a>  <span class="st">"cases_last4"</span>,</span>
-<span id="cb41-463"><a href="#cb41-463" aria-hidden="true" tabindex="-1"></a>  <span class="st">"cases_last8"</span>,</span>
-<span id="cb41-464"><a href="#cb41-464" aria-hidden="true" tabindex="-1"></a>  <span class="st">"active_weeks_last8"</span>,</span>
-<span id="cb41-465"><a href="#cb41-465" aria-hidden="true" tabindex="-1"></a>  <span class="st">"week_sin"</span>,</span>
-<span id="cb41-466"><a href="#cb41-466" aria-hidden="true" tabindex="-1"></a>  <span class="st">"week_cos"</span></span>
-<span id="cb41-467"><a href="#cb41-467" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb41-468"><a href="#cb41-468" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-469"><a href="#cb41-469" aria-hidden="true" tabindex="-1"></a>train_data <span class="ot">&lt;-</span> wnv_ml <span class="sc">|&gt;</span> <span class="fu">filter</span>(year <span class="sc">&lt;=</span> <span class="dv">2024</span>)</span>
-<span id="cb41-470"><a href="#cb41-470" aria-hidden="true" tabindex="-1"></a>test_data <span class="ot">&lt;-</span> wnv_ml <span class="sc">|&gt;</span> <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2025</span>)</span>
-<span id="cb41-471"><a href="#cb41-471" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-472"><a href="#cb41-472" aria-hidden="true" tabindex="-1"></a>train_task <span class="ot">&lt;-</span> TaskClassif<span class="sc">$</span><span class="fu">new</span>(</span>
-<span id="cb41-473"><a href="#cb41-473" aria-hidden="true" tabindex="-1"></a>  <span class="at">id =</span> <span class="st">"wnv-train"</span>,</span>
-<span id="cb41-474"><a href="#cb41-474" aria-hidden="true" tabindex="-1"></a>  <span class="at">backend =</span> train_data[, <span class="fu">c</span>(<span class="st">"activity_next_4w"</span>, feature_columns),</span>
-<span id="cb41-475"><a href="#cb41-475" aria-hidden="true" tabindex="-1"></a>                       <span class="at">with =</span> <span class="cn">FALSE</span>],</span>
-<span id="cb41-476"><a href="#cb41-476" aria-hidden="true" tabindex="-1"></a>  <span class="at">target =</span> <span class="st">"activity_next_4w"</span>,</span>
-<span id="cb41-477"><a href="#cb41-477" aria-hidden="true" tabindex="-1"></a>  <span class="at">positive =</span> <span class="st">"yes"</span>)</span>
-<span id="cb41-478"><a href="#cb41-478" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-479"><a href="#cb41-479" aria-hidden="true" tabindex="-1"></a>test_task <span class="ot">&lt;-</span> TaskClassif<span class="sc">$</span><span class="fu">new</span>(</span>
-<span id="cb41-480"><a href="#cb41-480" aria-hidden="true" tabindex="-1"></a>  <span class="at">id =</span> <span class="st">"wnv-test"</span>,</span>
-<span id="cb41-481"><a href="#cb41-481" aria-hidden="true" tabindex="-1"></a>  <span class="at">backend =</span> test_data[, <span class="fu">c</span>(<span class="st">"activity_next_4w"</span>, feature_columns),</span>
-<span id="cb41-482"><a href="#cb41-482" aria-hidden="true" tabindex="-1"></a>                      <span class="at">with =</span> <span class="cn">FALSE</span>],</span>
-<span id="cb41-483"><a href="#cb41-483" aria-hidden="true" tabindex="-1"></a>  <span class="at">target =</span> <span class="st">"activity_next_4w"</span>,</span>
-<span id="cb41-484"><a href="#cb41-484" aria-hidden="true" tabindex="-1"></a>  <span class="at">positive =</span> <span class="st">"yes"</span>)</span>
-<span id="cb41-485"><a href="#cb41-485" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb41-486"><a href="#cb41-486" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-487"><a href="#cb41-487" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-490"><a href="#cb41-490" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb41-491"><a href="#cb41-491" aria-hidden="true" tabindex="-1"></a>learner_logistic <span class="ot">&lt;-</span> <span class="fu">lrn</span>(</span>
-<span id="cb41-492"><a href="#cb41-492" aria-hidden="true" tabindex="-1"></a>  <span class="st">"classif.log_reg"</span>,</span>
-<span id="cb41-493"><a href="#cb41-493" aria-hidden="true" tabindex="-1"></a>  <span class="at">id =</span> <span class="st">"Logistic regression"</span>,</span>
-<span id="cb41-494"><a href="#cb41-494" aria-hidden="true" tabindex="-1"></a>  <span class="at">predict_type =</span> <span class="st">"prob"</span>)</span>
-<span id="cb41-495"><a href="#cb41-495" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-496"><a href="#cb41-496" aria-hidden="true" tabindex="-1"></a>learner_tree <span class="ot">&lt;-</span> <span class="fu">lrn</span>(</span>
-<span id="cb41-497"><a href="#cb41-497" aria-hidden="true" tabindex="-1"></a>  <span class="st">"classif.rpart"</span>,</span>
-<span id="cb41-498"><a href="#cb41-498" aria-hidden="true" tabindex="-1"></a>  <span class="at">id =</span> <span class="st">"Decision tree"</span>,</span>
-<span id="cb41-499"><a href="#cb41-499" aria-hidden="true" tabindex="-1"></a>  <span class="at">predict_type =</span> <span class="st">"prob"</span>,</span>
-<span id="cb41-500"><a href="#cb41-500" aria-hidden="true" tabindex="-1"></a>  <span class="at">cp =</span> <span class="fl">0.01</span>,</span>
-<span id="cb41-501"><a href="#cb41-501" aria-hidden="true" tabindex="-1"></a>  <span class="at">maxdepth =</span> <span class="dv">5</span>,</span>
-<span id="cb41-502"><a href="#cb41-502" aria-hidden="true" tabindex="-1"></a>  <span class="at">minsplit =</span> <span class="dv">40</span>,</span>
-<span id="cb41-503"><a href="#cb41-503" aria-hidden="true" tabindex="-1"></a>  <span class="at">xval =</span> <span class="dv">0</span>)</span>
-<span id="cb41-504"><a href="#cb41-504" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-505"><a href="#cb41-505" aria-hidden="true" tabindex="-1"></a>learner_forest <span class="ot">&lt;-</span> <span class="fu">lrn</span>(</span>
-<span id="cb41-506"><a href="#cb41-506" aria-hidden="true" tabindex="-1"></a>  <span class="st">"classif.ranger"</span>,</span>
-<span id="cb41-507"><a href="#cb41-507" aria-hidden="true" tabindex="-1"></a>  <span class="at">id =</span> <span class="st">"Random forest"</span>,</span>
-<span id="cb41-508"><a href="#cb41-508" aria-hidden="true" tabindex="-1"></a>  <span class="at">predict_type =</span> <span class="st">"prob"</span>,</span>
-<span id="cb41-509"><a href="#cb41-509" aria-hidden="true" tabindex="-1"></a>  <span class="at">num.trees =</span> <span class="dv">500</span>,</span>
-<span id="cb41-510"><a href="#cb41-510" aria-hidden="true" tabindex="-1"></a>  <span class="at">mtry =</span> <span class="dv">3</span>,</span>
-<span id="cb41-511"><a href="#cb41-511" aria-hidden="true" tabindex="-1"></a>  <span class="at">min.node.size =</span> <span class="dv">10</span>,</span>
-<span id="cb41-512"><a href="#cb41-512" aria-hidden="true" tabindex="-1"></a>  <span class="at">importance =</span> <span class="st">"permutation"</span>,</span>
-<span id="cb41-513"><a href="#cb41-513" aria-hidden="true" tabindex="-1"></a>  <span class="at">num.threads =</span> <span class="dv">1</span>,</span>
-<span id="cb41-514"><a href="#cb41-514" aria-hidden="true" tabindex="-1"></a>  <span class="at">seed =</span> <span class="dv">20260927</span>)</span>
-<span id="cb41-515"><a href="#cb41-515" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-516"><a href="#cb41-516" aria-hidden="true" tabindex="-1"></a>learners <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
-<span id="cb41-517"><a href="#cb41-517" aria-hidden="true" tabindex="-1"></a>  <span class="at">logistic =</span> learner_logistic,</span>
-<span id="cb41-518"><a href="#cb41-518" aria-hidden="true" tabindex="-1"></a>  <span class="at">tree =</span> learner_tree,</span>
-<span id="cb41-519"><a href="#cb41-519" aria-hidden="true" tabindex="-1"></a>  <span class="at">forest =</span> learner_forest)</span>
-<span id="cb41-520"><a href="#cb41-520" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-521"><a href="#cb41-521" aria-hidden="true" tabindex="-1"></a>fitted <span class="ot">&lt;-</span> <span class="fu">lapply</span>(learners, <span class="cf">function</span>(l) {</span>
-<span id="cb41-522"><a href="#cb41-522" aria-hidden="true" tabindex="-1"></a>  l<span class="sc">$</span><span class="fu">clone</span>(<span class="at">deep =</span> <span class="cn">TRUE</span>)<span class="sc">$</span><span class="fu">train</span>(train_task)</span>
-<span id="cb41-523"><a href="#cb41-523" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb41-524"><a href="#cb41-524" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb41-525"><a href="#cb41-525" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-526"><a href="#cb41-526" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-529"><a href="#cb41-529" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb41-530"><a href="#cb41-530" aria-hidden="true" tabindex="-1"></a>holdout_predictions <span class="ot">&lt;-</span> <span class="fu">rbindlist</span>(<span class="fu">lapply</span>(<span class="fu">names</span>(fitted), <span class="cf">function</span>(model_name) {</span>
-<span id="cb41-531"><a href="#cb41-531" aria-hidden="true" tabindex="-1"></a>  pred <span class="ot">&lt;-</span> fitted[[model_name]]<span class="sc">$</span><span class="fu">predict</span>(test_task)</span>
-<span id="cb41-532"><a href="#cb41-532" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.table</span>(</span>
-<span id="cb41-533"><a href="#cb41-533" aria-hidden="true" tabindex="-1"></a>    <span class="at">model =</span> model_name,</span>
-<span id="cb41-534"><a href="#cb41-534" aria-hidden="true" tabindex="-1"></a>    <span class="at">state =</span> test_data<span class="sc">$</span>state,</span>
-<span id="cb41-535"><a href="#cb41-535" aria-hidden="true" tabindex="-1"></a>    <span class="at">year =</span> test_data<span class="sc">$</span>year,</span>
-<span id="cb41-536"><a href="#cb41-536" aria-hidden="true" tabindex="-1"></a>    <span class="at">week =</span> test_data<span class="sc">$</span>week,</span>
-<span id="cb41-537"><a href="#cb41-537" aria-hidden="true" tabindex="-1"></a>    <span class="at">truth =</span> pred<span class="sc">$</span>truth,</span>
-<span id="cb41-538"><a href="#cb41-538" aria-hidden="true" tabindex="-1"></a>    <span class="at">probability =</span> pred<span class="sc">$</span>prob[, <span class="st">"yes"</span>]</span>
-<span id="cb41-539"><a href="#cb41-539" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb41-540"><a href="#cb41-540" aria-hidden="true" tabindex="-1"></a>}))</span>
-<span id="cb41-541"><a href="#cb41-541" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-542"><a href="#cb41-542" aria-hidden="true" tabindex="-1"></a>holdout_predictions</span>
+<span id="cb41-433"><a href="#cb41-433" aria-hidden="true" tabindex="-1"></a><span class="fu"># 9. Model comparison in the modern workflow</span></span>
+<span id="cb41-434"><a href="#cb41-434" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-435"><a href="#cb41-435" aria-hidden="true" tabindex="-1"></a>The more modern workflow compares multiple learners and uses probabilities directly.</span>
+<span id="cb41-436"><a href="#cb41-436" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-439"><a href="#cb41-439" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb41-440"><a href="#cb41-440" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb41-441"><a href="#cb41-441" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlr3)</span>
+<span id="cb41-442"><a href="#cb41-442" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlr3learners)</span>
+<span id="cb41-443"><a href="#cb41-443" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb41-444"><a href="#cb41-444" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-447"><a href="#cb41-447" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb41-448"><a href="#cb41-448" aria-hidden="true" tabindex="-1"></a>wnv_ml <span class="ot">&lt;-</span> <span class="fu">fread</span>(wnv_path) <span class="sc">|&gt;</span> <span class="co"># Similar to read.csv() and read.delim()</span></span>
+<span id="cb41-449"><a href="#cb41-449" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(week <span class="sc">&gt;=</span> <span class="dv">18</span>, week <span class="sc">&lt;=</span> <span class="dv">44</span>) <span class="sc">|&gt;</span></span>
+<span id="cb41-450"><a href="#cb41-450" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(</span>
+<span id="cb41-451"><a href="#cb41-451" aria-hidden="true" tabindex="-1"></a>    state, region, year, week,</span>
+<span id="cb41-452"><a href="#cb41-452" aria-hidden="true" tabindex="-1"></a>    cases_lag1, cases_lag2, cases_lag4,</span>
+<span id="cb41-453"><a href="#cb41-453" aria-hidden="true" tabindex="-1"></a>    cases_last4, cases_last8, active_weeks_last8,</span>
+<span id="cb41-454"><a href="#cb41-454" aria-hidden="true" tabindex="-1"></a>    week_sin, week_cos, activity_next_4w</span>
+<span id="cb41-455"><a href="#cb41-455" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb41-456"><a href="#cb41-456" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb41-457"><a href="#cb41-457" aria-hidden="true" tabindex="-1"></a>    <span class="at">region =</span> <span class="fu">factor</span>(region,</span>
+<span id="cb41-458"><a href="#cb41-458" aria-hidden="true" tabindex="-1"></a>      <span class="at">levels =</span> <span class="fu">c</span>(</span>
+<span id="cb41-459"><a href="#cb41-459" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Northeast"</span>, <span class="st">"South"</span>,</span>
+<span id="cb41-460"><a href="#cb41-460" aria-hidden="true" tabindex="-1"></a>        <span class="st">"North Central"</span>, <span class="st">"West"</span></span>
+<span id="cb41-461"><a href="#cb41-461" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb41-462"><a href="#cb41-462" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb41-463"><a href="#cb41-463" aria-hidden="true" tabindex="-1"></a>    <span class="at">activity_next_4w =</span> <span class="fu">factor</span>(activity_next_4w,</span>
+<span id="cb41-464"><a href="#cb41-464" aria-hidden="true" tabindex="-1"></a>      <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"no"</span>, <span class="st">"yes"</span>)</span>
+<span id="cb41-465"><a href="#cb41-465" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb41-466"><a href="#cb41-466" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb41-467"><a href="#cb41-467" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-468"><a href="#cb41-468" aria-hidden="true" tabindex="-1"></a>feature_columns <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb41-469"><a href="#cb41-469" aria-hidden="true" tabindex="-1"></a>  <span class="st">"region"</span>,</span>
+<span id="cb41-470"><a href="#cb41-470" aria-hidden="true" tabindex="-1"></a>  <span class="st">"cases_lag1"</span>,</span>
+<span id="cb41-471"><a href="#cb41-471" aria-hidden="true" tabindex="-1"></a>  <span class="st">"cases_lag2"</span>,</span>
+<span id="cb41-472"><a href="#cb41-472" aria-hidden="true" tabindex="-1"></a>  <span class="st">"cases_lag4"</span>,</span>
+<span id="cb41-473"><a href="#cb41-473" aria-hidden="true" tabindex="-1"></a>  <span class="st">"cases_last4"</span>,</span>
+<span id="cb41-474"><a href="#cb41-474" aria-hidden="true" tabindex="-1"></a>  <span class="st">"cases_last8"</span>,</span>
+<span id="cb41-475"><a href="#cb41-475" aria-hidden="true" tabindex="-1"></a>  <span class="st">"active_weeks_last8"</span>,</span>
+<span id="cb41-476"><a href="#cb41-476" aria-hidden="true" tabindex="-1"></a>  <span class="st">"week_sin"</span>,</span>
+<span id="cb41-477"><a href="#cb41-477" aria-hidden="true" tabindex="-1"></a>  <span class="st">"week_cos"</span></span>
+<span id="cb41-478"><a href="#cb41-478" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb41-479"><a href="#cb41-479" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-480"><a href="#cb41-480" aria-hidden="true" tabindex="-1"></a>train_data <span class="ot">&lt;-</span> wnv_ml <span class="sc">|&gt;</span> <span class="fu">filter</span>(year <span class="sc">&lt;=</span> <span class="dv">2024</span>)</span>
+<span id="cb41-481"><a href="#cb41-481" aria-hidden="true" tabindex="-1"></a>test_data <span class="ot">&lt;-</span> wnv_ml <span class="sc">|&gt;</span> <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2025</span>)</span>
+<span id="cb41-482"><a href="#cb41-482" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-483"><a href="#cb41-483" aria-hidden="true" tabindex="-1"></a>train_task <span class="ot">&lt;-</span> TaskClassif<span class="sc">$</span><span class="fu">new</span>(</span>
+<span id="cb41-484"><a href="#cb41-484" aria-hidden="true" tabindex="-1"></a>  <span class="at">id =</span> <span class="st">"wnv-train"</span>,</span>
+<span id="cb41-485"><a href="#cb41-485" aria-hidden="true" tabindex="-1"></a>  <span class="at">backend =</span> train_data[, <span class="fu">c</span>(<span class="st">"activity_next_4w"</span>, feature_columns),</span>
+<span id="cb41-486"><a href="#cb41-486" aria-hidden="true" tabindex="-1"></a>    <span class="at">with =</span> <span class="cn">FALSE</span></span>
+<span id="cb41-487"><a href="#cb41-487" aria-hidden="true" tabindex="-1"></a>  ],</span>
+<span id="cb41-488"><a href="#cb41-488" aria-hidden="true" tabindex="-1"></a>  <span class="at">target =</span> <span class="st">"activity_next_4w"</span>,</span>
+<span id="cb41-489"><a href="#cb41-489" aria-hidden="true" tabindex="-1"></a>  <span class="at">positive =</span> <span class="st">"yes"</span></span>
+<span id="cb41-490"><a href="#cb41-490" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb41-491"><a href="#cb41-491" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-492"><a href="#cb41-492" aria-hidden="true" tabindex="-1"></a>test_task <span class="ot">&lt;-</span> TaskClassif<span class="sc">$</span><span class="fu">new</span>(</span>
+<span id="cb41-493"><a href="#cb41-493" aria-hidden="true" tabindex="-1"></a>  <span class="at">id =</span> <span class="st">"wnv-test"</span>,</span>
+<span id="cb41-494"><a href="#cb41-494" aria-hidden="true" tabindex="-1"></a>  <span class="at">backend =</span> test_data[, <span class="fu">c</span>(<span class="st">"activity_next_4w"</span>, feature_columns),</span>
+<span id="cb41-495"><a href="#cb41-495" aria-hidden="true" tabindex="-1"></a>    <span class="at">with =</span> <span class="cn">FALSE</span></span>
+<span id="cb41-496"><a href="#cb41-496" aria-hidden="true" tabindex="-1"></a>  ],</span>
+<span id="cb41-497"><a href="#cb41-497" aria-hidden="true" tabindex="-1"></a>  <span class="at">target =</span> <span class="st">"activity_next_4w"</span>,</span>
+<span id="cb41-498"><a href="#cb41-498" aria-hidden="true" tabindex="-1"></a>  <span class="at">positive =</span> <span class="st">"yes"</span></span>
+<span id="cb41-499"><a href="#cb41-499" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb41-500"><a href="#cb41-500" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb41-501"><a href="#cb41-501" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-502"><a href="#cb41-502" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-505"><a href="#cb41-505" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb41-506"><a href="#cb41-506" aria-hidden="true" tabindex="-1"></a>learner_logistic <span class="ot">&lt;-</span> <span class="fu">lrn</span>(</span>
+<span id="cb41-507"><a href="#cb41-507" aria-hidden="true" tabindex="-1"></a>  <span class="st">"classif.log_reg"</span>,</span>
+<span id="cb41-508"><a href="#cb41-508" aria-hidden="true" tabindex="-1"></a>  <span class="at">id =</span> <span class="st">"Logistic regression"</span>,</span>
+<span id="cb41-509"><a href="#cb41-509" aria-hidden="true" tabindex="-1"></a>  <span class="at">predict_type =</span> <span class="st">"prob"</span></span>
+<span id="cb41-510"><a href="#cb41-510" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb41-511"><a href="#cb41-511" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-512"><a href="#cb41-512" aria-hidden="true" tabindex="-1"></a>learner_tree <span class="ot">&lt;-</span> <span class="fu">lrn</span>(</span>
+<span id="cb41-513"><a href="#cb41-513" aria-hidden="true" tabindex="-1"></a>  <span class="st">"classif.rpart"</span>,</span>
+<span id="cb41-514"><a href="#cb41-514" aria-hidden="true" tabindex="-1"></a>  <span class="at">id =</span> <span class="st">"Decision tree"</span>,</span>
+<span id="cb41-515"><a href="#cb41-515" aria-hidden="true" tabindex="-1"></a>  <span class="at">predict_type =</span> <span class="st">"prob"</span>,</span>
+<span id="cb41-516"><a href="#cb41-516" aria-hidden="true" tabindex="-1"></a>  <span class="at">cp =</span> <span class="fl">0.01</span>,</span>
+<span id="cb41-517"><a href="#cb41-517" aria-hidden="true" tabindex="-1"></a>  <span class="at">maxdepth =</span> <span class="dv">5</span>,</span>
+<span id="cb41-518"><a href="#cb41-518" aria-hidden="true" tabindex="-1"></a>  <span class="at">minsplit =</span> <span class="dv">40</span>,</span>
+<span id="cb41-519"><a href="#cb41-519" aria-hidden="true" tabindex="-1"></a>  <span class="at">xval =</span> <span class="dv">0</span></span>
+<span id="cb41-520"><a href="#cb41-520" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb41-521"><a href="#cb41-521" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-522"><a href="#cb41-522" aria-hidden="true" tabindex="-1"></a>learner_forest <span class="ot">&lt;-</span> <span class="fu">lrn</span>(</span>
+<span id="cb41-523"><a href="#cb41-523" aria-hidden="true" tabindex="-1"></a>  <span class="st">"classif.ranger"</span>,</span>
+<span id="cb41-524"><a href="#cb41-524" aria-hidden="true" tabindex="-1"></a>  <span class="at">id =</span> <span class="st">"Random forest"</span>,</span>
+<span id="cb41-525"><a href="#cb41-525" aria-hidden="true" tabindex="-1"></a>  <span class="at">predict_type =</span> <span class="st">"prob"</span>,</span>
+<span id="cb41-526"><a href="#cb41-526" aria-hidden="true" tabindex="-1"></a>  <span class="at">num.trees =</span> <span class="dv">500</span>,</span>
+<span id="cb41-527"><a href="#cb41-527" aria-hidden="true" tabindex="-1"></a>  <span class="at">mtry =</span> <span class="dv">3</span>,</span>
+<span id="cb41-528"><a href="#cb41-528" aria-hidden="true" tabindex="-1"></a>  <span class="at">min.node.size =</span> <span class="dv">10</span>,</span>
+<span id="cb41-529"><a href="#cb41-529" aria-hidden="true" tabindex="-1"></a>  <span class="at">importance =</span> <span class="st">"permutation"</span>,</span>
+<span id="cb41-530"><a href="#cb41-530" aria-hidden="true" tabindex="-1"></a>  <span class="at">num.threads =</span> <span class="dv">1</span>,</span>
+<span id="cb41-531"><a href="#cb41-531" aria-hidden="true" tabindex="-1"></a>  <span class="at">seed =</span> <span class="dv">20260927</span></span>
+<span id="cb41-532"><a href="#cb41-532" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb41-533"><a href="#cb41-533" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-534"><a href="#cb41-534" aria-hidden="true" tabindex="-1"></a>learners <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb41-535"><a href="#cb41-535" aria-hidden="true" tabindex="-1"></a>  <span class="at">logistic =</span> learner_logistic,</span>
+<span id="cb41-536"><a href="#cb41-536" aria-hidden="true" tabindex="-1"></a>  <span class="at">tree =</span> learner_tree,</span>
+<span id="cb41-537"><a href="#cb41-537" aria-hidden="true" tabindex="-1"></a>  <span class="at">forest =</span> learner_forest</span>
+<span id="cb41-538"><a href="#cb41-538" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb41-539"><a href="#cb41-539" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-540"><a href="#cb41-540" aria-hidden="true" tabindex="-1"></a>fitted <span class="ot">&lt;-</span> <span class="fu">lapply</span>(learners, <span class="cf">function</span>(l) {</span>
+<span id="cb41-541"><a href="#cb41-541" aria-hidden="true" tabindex="-1"></a>  l<span class="sc">$</span><span class="fu">clone</span>(<span class="at">deep =</span> <span class="cn">TRUE</span>)<span class="sc">$</span><span class="fu">train</span>(train_task)</span>
+<span id="cb41-542"><a href="#cb41-542" aria-hidden="true" tabindex="-1"></a>})</span>
 <span id="cb41-543"><a href="#cb41-543" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb41-544"><a href="#cb41-544" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb41-545"><a href="#cb41-545" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb41-548"><a href="#cb41-548" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb41-549"><a href="#cb41-549" aria-hidden="true" tabindex="-1"></a>summarise_model <span class="ot">&lt;-</span> <span class="cf">function</span>(df, <span class="at">threshold =</span> <span class="fl">0.5</span>) {</span>
-<span id="cb41-550"><a href="#cb41-550" aria-hidden="true" tabindex="-1"></a>  response <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(df<span class="sc">$</span>probability <span class="sc">&gt;=</span> threshold, <span class="st">"yes"</span>, <span class="st">"no"</span>)</span>
-<span id="cb41-551"><a href="#cb41-551" aria-hidden="true" tabindex="-1"></a>  response <span class="ot">&lt;-</span> <span class="fu">factor</span>(response, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"no"</span>, <span class="st">"yes"</span>))</span>
-<span id="cb41-552"><a href="#cb41-552" aria-hidden="true" tabindex="-1"></a>  truth <span class="ot">&lt;-</span> <span class="fu">factor</span>(df<span class="sc">$</span>truth, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"no"</span>, <span class="st">"yes"</span>))</span>
-<span id="cb41-553"><a href="#cb41-553" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-554"><a href="#cb41-554" aria-hidden="true" tabindex="-1"></a>  tp <span class="ot">&lt;-</span> <span class="fu">sum</span>(truth <span class="sc">==</span> <span class="st">"yes"</span> <span class="sc">&amp;</span> response <span class="sc">==</span> <span class="st">"yes"</span>)</span>
-<span id="cb41-555"><a href="#cb41-555" aria-hidden="true" tabindex="-1"></a>  fn <span class="ot">&lt;-</span> <span class="fu">sum</span>(truth <span class="sc">==</span> <span class="st">"yes"</span> <span class="sc">&amp;</span> response <span class="sc">==</span> <span class="st">"no"</span>)</span>
-<span id="cb41-556"><a href="#cb41-556" aria-hidden="true" tabindex="-1"></a>  tn <span class="ot">&lt;-</span> <span class="fu">sum</span>(truth <span class="sc">==</span> <span class="st">"no"</span> <span class="sc">&amp;</span> response <span class="sc">==</span> <span class="st">"no"</span>)</span>
-<span id="cb41-557"><a href="#cb41-557" aria-hidden="true" tabindex="-1"></a>  fp <span class="ot">&lt;-</span> <span class="fu">sum</span>(truth <span class="sc">==</span> <span class="st">"no"</span> <span class="sc">&amp;</span> response <span class="sc">==</span> <span class="st">"yes"</span>)</span>
-<span id="cb41-558"><a href="#cb41-558" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-559"><a href="#cb41-559" aria-hidden="true" tabindex="-1"></a>  sensitivity <span class="ot">&lt;-</span> tp <span class="sc">/</span> (tp <span class="sc">+</span> fn)</span>
-<span id="cb41-560"><a href="#cb41-560" aria-hidden="true" tabindex="-1"></a>  specificity <span class="ot">&lt;-</span> tn <span class="sc">/</span> (tn <span class="sc">+</span> fp)</span>
-<span id="cb41-561"><a href="#cb41-561" aria-hidden="true" tabindex="-1"></a>  accuracy <span class="ot">&lt;-</span> (tp <span class="sc">+</span> tn) <span class="sc">/</span> <span class="fu">length</span>(truth)</span>
-<span id="cb41-562"><a href="#cb41-562" aria-hidden="true" tabindex="-1"></a>  bacc <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">c</span>(sensitivity, specificity))</span>
+<span id="cb41-549"><a href="#cb41-549" aria-hidden="true" tabindex="-1"></a>holdout_predictions <span class="ot">&lt;-</span> <span class="fu">rbindlist</span>(<span class="fu">lapply</span>(<span class="fu">names</span>(fitted), <span class="cf">function</span>(model_name) {</span>
+<span id="cb41-550"><a href="#cb41-550" aria-hidden="true" tabindex="-1"></a>  pred <span class="ot">&lt;-</span> fitted[[model_name]]<span class="sc">$</span><span class="fu">predict</span>(test_task)</span>
+<span id="cb41-551"><a href="#cb41-551" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.table</span>(</span>
+<span id="cb41-552"><a href="#cb41-552" aria-hidden="true" tabindex="-1"></a>    <span class="at">model =</span> model_name,</span>
+<span id="cb41-553"><a href="#cb41-553" aria-hidden="true" tabindex="-1"></a>    <span class="at">state =</span> test_data<span class="sc">$</span>state,</span>
+<span id="cb41-554"><a href="#cb41-554" aria-hidden="true" tabindex="-1"></a>    <span class="at">year =</span> test_data<span class="sc">$</span>year,</span>
+<span id="cb41-555"><a href="#cb41-555" aria-hidden="true" tabindex="-1"></a>    <span class="at">week =</span> test_data<span class="sc">$</span>week,</span>
+<span id="cb41-556"><a href="#cb41-556" aria-hidden="true" tabindex="-1"></a>    <span class="at">truth =</span> pred<span class="sc">$</span>truth,</span>
+<span id="cb41-557"><a href="#cb41-557" aria-hidden="true" tabindex="-1"></a>    <span class="at">probability =</span> pred<span class="sc">$</span>prob[, <span class="st">"yes"</span>]</span>
+<span id="cb41-558"><a href="#cb41-558" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb41-559"><a href="#cb41-559" aria-hidden="true" tabindex="-1"></a>}))</span>
+<span id="cb41-560"><a href="#cb41-560" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-561"><a href="#cb41-561" aria-hidden="true" tabindex="-1"></a>holdout_predictions</span>
+<span id="cb41-562"><a href="#cb41-562" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb41-563"><a href="#cb41-563" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-564"><a href="#cb41-564" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.table</span>(</span>
-<span id="cb41-565"><a href="#cb41-565" aria-hidden="true" tabindex="-1"></a>    <span class="at">threshold =</span> threshold,</span>
-<span id="cb41-566"><a href="#cb41-566" aria-hidden="true" tabindex="-1"></a>    <span class="at">sensitivity =</span> sensitivity,</span>
-<span id="cb41-567"><a href="#cb41-567" aria-hidden="true" tabindex="-1"></a>    <span class="at">specificity =</span> specificity,</span>
-<span id="cb41-568"><a href="#cb41-568" aria-hidden="true" tabindex="-1"></a>    <span class="at">accuracy =</span> accuracy,</span>
-<span id="cb41-569"><a href="#cb41-569" aria-hidden="true" tabindex="-1"></a>    <span class="at">balanced_accuracy =</span> bacc,</span>
-<span id="cb41-570"><a href="#cb41-570" aria-hidden="true" tabindex="-1"></a>    <span class="at">tp =</span> tp,</span>
-<span id="cb41-571"><a href="#cb41-571" aria-hidden="true" tabindex="-1"></a>    <span class="at">fp =</span> fp,</span>
-<span id="cb41-572"><a href="#cb41-572" aria-hidden="true" tabindex="-1"></a>    <span class="at">tn =</span> tn,</span>
-<span id="cb41-573"><a href="#cb41-573" aria-hidden="true" tabindex="-1"></a>    <span class="at">fn =</span> fn</span>
-<span id="cb41-574"><a href="#cb41-574" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb41-575"><a href="#cb41-575" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb41-576"><a href="#cb41-576" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb41-564"><a href="#cb41-564" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-567"><a href="#cb41-567" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb41-568"><a href="#cb41-568" aria-hidden="true" tabindex="-1"></a>summarise_model <span class="ot">&lt;-</span> <span class="cf">function</span>(df, <span class="at">threshold =</span> <span class="fl">0.5</span>) {</span>
+<span id="cb41-569"><a href="#cb41-569" aria-hidden="true" tabindex="-1"></a>  response <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(df<span class="sc">$</span>probability <span class="sc">&gt;=</span> threshold, <span class="st">"yes"</span>, <span class="st">"no"</span>)</span>
+<span id="cb41-570"><a href="#cb41-570" aria-hidden="true" tabindex="-1"></a>  response <span class="ot">&lt;-</span> <span class="fu">factor</span>(response, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"no"</span>, <span class="st">"yes"</span>))</span>
+<span id="cb41-571"><a href="#cb41-571" aria-hidden="true" tabindex="-1"></a>  truth <span class="ot">&lt;-</span> <span class="fu">factor</span>(df<span class="sc">$</span>truth, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"no"</span>, <span class="st">"yes"</span>))</span>
+<span id="cb41-572"><a href="#cb41-572" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-573"><a href="#cb41-573" aria-hidden="true" tabindex="-1"></a>  tp <span class="ot">&lt;-</span> <span class="fu">sum</span>(truth <span class="sc">==</span> <span class="st">"yes"</span> <span class="sc">&amp;</span> response <span class="sc">==</span> <span class="st">"yes"</span>)</span>
+<span id="cb41-574"><a href="#cb41-574" aria-hidden="true" tabindex="-1"></a>  fn <span class="ot">&lt;-</span> <span class="fu">sum</span>(truth <span class="sc">==</span> <span class="st">"yes"</span> <span class="sc">&amp;</span> response <span class="sc">==</span> <span class="st">"no"</span>)</span>
+<span id="cb41-575"><a href="#cb41-575" aria-hidden="true" tabindex="-1"></a>  tn <span class="ot">&lt;-</span> <span class="fu">sum</span>(truth <span class="sc">==</span> <span class="st">"no"</span> <span class="sc">&amp;</span> response <span class="sc">==</span> <span class="st">"no"</span>)</span>
+<span id="cb41-576"><a href="#cb41-576" aria-hidden="true" tabindex="-1"></a>  fp <span class="ot">&lt;-</span> <span class="fu">sum</span>(truth <span class="sc">==</span> <span class="st">"no"</span> <span class="sc">&amp;</span> response <span class="sc">==</span> <span class="st">"yes"</span>)</span>
 <span id="cb41-577"><a href="#cb41-577" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-578"><a href="#cb41-578" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-581"><a href="#cb41-581" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb41-582"><a href="#cb41-582" aria-hidden="true" tabindex="-1"></a>summary_table <span class="ot">&lt;-</span> <span class="fu">rbindlist</span>(<span class="fu">lapply</span>(<span class="fu">split</span>(holdout_predictions, <span class="at">by =</span> <span class="st">"model"</span>, <span class="at">keep.by =</span> <span class="cn">TRUE</span>), <span class="cf">function</span>(x) {</span>
-<span id="cb41-583"><a href="#cb41-583" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise_model</span>(x, <span class="at">threshold =</span> <span class="fl">0.5</span>)</span>
-<span id="cb41-584"><a href="#cb41-584" aria-hidden="true" tabindex="-1"></a>}), <span class="at">idcol =</span> <span class="st">"model"</span>)</span>
-<span id="cb41-585"><a href="#cb41-585" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-586"><a href="#cb41-586" aria-hidden="true" tabindex="-1"></a>summary_table</span>
-<span id="cb41-587"><a href="#cb41-587" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb41-588"><a href="#cb41-588" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-589"><a href="#cb41-589" aria-hidden="true" tabindex="-1"></a>This is framing of supervised learning and model evaluation: compare models, use probabilities, and evaluate generalization on unseen data.</span>
-<span id="cb41-590"><a href="#cb41-590" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-591"><a href="#cb41-591" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
-<span id="cb41-592"><a href="#cb41-592" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-593"><a href="#cb41-593" aria-hidden="true" tabindex="-1"></a><span class="fu"># 10. Visualization</span></span>
-<span id="cb41-594"><a href="#cb41-594" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-595"><a href="#cb41-595" aria-hidden="true" tabindex="-1"></a><span class="fu">### ROC curve</span></span>
+<span id="cb41-578"><a href="#cb41-578" aria-hidden="true" tabindex="-1"></a>  sensitivity <span class="ot">&lt;-</span> tp <span class="sc">/</span> (tp <span class="sc">+</span> fn)</span>
+<span id="cb41-579"><a href="#cb41-579" aria-hidden="true" tabindex="-1"></a>  specificity <span class="ot">&lt;-</span> tn <span class="sc">/</span> (tn <span class="sc">+</span> fp)</span>
+<span id="cb41-580"><a href="#cb41-580" aria-hidden="true" tabindex="-1"></a>  accuracy <span class="ot">&lt;-</span> (tp <span class="sc">+</span> tn) <span class="sc">/</span> <span class="fu">length</span>(truth)</span>
+<span id="cb41-581"><a href="#cb41-581" aria-hidden="true" tabindex="-1"></a>  bacc <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">c</span>(sensitivity, specificity))</span>
+<span id="cb41-582"><a href="#cb41-582" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-583"><a href="#cb41-583" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.table</span>(</span>
+<span id="cb41-584"><a href="#cb41-584" aria-hidden="true" tabindex="-1"></a>    <span class="at">threshold =</span> threshold,</span>
+<span id="cb41-585"><a href="#cb41-585" aria-hidden="true" tabindex="-1"></a>    <span class="at">sensitivity =</span> sensitivity,</span>
+<span id="cb41-586"><a href="#cb41-586" aria-hidden="true" tabindex="-1"></a>    <span class="at">specificity =</span> specificity,</span>
+<span id="cb41-587"><a href="#cb41-587" aria-hidden="true" tabindex="-1"></a>    <span class="at">accuracy =</span> accuracy,</span>
+<span id="cb41-588"><a href="#cb41-588" aria-hidden="true" tabindex="-1"></a>    <span class="at">balanced_accuracy =</span> bacc,</span>
+<span id="cb41-589"><a href="#cb41-589" aria-hidden="true" tabindex="-1"></a>    <span class="at">tp =</span> tp,</span>
+<span id="cb41-590"><a href="#cb41-590" aria-hidden="true" tabindex="-1"></a>    <span class="at">fp =</span> fp,</span>
+<span id="cb41-591"><a href="#cb41-591" aria-hidden="true" tabindex="-1"></a>    <span class="at">tn =</span> tn,</span>
+<span id="cb41-592"><a href="#cb41-592" aria-hidden="true" tabindex="-1"></a>    <span class="at">fn =</span> fn</span>
+<span id="cb41-593"><a href="#cb41-593" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb41-594"><a href="#cb41-594" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb41-595"><a href="#cb41-595" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb41-596"><a href="#cb41-596" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-599"><a href="#cb41-599" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb41-600"><a href="#cb41-600" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pROC)</span>
-<span id="cb41-601"><a href="#cb41-601" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb41-602"><a href="#cb41-602" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-605"><a href="#cb41-605" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb41-606"><a href="#cb41-606" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: "ROC curves for the candidate WNV prediction models on the 2025 holdout set."</span></span>
-<span id="cb41-607"><a href="#cb41-607" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-align: center</span></span>
-<span id="cb41-608"><a href="#cb41-608" aria-hidden="true" tabindex="-1"></a>roc_data <span class="ot">&lt;-</span> <span class="fu">rbindlist</span>(<span class="fu">lapply</span>(<span class="fu">unique</span>(holdout_predictions<span class="sc">$</span>model), </span>
-<span id="cb41-609"><a href="#cb41-609" aria-hidden="true" tabindex="-1"></a>                             <span class="cf">function</span>(m) {</span>
-<span id="cb41-610"><a href="#cb41-610" aria-hidden="true" tabindex="-1"></a>  pred <span class="ot">&lt;-</span> holdout_predictions[model <span class="sc">==</span> m]</span>
-<span id="cb41-611"><a href="#cb41-611" aria-hidden="true" tabindex="-1"></a>  obj <span class="ot">&lt;-</span> <span class="fu">roc</span>(pred<span class="sc">$</span>truth, pred<span class="sc">$</span>probability, </span>
-<span id="cb41-612"><a href="#cb41-612" aria-hidden="true" tabindex="-1"></a>             <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"no"</span>, <span class="st">"yes"</span>), <span class="at">quiet =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb41-613"><a href="#cb41-613" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.table</span>(</span>
-<span id="cb41-614"><a href="#cb41-614" aria-hidden="true" tabindex="-1"></a>    <span class="at">model =</span> m,</span>
-<span id="cb41-615"><a href="#cb41-615" aria-hidden="true" tabindex="-1"></a>    <span class="at">fpr =</span> <span class="fu">rev</span>(obj<span class="sc">$</span>specificities),</span>
-<span id="cb41-616"><a href="#cb41-616" aria-hidden="true" tabindex="-1"></a>    <span class="at">tpr =</span> <span class="fu">rev</span>(obj<span class="sc">$</span>sensitivities)</span>
-<span id="cb41-617"><a href="#cb41-617" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb41-618"><a href="#cb41-618" aria-hidden="true" tabindex="-1"></a>}))</span>
+<span id="cb41-597"><a href="#cb41-597" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-600"><a href="#cb41-600" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb41-601"><a href="#cb41-601" aria-hidden="true" tabindex="-1"></a>summary_table <span class="ot">&lt;-</span> <span class="fu">rbindlist</span>(<span class="fu">lapply</span>(</span>
+<span id="cb41-602"><a href="#cb41-602" aria-hidden="true" tabindex="-1"></a>  <span class="fu">split</span>(holdout_predictions,</span>
+<span id="cb41-603"><a href="#cb41-603" aria-hidden="true" tabindex="-1"></a>    <span class="at">by =</span> <span class="st">"model"</span>,</span>
+<span id="cb41-604"><a href="#cb41-604" aria-hidden="true" tabindex="-1"></a>    <span class="at">keep.by =</span> <span class="cn">TRUE</span></span>
+<span id="cb41-605"><a href="#cb41-605" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb41-606"><a href="#cb41-606" aria-hidden="true" tabindex="-1"></a>  <span class="cf">function</span>(x) {</span>
+<span id="cb41-607"><a href="#cb41-607" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise_model</span>(x, <span class="at">threshold =</span> <span class="fl">0.5</span>)</span>
+<span id="cb41-608"><a href="#cb41-608" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb41-609"><a href="#cb41-609" aria-hidden="true" tabindex="-1"></a>), <span class="at">idcol =</span> <span class="st">"model"</span>)</span>
+<span id="cb41-610"><a href="#cb41-610" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-611"><a href="#cb41-611" aria-hidden="true" tabindex="-1"></a>summary_table</span>
+<span id="cb41-612"><a href="#cb41-612" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb41-613"><a href="#cb41-613" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-614"><a href="#cb41-614" aria-hidden="true" tabindex="-1"></a>This is framing of supervised learning and model evaluation: compare models, use probabilities, and evaluate generalization on unseen data.</span>
+<span id="cb41-615"><a href="#cb41-615" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-616"><a href="#cb41-616" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
+<span id="cb41-617"><a href="#cb41-617" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-618"><a href="#cb41-618" aria-hidden="true" tabindex="-1"></a><span class="fu"># 10. Visualization</span></span>
 <span id="cb41-619"><a href="#cb41-619" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-620"><a href="#cb41-620" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(roc_data, <span class="fu">aes</span>(<span class="at">x =</span> <span class="dv">1</span> <span class="sc">-</span> fpr, <span class="at">y =</span> tpr, <span class="at">colour =</span> model)) <span class="sc">+</span></span>
-<span id="cb41-621"><a href="#cb41-621" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb41-622"><a href="#cb41-622" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">intercept =</span> <span class="dv">0</span>, <span class="at">slope =</span> <span class="dv">1</span>, </span>
-<span id="cb41-623"><a href="#cb41-623" aria-hidden="true" tabindex="-1"></a>              <span class="at">linetype =</span> <span class="dv">2</span>, <span class="at">colour =</span> <span class="st">"grey55"</span>) <span class="sc">+</span></span>
-<span id="cb41-624"><a href="#cb41-624" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb41-625"><a href="#cb41-625" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"ROC curves for WNV prediction models"</span>,</span>
-<span id="cb41-626"><a href="#cb41-626" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"False-positive rate"</span>,</span>
-<span id="cb41-627"><a href="#cb41-627" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Sensitivity"</span>,</span>
-<span id="cb41-628"><a href="#cb41-628" aria-hidden="true" tabindex="-1"></a>    <span class="at">colour =</span> <span class="st">"Model"</span></span>
-<span id="cb41-629"><a href="#cb41-629" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb41-630"><a href="#cb41-630" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span>
-<span id="cb41-631"><a href="#cb41-631" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb41-632"><a href="#cb41-632" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-633"><a href="#cb41-633" aria-hidden="true" tabindex="-1"></a><span class="fu">### Confusion matrix plot</span></span>
-<span id="cb41-634"><a href="#cb41-634" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-637"><a href="#cb41-637" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb41-638"><a href="#cb41-638" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: "Confusion matrices for the candidate models on the 2025 holdout set at a 0.5 probability threshold."</span></span>
-<span id="cb41-639"><a href="#cb41-639" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-align: center</span></span>
-<span id="cb41-640"><a href="#cb41-640" aria-hidden="true" tabindex="-1"></a>confusion_data <span class="ot">&lt;-</span> <span class="fu">rbindlist</span>(<span class="fu">lapply</span>(<span class="fu">unique</span>(holdout_predictions<span class="sc">$</span>model), <span class="cf">function</span>(m) {</span>
-<span id="cb41-641"><a href="#cb41-641" aria-hidden="true" tabindex="-1"></a>  pred <span class="ot">&lt;-</span> holdout_predictions[model <span class="sc">==</span> m]</span>
-<span id="cb41-642"><a href="#cb41-642" aria-hidden="true" tabindex="-1"></a>  pred<span class="sc">$</span>response <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(pred<span class="sc">$</span>probability <span class="sc">&gt;=</span> <span class="fl">0.5</span>, <span class="st">"yes"</span>, <span class="st">"no"</span>)</span>
-<span id="cb41-643"><a href="#cb41-643" aria-hidden="true" tabindex="-1"></a>  tab <span class="ot">&lt;-</span> <span class="fu">table</span>(<span class="at">Actual =</span> pred<span class="sc">$</span>truth, <span class="at">Predicted =</span> pred<span class="sc">$</span>response)</span>
-<span id="cb41-644"><a href="#cb41-644" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.table</span>(</span>
-<span id="cb41-645"><a href="#cb41-645" aria-hidden="true" tabindex="-1"></a>    <span class="at">model =</span> m,</span>
-<span id="cb41-646"><a href="#cb41-646" aria-hidden="true" tabindex="-1"></a>    <span class="at">truth =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"no"</span>, <span class="st">"yes"</span>), <span class="at">each =</span> <span class="dv">2</span>),</span>
-<span id="cb41-647"><a href="#cb41-647" aria-hidden="true" tabindex="-1"></a>    <span class="at">response =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"no"</span>, <span class="st">"yes"</span>), <span class="at">times =</span> <span class="dv">2</span>),</span>
-<span id="cb41-648"><a href="#cb41-648" aria-hidden="true" tabindex="-1"></a>    <span class="at">count =</span> <span class="fu">as.vector</span>(tab)</span>
-<span id="cb41-649"><a href="#cb41-649" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb41-650"><a href="#cb41-650" aria-hidden="true" tabindex="-1"></a>}))</span>
-<span id="cb41-651"><a href="#cb41-651" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-652"><a href="#cb41-652" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(confusion_data, <span class="fu">aes</span>(response, truth, <span class="at">fill =</span> count)) <span class="sc">+</span></span>
-<span id="cb41-653"><a href="#cb41-653" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_tile</span>(<span class="at">color =</span> <span class="st">"white"</span>) <span class="sc">+</span></span>
-<span id="cb41-654"><a href="#cb41-654" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> count), <span class="at">fontface =</span> <span class="st">"bold"</span>) <span class="sc">+</span></span>
-<span id="cb41-655"><a href="#cb41-655" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_gradient</span>(<span class="at">low =</span> <span class="st">"#F3E8FF"</span>, <span class="at">high =</span> <span class="st">"#6D28D9"</span>) <span class="sc">+</span></span>
-<span id="cb41-656"><a href="#cb41-656" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> model) <span class="sc">+</span></span>
-<span id="cb41-657"><a href="#cb41-657" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb41-658"><a href="#cb41-658" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Confusion matrices on the 2025 holdout set"</span>,</span>
-<span id="cb41-659"><a href="#cb41-659" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Predicted class"</span>,</span>
-<span id="cb41-660"><a href="#cb41-660" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Observed class"</span>,</span>
-<span id="cb41-661"><a href="#cb41-661" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"Count"</span></span>
-<span id="cb41-662"><a href="#cb41-662" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb41-663"><a href="#cb41-663" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span>
-<span id="cb41-664"><a href="#cb41-664" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb41-665"><a href="#cb41-665" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-666"><a href="#cb41-666" aria-hidden="true" tabindex="-1"></a><span class="fu">### Geographic map of predictions</span></span>
-<span id="cb41-667"><a href="#cb41-667" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-670"><a href="#cb41-670" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb41-671"><a href="#cb41-671" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: "Mean predicted probability of WNV activity by state in the 2025 holdout data."</span></span>
-<span id="cb41-672"><a href="#cb41-672" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-align: center</span></span>
-<span id="cb41-673"><a href="#cb41-673" aria-hidden="true" tabindex="-1"></a>state_predictions <span class="ot">&lt;-</span> holdout_predictions <span class="sc">|&gt;</span> </span>
-<span id="cb41-674"><a href="#cb41-674" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(state) <span class="sc">|&gt;</span></span>
-<span id="cb41-675"><a href="#cb41-675" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">predicted_probability =</span> <span class="fu">mean</span>(probability), <span class="at">.groups =</span> <span class="st">"drop"</span>)</span>
-<span id="cb41-676"><a href="#cb41-676" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-677"><a href="#cb41-677" aria-hidden="true" tabindex="-1"></a>state_map <span class="ot">&lt;-</span> <span class="fu">map_data</span>(<span class="st">"state"</span>)</span>
-<span id="cb41-678"><a href="#cb41-678" aria-hidden="true" tabindex="-1"></a>state_map <span class="ot">&lt;-</span> state_map <span class="sc">|&gt;</span></span>
-<span id="cb41-679"><a href="#cb41-679" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">state =</span> region) <span class="sc">|&gt;</span></span>
-<span id="cb41-680"><a href="#cb41-680" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(</span>
-<span id="cb41-681"><a href="#cb41-681" aria-hidden="true" tabindex="-1"></a>    state_predictions <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">state =</span> <span class="fu">tolower</span>(state)),</span>
-<span id="cb41-682"><a href="#cb41-682" aria-hidden="true" tabindex="-1"></a>    <span class="at">by =</span> <span class="st">"state"</span></span>
-<span id="cb41-683"><a href="#cb41-683" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb41-684"><a href="#cb41-684" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-685"><a href="#cb41-685" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(state_map, <span class="fu">aes</span>(long, lat, <span class="at">group =</span> group, <span class="at">fill =</span> predicted_probability)) <span class="sc">+</span></span>
-<span id="cb41-686"><a href="#cb41-686" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_polygon</span>(<span class="at">color =</span> <span class="st">"white"</span>, <span class="at">linewidth =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
-<span id="cb41-687"><a href="#cb41-687" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_map</span>() <span class="sc">+</span></span>
-<span id="cb41-688"><a href="#cb41-688" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_gradient2</span>(</span>
-<span id="cb41-689"><a href="#cb41-689" aria-hidden="true" tabindex="-1"></a>    <span class="at">low =</span> <span class="st">"#FDE68A"</span>,</span>
-<span id="cb41-690"><a href="#cb41-690" aria-hidden="true" tabindex="-1"></a>    <span class="at">mid =</span> <span class="st">"#F59E0B"</span>,</span>
-<span id="cb41-691"><a href="#cb41-691" aria-hidden="true" tabindex="-1"></a>    <span class="at">high =</span> <span class="st">"#B91C1C"</span>,</span>
-<span id="cb41-692"><a href="#cb41-692" aria-hidden="true" tabindex="-1"></a>    <span class="at">midpoint =</span> <span class="fu">median</span>(state_map<span class="sc">$</span>predicted_probability, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb41-693"><a href="#cb41-693" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb41-694"><a href="#cb41-694" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb41-695"><a href="#cb41-695" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Predicted WNV activity probability by state"</span>,</span>
-<span id="cb41-696"><a href="#cb41-696" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">""</span>,</span>
-<span id="cb41-697"><a href="#cb41-697" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">""</span>,</span>
-<span id="cb41-698"><a href="#cb41-698" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"Predicted prob."</span></span>
-<span id="cb41-699"><a href="#cb41-699" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb41-700"><a href="#cb41-700" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb41-701"><a href="#cb41-701" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
-<span id="cb41-702"><a href="#cb41-702" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb41-703"><a href="#cb41-703" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb41-704"><a href="#cb41-704" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.ticks =</span> <span class="fu">element_blank</span>()</span>
-<span id="cb41-705"><a href="#cb41-705" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb41-706"><a href="#cb41-706" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb41-707"><a href="#cb41-707" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-708"><a href="#cb41-708" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
-<span id="cb41-709"><a href="#cb41-709" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-710"><a href="#cb41-710" aria-hidden="true" tabindex="-1"></a><span class="fu"># 11. What the results mean</span></span>
-<span id="cb41-711"><a href="#cb41-711" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-712"><a href="#cb41-712" aria-hidden="true" tabindex="-1"></a>The point of the workflow is not only to fit a model but to explain how machine learning works in practice.</span>
-<span id="cb41-713"><a href="#cb41-713" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-714"><a href="#cb41-714" aria-hidden="true" tabindex="-1"></a>A typical sequence is:</span>
-<span id="cb41-715"><a href="#cb41-715" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-716"><a href="#cb41-716" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Use historical data to learn patterns.</span>
-<span id="cb41-717"><a href="#cb41-717" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Choose a model and specify the outcome.</span>
-<span id="cb41-718"><a href="#cb41-718" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Train the model on observed labels.</span>
-<span id="cb41-719"><a href="#cb41-719" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Predict on unseen data.</span>
-<span id="cb41-720"><a href="#cb41-720" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Evaluate the output with appropriate metrics.</span>
-<span id="cb41-721"><a href="#cb41-721" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Interpret the model in context.</span>
-<span id="cb41-722"><a href="#cb41-722" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-723"><a href="#cb41-723" aria-hidden="true" tabindex="-1"></a>This is the bridge between the abstract learning cycle and applied epidemiology.</span>
-<span id="cb41-724"><a href="#cb41-724" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-725"><a href="#cb41-725" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
-<span id="cb41-726"><a href="#cb41-726" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-727"><a href="#cb41-727" aria-hidden="true" tabindex="-1"></a><span class="fu"># 12. Final takeaway</span></span>
-<span id="cb41-728"><a href="#cb41-728" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-729"><a href="#cb41-729" aria-hidden="true" tabindex="-1"></a>The conceptual notebook shows that learning is about using data to update model parameters or structure according to a loss function and an optimization scheme.</span>
-<span id="cb41-730"><a href="#cb41-730" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-731"><a href="#cb41-731" aria-hidden="true" tabindex="-1"></a>The epidemiology workflow shows how the same logic is used in a real decision problem: predict whether WNV activity will be observed in future weeks using information available at the current time.</span>
-<span id="cb41-732"><a href="#cb41-732" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-733"><a href="#cb41-733" aria-hidden="true" tabindex="-1"></a>The same essential pattern appears in both:</span>
-<span id="cb41-734"><a href="#cb41-734" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-735"><a href="#cb41-735" aria-hidden="true" tabindex="-1"></a><span class="in">``` text</span></span>
-<span id="cb41-736"><a href="#cb41-736" aria-hidden="true" tabindex="-1"></a><span class="in">data -&gt; model -&gt; predictions -&gt; loss -&gt; update -&gt; repeat -&gt; evaluation</span></span>
-<span id="cb41-737"><a href="#cb41-737" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb41-738"><a href="#cb41-738" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-739"><a href="#cb41-739" aria-hidden="true" tabindex="-1"></a>That is the heart of machine learning.</span>
+<span id="cb41-620"><a href="#cb41-620" aria-hidden="true" tabindex="-1"></a><span class="fu">### ROC curve</span></span>
+<span id="cb41-621"><a href="#cb41-621" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-624"><a href="#cb41-624" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb41-625"><a href="#cb41-625" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pROC)</span>
+<span id="cb41-626"><a href="#cb41-626" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb41-627"><a href="#cb41-627" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-630"><a href="#cb41-630" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb41-631"><a href="#cb41-631" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: "ROC curves for the candidate WNV prediction models on the 2025 holdout set."</span></span>
+<span id="cb41-632"><a href="#cb41-632" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-align: center</span></span>
+<span id="cb41-633"><a href="#cb41-633" aria-hidden="true" tabindex="-1"></a>roc_data <span class="ot">&lt;-</span> <span class="fu">rbindlist</span>(<span class="fu">lapply</span>(</span>
+<span id="cb41-634"><a href="#cb41-634" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>(holdout_predictions<span class="sc">$</span>model),</span>
+<span id="cb41-635"><a href="#cb41-635" aria-hidden="true" tabindex="-1"></a>  <span class="cf">function</span>(m) {</span>
+<span id="cb41-636"><a href="#cb41-636" aria-hidden="true" tabindex="-1"></a>    pred <span class="ot">&lt;-</span> holdout_predictions[model <span class="sc">==</span> m]</span>
+<span id="cb41-637"><a href="#cb41-637" aria-hidden="true" tabindex="-1"></a>    obj <span class="ot">&lt;-</span> <span class="fu">roc</span>(pred<span class="sc">$</span>truth, pred<span class="sc">$</span>probability,</span>
+<span id="cb41-638"><a href="#cb41-638" aria-hidden="true" tabindex="-1"></a>      <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"no"</span>, <span class="st">"yes"</span>), <span class="at">quiet =</span> <span class="cn">TRUE</span></span>
+<span id="cb41-639"><a href="#cb41-639" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb41-640"><a href="#cb41-640" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.table</span>(</span>
+<span id="cb41-641"><a href="#cb41-641" aria-hidden="true" tabindex="-1"></a>      <span class="at">model =</span> m,</span>
+<span id="cb41-642"><a href="#cb41-642" aria-hidden="true" tabindex="-1"></a>      <span class="at">fpr =</span> <span class="fu">rev</span>(obj<span class="sc">$</span>specificities),</span>
+<span id="cb41-643"><a href="#cb41-643" aria-hidden="true" tabindex="-1"></a>      <span class="at">tpr =</span> <span class="fu">rev</span>(obj<span class="sc">$</span>sensitivities)</span>
+<span id="cb41-644"><a href="#cb41-644" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb41-645"><a href="#cb41-645" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb41-646"><a href="#cb41-646" aria-hidden="true" tabindex="-1"></a>))</span>
+<span id="cb41-647"><a href="#cb41-647" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-648"><a href="#cb41-648" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(roc_data, <span class="fu">aes</span>(<span class="at">x =</span> <span class="dv">1</span> <span class="sc">-</span> fpr, <span class="at">y =</span> tpr, <span class="at">colour =</span> model)) <span class="sc">+</span></span>
+<span id="cb41-649"><a href="#cb41-649" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb41-650"><a href="#cb41-650" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(</span>
+<span id="cb41-651"><a href="#cb41-651" aria-hidden="true" tabindex="-1"></a>    <span class="at">intercept =</span> <span class="dv">0</span>, <span class="at">slope =</span> <span class="dv">1</span>,</span>
+<span id="cb41-652"><a href="#cb41-652" aria-hidden="true" tabindex="-1"></a>    <span class="at">linetype =</span> <span class="dv">2</span>, <span class="at">colour =</span> <span class="st">"grey55"</span></span>
+<span id="cb41-653"><a href="#cb41-653" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb41-654"><a href="#cb41-654" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb41-655"><a href="#cb41-655" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"ROC curves for WNV prediction models"</span>,</span>
+<span id="cb41-656"><a href="#cb41-656" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"False-positive rate"</span>,</span>
+<span id="cb41-657"><a href="#cb41-657" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Sensitivity"</span>,</span>
+<span id="cb41-658"><a href="#cb41-658" aria-hidden="true" tabindex="-1"></a>    <span class="at">colour =</span> <span class="st">"Model"</span></span>
+<span id="cb41-659"><a href="#cb41-659" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb41-660"><a href="#cb41-660" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span>
+<span id="cb41-661"><a href="#cb41-661" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb41-662"><a href="#cb41-662" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-663"><a href="#cb41-663" aria-hidden="true" tabindex="-1"></a><span class="fu">### Confusion matrix plot</span></span>
+<span id="cb41-664"><a href="#cb41-664" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-667"><a href="#cb41-667" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb41-668"><a href="#cb41-668" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: "Confusion matrices for the candidate models on the 2025 holdout set at a 0.5 probability threshold."</span></span>
+<span id="cb41-669"><a href="#cb41-669" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-align: center</span></span>
+<span id="cb41-670"><a href="#cb41-670" aria-hidden="true" tabindex="-1"></a>confusion_data <span class="ot">&lt;-</span> <span class="fu">rbindlist</span>(<span class="fu">lapply</span>(<span class="fu">unique</span>(holdout_predictions<span class="sc">$</span>model), <span class="cf">function</span>(m) {</span>
+<span id="cb41-671"><a href="#cb41-671" aria-hidden="true" tabindex="-1"></a>  pred <span class="ot">&lt;-</span> holdout_predictions[model <span class="sc">==</span> m]</span>
+<span id="cb41-672"><a href="#cb41-672" aria-hidden="true" tabindex="-1"></a>  pred<span class="sc">$</span>response <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(pred<span class="sc">$</span>probability <span class="sc">&gt;=</span> <span class="fl">0.5</span>, <span class="st">"yes"</span>, <span class="st">"no"</span>)</span>
+<span id="cb41-673"><a href="#cb41-673" aria-hidden="true" tabindex="-1"></a>  tab <span class="ot">&lt;-</span> <span class="fu">table</span>(<span class="at">Actual =</span> pred<span class="sc">$</span>truth, <span class="at">Predicted =</span> pred<span class="sc">$</span>response)</span>
+<span id="cb41-674"><a href="#cb41-674" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.table</span>(</span>
+<span id="cb41-675"><a href="#cb41-675" aria-hidden="true" tabindex="-1"></a>    <span class="at">model =</span> m,</span>
+<span id="cb41-676"><a href="#cb41-676" aria-hidden="true" tabindex="-1"></a>    <span class="at">truth =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"no"</span>, <span class="st">"yes"</span>), <span class="at">each =</span> <span class="dv">2</span>),</span>
+<span id="cb41-677"><a href="#cb41-677" aria-hidden="true" tabindex="-1"></a>    <span class="at">response =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"no"</span>, <span class="st">"yes"</span>), <span class="at">times =</span> <span class="dv">2</span>),</span>
+<span id="cb41-678"><a href="#cb41-678" aria-hidden="true" tabindex="-1"></a>    <span class="at">count =</span> <span class="fu">as.vector</span>(tab)</span>
+<span id="cb41-679"><a href="#cb41-679" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb41-680"><a href="#cb41-680" aria-hidden="true" tabindex="-1"></a>}))</span>
+<span id="cb41-681"><a href="#cb41-681" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-682"><a href="#cb41-682" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(confusion_data, <span class="fu">aes</span>(response, truth, <span class="at">fill =</span> count)) <span class="sc">+</span></span>
+<span id="cb41-683"><a href="#cb41-683" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_tile</span>(<span class="at">color =</span> <span class="st">"white"</span>) <span class="sc">+</span></span>
+<span id="cb41-684"><a href="#cb41-684" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> count), <span class="at">fontface =</span> <span class="st">"bold"</span>) <span class="sc">+</span></span>
+<span id="cb41-685"><a href="#cb41-685" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_gradient</span>(<span class="at">low =</span> <span class="st">"#F3E8FF"</span>, <span class="at">high =</span> <span class="st">"#6D28D9"</span>) <span class="sc">+</span></span>
+<span id="cb41-686"><a href="#cb41-686" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>model) <span class="sc">+</span></span>
+<span id="cb41-687"><a href="#cb41-687" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb41-688"><a href="#cb41-688" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Confusion matrices on the 2025 holdout set"</span>,</span>
+<span id="cb41-689"><a href="#cb41-689" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Predicted class"</span>,</span>
+<span id="cb41-690"><a href="#cb41-690" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Observed class"</span>,</span>
+<span id="cb41-691"><a href="#cb41-691" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"Count"</span></span>
+<span id="cb41-692"><a href="#cb41-692" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb41-693"><a href="#cb41-693" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span>
+<span id="cb41-694"><a href="#cb41-694" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb41-695"><a href="#cb41-695" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-696"><a href="#cb41-696" aria-hidden="true" tabindex="-1"></a><span class="fu">### Geographic map of predictions</span></span>
+<span id="cb41-697"><a href="#cb41-697" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-700"><a href="#cb41-700" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb41-701"><a href="#cb41-701" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: "Mean predicted probability of WNV activity by state in the 2025 holdout data."</span></span>
+<span id="cb41-702"><a href="#cb41-702" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-align: center</span></span>
+<span id="cb41-703"><a href="#cb41-703" aria-hidden="true" tabindex="-1"></a>state_predictions <span class="ot">&lt;-</span> holdout_predictions <span class="sc">|&gt;</span></span>
+<span id="cb41-704"><a href="#cb41-704" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(state) <span class="sc">|&gt;</span></span>
+<span id="cb41-705"><a href="#cb41-705" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">predicted_probability =</span> <span class="fu">mean</span>(probability), <span class="at">.groups =</span> <span class="st">"drop"</span>)</span>
+<span id="cb41-706"><a href="#cb41-706" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-707"><a href="#cb41-707" aria-hidden="true" tabindex="-1"></a>state_map <span class="ot">&lt;-</span> <span class="fu">map_data</span>(<span class="st">"state"</span>)</span>
+<span id="cb41-708"><a href="#cb41-708" aria-hidden="true" tabindex="-1"></a>state_map <span class="ot">&lt;-</span> state_map <span class="sc">|&gt;</span></span>
+<span id="cb41-709"><a href="#cb41-709" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">state =</span> region) <span class="sc">|&gt;</span></span>
+<span id="cb41-710"><a href="#cb41-710" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(</span>
+<span id="cb41-711"><a href="#cb41-711" aria-hidden="true" tabindex="-1"></a>    state_predictions <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">state =</span> <span class="fu">tolower</span>(state)),</span>
+<span id="cb41-712"><a href="#cb41-712" aria-hidden="true" tabindex="-1"></a>    <span class="at">by =</span> <span class="st">"state"</span></span>
+<span id="cb41-713"><a href="#cb41-713" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb41-714"><a href="#cb41-714" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-715"><a href="#cb41-715" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(state_map, <span class="fu">aes</span>(long, lat, <span class="at">group =</span> group, <span class="at">fill =</span> predicted_probability)) <span class="sc">+</span></span>
+<span id="cb41-716"><a href="#cb41-716" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_polygon</span>(<span class="at">color =</span> <span class="st">"white"</span>, <span class="at">linewidth =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb41-717"><a href="#cb41-717" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_map</span>() <span class="sc">+</span></span>
+<span id="cb41-718"><a href="#cb41-718" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_gradient2</span>(</span>
+<span id="cb41-719"><a href="#cb41-719" aria-hidden="true" tabindex="-1"></a>    <span class="at">low =</span> <span class="st">"#FDE68A"</span>,</span>
+<span id="cb41-720"><a href="#cb41-720" aria-hidden="true" tabindex="-1"></a>    <span class="at">mid =</span> <span class="st">"#F59E0B"</span>,</span>
+<span id="cb41-721"><a href="#cb41-721" aria-hidden="true" tabindex="-1"></a>    <span class="at">high =</span> <span class="st">"#B91C1C"</span>,</span>
+<span id="cb41-722"><a href="#cb41-722" aria-hidden="true" tabindex="-1"></a>    <span class="at">midpoint =</span> <span class="fu">median</span>(state_map<span class="sc">$</span>predicted_probability, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb41-723"><a href="#cb41-723" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb41-724"><a href="#cb41-724" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb41-725"><a href="#cb41-725" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Predicted WNV activity probability by state"</span>,</span>
+<span id="cb41-726"><a href="#cb41-726" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">""</span>,</span>
+<span id="cb41-727"><a href="#cb41-727" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">""</span>,</span>
+<span id="cb41-728"><a href="#cb41-728" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"Predicted prob."</span></span>
+<span id="cb41-729"><a href="#cb41-729" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb41-730"><a href="#cb41-730" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb41-731"><a href="#cb41-731" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb41-732"><a href="#cb41-732" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb41-733"><a href="#cb41-733" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb41-734"><a href="#cb41-734" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.ticks =</span> <span class="fu">element_blank</span>()</span>
+<span id="cb41-735"><a href="#cb41-735" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb41-736"><a href="#cb41-736" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb41-737"><a href="#cb41-737" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-738"><a href="#cb41-738" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
+<span id="cb41-739"><a href="#cb41-739" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-740"><a href="#cb41-740" aria-hidden="true" tabindex="-1"></a><span class="fu"># 11. What the results mean</span></span>
+<span id="cb41-741"><a href="#cb41-741" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-742"><a href="#cb41-742" aria-hidden="true" tabindex="-1"></a>The point of the workflow is not only to fit a model but to explain how machine learning works in practice.</span>
+<span id="cb41-743"><a href="#cb41-743" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-744"><a href="#cb41-744" aria-hidden="true" tabindex="-1"></a>A typical sequence is:</span>
+<span id="cb41-745"><a href="#cb41-745" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-746"><a href="#cb41-746" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Use historical data to learn patterns.</span>
+<span id="cb41-747"><a href="#cb41-747" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Choose a model and specify the outcome.</span>
+<span id="cb41-748"><a href="#cb41-748" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Train the model on observed labels.</span>
+<span id="cb41-749"><a href="#cb41-749" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Predict on unseen data.</span>
+<span id="cb41-750"><a href="#cb41-750" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Evaluate the output with appropriate metrics.</span>
+<span id="cb41-751"><a href="#cb41-751" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Interpret the model in context.</span>
+<span id="cb41-752"><a href="#cb41-752" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-753"><a href="#cb41-753" aria-hidden="true" tabindex="-1"></a>This is the bridge between the abstract learning cycle and applied epidemiology.</span>
+<span id="cb41-754"><a href="#cb41-754" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-755"><a href="#cb41-755" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
+<span id="cb41-756"><a href="#cb41-756" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-757"><a href="#cb41-757" aria-hidden="true" tabindex="-1"></a><span class="fu"># 12. Final takeaway</span></span>
+<span id="cb41-758"><a href="#cb41-758" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-759"><a href="#cb41-759" aria-hidden="true" tabindex="-1"></a>The conceptual notebook shows that learning is about using data to update model parameters or structure according to a loss function and an optimization scheme.</span>
+<span id="cb41-760"><a href="#cb41-760" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-761"><a href="#cb41-761" aria-hidden="true" tabindex="-1"></a>The epidemiology workflow shows how the same logic is used in a real decision problem: predict whether WNV activity will be observed in future weeks using information available at the current time.</span>
+<span id="cb41-762"><a href="#cb41-762" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-763"><a href="#cb41-763" aria-hidden="true" tabindex="-1"></a>The same essential pattern appears in both:</span>
+<span id="cb41-764"><a href="#cb41-764" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-765"><a href="#cb41-765" aria-hidden="true" tabindex="-1"></a><span class="in">``` text</span></span>
+<span id="cb41-766"><a href="#cb41-766" aria-hidden="true" tabindex="-1"></a><span class="in">data -&gt; model -&gt; predictions -&gt; loss -&gt; update -&gt; repeat -&gt; evaluation</span></span>
+<span id="cb41-767"><a href="#cb41-767" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb41-768"><a href="#cb41-768" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-769"><a href="#cb41-769" aria-hidden="true" tabindex="-1"></a>That is the heart of machine learning.</span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

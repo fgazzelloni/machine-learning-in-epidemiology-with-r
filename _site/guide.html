@@ -76,11 +76,15 @@ ul.task-list li input[type="checkbox"] {
           link.hasAttribute('download') || link.getAttribute('role') === 'tab' ||
           link.hasAttribute('data-bs-toggle')) return;
       var destination = new URL(href, document.baseURI);
-      if (destination.origin === location.origin &&
-          destination.pathname === location.pathname &&
-          destination.search === location.search && destination.hash) return;
-      link.target = '_blank';
-      link.relList.add('noopener', 'noreferrer');
+      var external = /^https?:$/.test(destination.protocol) &&
+          destination.origin !== location.origin;
+      if (external) {
+        link.target = '_blank';
+        link.relList.add('noopener', 'noreferrer');
+      } else {
+        link.removeAttribute('target');
+        link.relList.remove('noopener', 'noreferrer');
+      }
     });
   }
   if (document.readyState === 'loading') {

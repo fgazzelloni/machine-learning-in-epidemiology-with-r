@@ -4,7 +4,7 @@
     "href": "part2/workshop-part-2-trees-to-neural-networks.html",
     "title": "Machine Learning in Epidemiology with R — Part 2",
     "section": "",
-    "text": "In Part 1, we explored how learning works and applied it to West Nile surveillance. In this session, we use the heart-disease data from Wright et al. and follow the order of their published examples. Open machine-learning-in-epidemiology-with-r.Rproj from the repository root in RStudio. This single project contains both parts. In a fresh project session, run the following in the Console before using the Part 2 scripts:\n\n\nCode\nsetwd(\"part2\")\n\n\nThe scripts use part2/ as their working directory. Quarto runs this notebook from its own folder when rendering.\nThis workshop implements the published examples. Implementation details are documented in the replication record. The frozen data and transformation details are in the data guide.",
+    "text": "Open the Part 2 presentation Download the PDF\nThe presentation follows this notebook, with 19 main slides and 10 optional appendix slides. Results shown are saved local workshop runs. Use the complete code blocks below for the hands-on exercises.",
     "crumbs": [
       "Home",
       "Part 2",
@@ -12,11 +12,11 @@
     ]
   },
   {
-    "objectID": "part2/workshop-part-2-trees-to-neural-networks.html#from-the-september-introduction-to-the-article-workflow",
-    "href": "part2/workshop-part-2-trees-to-neural-networks.html#from-the-september-introduction-to-the-article-workflow",
+    "objectID": "part2/workshop-part-2-trees-to-neural-networks.html#slide-presentation",
+    "href": "part2/workshop-part-2-trees-to-neural-networks.html#slide-presentation",
     "title": "Machine Learning in Epidemiology with R — Part 2",
     "section": "",
-    "text": "In Part 1, we explored how learning works and applied it to West Nile surveillance. In this session, we use the heart-disease data from Wright et al. and follow the order of their published examples. Open machine-learning-in-epidemiology-with-r.Rproj from the repository root in RStudio. This single project contains both parts. In a fresh project session, run the following in the Console before using the Part 2 scripts:\n\n\nCode\nsetwd(\"part2\")\n\n\nThe scripts use part2/ as their working directory. Quarto runs this notebook from its own folder when rendering.\nThis workshop implements the published examples. Implementation details are documented in the replication record. The frozen data and transformation details are in the data guide.",
+    "text": "Open the Part 2 presentation Download the PDF\nThe presentation follows this notebook, with 19 main slides and 10 optional appendix slides. Results shown are saved local workshop runs. Use the complete code blocks below for the hands-on exercises.",
     "crumbs": [
       "Home",
       "Part 2",
@@ -24,11 +24,11 @@
     ]
   },
   {
-    "objectID": "part2/workshop-part-2-trees-to-neural-networks.html#session-route",
-    "href": "part2/workshop-part-2-trees-to-neural-networks.html#session-route",
+    "objectID": "part2/workshop-part-2-trees-to-neural-networks.html#what-will-we-learn",
+    "href": "part2/workshop-part-2-trees-to-neural-networks.html#what-will-we-learn",
     "title": "Machine Learning in Epidemiology with R — Part 2",
-    "section": "Session route",
-    "text": "Session route\nDuring the main session, work through sections 1–4: understand the data, fit and prune a tree, explore a neural network using saved results, and evaluate predictions. Allow time to discuss each checkpoint.\nSections 5–8 are extensions for follow-up study. Full neural-network training, tuning and synthetic-data generation run separately; they are not required to follow the main session.",
+    "section": "What will we learn?",
+    "text": "What will we learn?\nCan clinical measurements help us distinguish patients with and without heart disease? We will first read the results of a random forest already fitted to these data. Then we will build a neural network and examine its predictions.\nBy the end, you should be able to explain a model’s mistakes, fit a neural network with Keras, and use mlr3 to evaluate its predictions.\nHave the session guide ready before starting. It covers opening the project and installing Keras. The code below assumes your working folder is part2/. Run the code blocks in order in RStudio during the session. Saved results let us discuss the examples before fitting our own network.",
     "crumbs": [
       "Home",
       "Part 2",
@@ -36,11 +36,11 @@
     ]
   },
   {
-    "objectID": "part2/workshop-part-2-trees-to-neural-networks.html#meet-the-data",
-    "href": "part2/workshop-part-2-trees-to-neural-networks.html#meet-the-data",
+    "objectID": "part2/workshop-part-2-trees-to-neural-networks.html#meet-the-heart-data",
+    "href": "part2/workshop-part-2-trees-to-neural-networks.html#meet-the-heart-data",
     "title": "Machine Learning in Epidemiology with R — Part 2",
-    "section": "1. Meet the data",
-    "text": "1. Meet the data\nThe task is to distinguish existing heart disease from its absence using clinical measurements. This is a classification example, not a future cardiovascular risk score.\n\n\nCode\n# Article section 1 and appendix: heart-statlog, OpenML 53, version 1.\n# Run from part2/. All preprocessing choices are listed in data/README.md.\narff &lt;- readLines(\"data/raw/heart-statlog.arff\")\nstart &lt;- grep(\"^@data\", arff, ignore.case = TRUE)\nheart &lt;- read.csv(text = paste(arff[(start + 1):length(arff)], collapse = \"\\n\"),\n                  header = FALSE, strip.white = TRUE)\nnames(heart) &lt;- c(\"age\", \"sex\", \"chest_pain\", \"resting_blood_pressure\",\n  \"serum_cholesterol\", \"fasting_blood_sugar\", \"resting_ecg\", \"max_heart_rate\",\n  \"exercise_induced_angina\", \"ST_depression\", \"ST_slope\", \"num_major_vessels\",\n  \"thal\", \"heart_disease\")\nstopifnot(nrow(heart) == 270L, ncol(heart) == 14L, !anyNA(heart))\nheart$sex &lt;- factor(heart$sex, c(0, 1), c(\"female\", \"male\"))\nheart$chest_pain &lt;- factor(heart$chest_pain, 1:4,\n  c(\"typical angina\", \"atypical angina\", \"non-anginal pain\", \"asymptomatic\"))\nheart$fasting_blood_sugar &lt;- factor(heart$fasting_blood_sugar, c(0, 1), c(\"false\", \"true\"))\nheart$resting_ecg &lt;- factor(heart$resting_ecg, 0:2,\n  c(\"normal\", \"ST-T wave abnormality\", \"left ventricular hypertrophy\"))\nheart$exercise_induced_angina &lt;- factor(heart$exercise_induced_angina, c(0, 1), c(\"no\", \"yes\"))\nheart$ST_slope &lt;- factor(heart$ST_slope, 1:3, c(\"upsloping\", \"flat\", \"downsloping\"))\nheart$thal &lt;- factor(heart$thal, c(3, 6, 7), c(\"normal\", \"fixed defect\", \"reversible defect\"))\nheart$heart_disease &lt;- factor(heart$heart_disease, c(\"absent\", \"present\"))\nnumeric_columns &lt;- c(\"age\", \"resting_blood_pressure\", \"serum_cholesterol\",\n                     \"max_heart_rate\", \"ST_depression\", \"num_major_vessels\")\nheart[numeric_columns] &lt;- lapply(heart[numeric_columns], as.numeric)\nstopifnot(!anyNA(heart), identical(as.integer(table(heart$heart_disease)), c(150L, 120L)))\ndir.create(\"outputs\", showWarnings = FALSE)\ndir.create(\"figures\", showWarnings = FALSE)\nwrite.csv(heart, \"data/processed/heart.csv\", row.names = FALSE)\n\n\n\n\nCode\ndim(heart)\n\n\n[1] 270  14\n\n\nCode\ntable(heart$heart_disease)\n\n\n\n absent present \n    150     120 \n\n\nCode\nstr(heart)\n\n\n'data.frame':   270 obs. of  14 variables:\n $ age                    : num  70 67 57 64 74 65 56 59 60 63 ...\n $ sex                    : Factor w/ 2 levels \"female\",\"male\": 2 1 2 2 1 2 2 2 2 1 ...\n $ chest_pain             : Factor w/ 4 levels \"typical angina\",..: 4 3 2 4 2 4 3 4 4 4 ...\n $ resting_blood_pressure : num  130 115 124 128 120 120 130 110 140 150 ...\n $ serum_cholesterol      : num  322 564 261 263 269 177 256 239 293 407 ...\n $ fasting_blood_sugar    : Factor w/ 2 levels \"false\",\"true\": 1 1 1 1 1 1 2 1 1 1 ...\n $ resting_ecg            : Factor w/ 3 levels \"normal\",\"ST-T wave abnormality\",..: 3 3 1 1 3 1 3 3 3 3 ...\n $ max_heart_rate         : num  109 160 141 105 121 140 142 142 170 154 ...\n $ exercise_induced_angina: Factor w/ 2 levels \"no\",\"yes\": 1 1 1 2 2 1 2 2 1 1 ...\n $ ST_depression          : num  2.4 1.6 0.3 0.2 0.2 0.4 0.6 1.2 1.2 4 ...\n $ ST_slope               : Factor w/ 3 levels \"upsloping\",\"flat\",..: 2 2 1 2 1 1 2 2 2 2 ...\n $ num_major_vessels      : num  3 0 0 1 1 0 1 1 2 3 ...\n $ thal                   : Factor w/ 3 levels \"normal\",\"fixed defect\",..: 1 3 3 3 1 3 2 3 3 3 ...\n $ heart_disease          : Factor w/ 2 levels \"absent\",\"present\": 2 1 2 1 1 1 2 2 2 2 ...\n\n\nThere are 270 patients and 13 predictors. The outcome is heart_disease, and present is the positive class. Examine age, chest pain, cholesterol and exercise measurements before discussing what information a learner receives.\nCheckpoint: Which column is the outcome? What does one row represent, and why is this a classification task?",
+    "section": "1. Meet the heart data",
+    "text": "1. Meet the heart data\nEach row describes one patient. There are 270 patients and 13 measurements, including age, chest pain and cholesterol. The outcome, heart_disease, tells us whether heart disease is absent or present. We are classifying existing heart disease, rather than estimating future risk.\nLoad the prepared data. The data script gives the categories readable labels.\n\n# Load the patient measurements and outcome labels.\nsource(\"R/01-data.R\")\n\nCount the patients in each outcome group:\n\ntable(heart$heart_disease)\n\n\n absent present \n    150     120 \n\n\nThere are 150 patients without heart disease and 120 with heart disease. A predictor is a measurement we use to help predict the outcome. The outcome itself must not be included among the predictors.\nDiscuss: Which measurements might help distinguish the two groups?",
     "crumbs": [
       "Home",
       "Part 2",
@@ -48,11 +48,11 @@
     ]
   },
   {
-    "objectID": "part2/workshop-part-2-trees-to-neural-networks.html#fit-and-prune-a-tree-article-section-2.1.3",
-    "href": "part2/workshop-part-2-trees-to-neural-networks.html#fit-and-prune-a-tree-article-section-2.1.3",
+    "objectID": "part2/workshop-part-2-trees-to-neural-networks.html#read-the-random-forest-results",
+    "href": "part2/workshop-part-2-trees-to-neural-networks.html#read-the-random-forest-results",
     "title": "Machine Learning in Epidemiology with R — Part 2",
-    "section": "2. Fit and prune a tree — article section 2.1.3",
-    "text": "2. Fit and prune a tree — article section 2.1.3\nThe core script follows the tree examples, then continues through evaluation and resampling. Read it section by section in RStudio. The first trees use the complete dataset for illustration, as in the article; their fitted accuracy would not estimate performance on new patients.\n\n\nCode\n# Article sections 2.1, 3.1 and 3.2. Local seeds make this run reproducible.\nsource(\"R/01-data.R\")\nlibrary(mlr3)\nlibrary(mlr3learners)\nlibrary(mlr3viz)\nset.seed(20261023)\n# These first trees illustrate fitting and pruning on all observations,\n# as in the article; they do not estimate generalisation performance.\ncart &lt;- rpart::rpart(heart_disease ~ ., data = heart)\npng(\"figures/01-tree.png\", width = 1500, height = 1000, res = 150)\nrpart.plot::rpart.plot(cart)\ninvisible(dev.off())\ndeep_cart &lt;- rpart::rpart(heart_disease ~ ., data = heart,\n                         control = rpart::rpart.control(minsplit = 2))\npng(\"figures/02-complexity.png\", width = 1200, height = 900, res = 150)\nrpart::plotcp(deep_cart)\ninvisible(dev.off())\npruned_cart &lt;- rpart::prune(deep_cart, cp = 0.031)\npng(\"figures/03-pruned-tree.png\", width = 1500, height = 1000, res = 150)\nrpart.plot::rpart.plot(pruned_cart)\ninvisible(dev.off())\n\n\n\n\n\nDefault classification tree fitted to the complete heart-disease dataset.\n\n\nCompare the default tree with the deep tree. The complexity plot connects pruning to the balance between fitting the observed sample and generalising beyond it. The article uses cp = 0.031; we retain that value for the replication.\n\n\n\nCross-validated relative error across candidate complexity parameter values.\n\n\n\n\n\nClassification tree pruned using cp = 0.031.\n\n\nCheckpoint: Compare the default and pruned trees. How could pruning help predictions on new patients?",
+    "section": "2. Read the random forest results",
+    "text": "2. Read the random forest results\nA random forest combines predictions from many decision trees. We have already fitted this model using 180 patients and tested it on the other 90. The test patients were kept out of training so we could assess predictions on unseen observations. We will use the saved results here, without fitting the forest again.\n\nWhat did the model get right and wrong?\nA confusion matrix counts correct predictions and mistakes. Read the rows as the model’s predictions and the columns as the patients’ recorded outcomes.\n\n\nRead the saved confusion matrix\nforest_confusion &lt;- read.csv(\"outputs/confusion.csv\")\nforest_table &lt;- xtabs(Freq ~ response + truth, data = forest_confusion)\nknitr::kable(forest_table, caption = \"Random forest: predictions for 90 test patients\")\n\n\n\nRandom forest: predictions for 90 test patients\n\n\n\nabsent\npresent\n\n\n\n\nabsent\n45\n7\n\n\npresent\n8\n30\n\n\n\n\n\nThe model correctly identified 30 patients with heart disease and 45 without it. It missed 7 patients who had heart disease (false negatives) and raised 8 false alarms in patients without heart disease (false positives).\nDiscuss: What might a missed case mean for a patient? What might a false alarm lead to?\n\n\nHow well did it perform?\nAccuracy is the proportion of all test patients classified correctly. Sensitivity is the proportion of patients with heart disease correctly identified. Specificity is the proportion without heart disease correctly identified.\n\n\nRead the saved forest scores\nforest_scores &lt;- read.csv(\"outputs/holdout-measures.csv\")\nmeasure_ids &lt;- c(\"classif.acc\", \"classif.tpr\", \"classif.tnr\")\nmeasure_labels &lt;- c(\"Accuracy\", \"Sensitivity\", \"Specificity\")\nforest_values &lt;- forest_scores$value[match(measure_ids, forest_scores$measure)]\n\nknitr::kable(\n  data.frame(Measure = measure_labels, Percent = round(100 * forest_values, 1)),\n  caption = \"Saved random forest results (%)\"\n)\n\n\n\nSaved random forest results (%)\n\n\nMeasure\nPercent\n\n\n\n\nAccuracy\n83.3\n\n\nSensitivity\n81.1\n\n\nSpecificity\n84.9\n\n\n\n\n\nAccuracy is 83.3%: 75 correct predictions out of 90. Sensitivity is 81.1% and specificity is 84.9%. Looking at all three helps us see what accuracy alone can hide.\nThe forest predicts probabilities. A threshold is the probability at which we decide to classify a patient as having heart disease. Lowering the threshold usually catches more cases, but also raises more false alarms.\n\n\n\nThe ROC curve shows sensitivity against the false-positive rate as the probability threshold changes. The diagonal represents chance-level discrimination.\n\n\nDiscuss: Would you choose a threshold using accuracy alone?",
     "crumbs": [
       "Home",
       "Part 2",
@@ -60,11 +60,11 @@
     ]
   },
   {
-    "objectID": "part2/workshop-part-2-trees-to-neural-networks.html#explore-a-neural-network-article-section-2.2.3",
-    "href": "part2/workshop-part-2-trees-to-neural-networks.html#explore-a-neural-network-article-section-2.2.3",
+    "objectID": "part2/workshop-part-2-trees-to-neural-networks.html#use-mlr3-to-organise-the-prediction-task",
+    "href": "part2/workshop-part-2-trees-to-neural-networks.html#use-mlr3-to-organise-the-prediction-task",
     "title": "Machine Learning in Epidemiology with R — Part 2",
-    "section": "3. Explore a neural network — article section 2.2.3",
-    "text": "3. Explore a neural network — article section 2.2.3\nThe network script retains the published 64/32-unit architecture, dropout of 0.4, sigmoid output, Adam learning rate of 0.002, binary cross-entropy, 50 epochs, batches of 32, 20% validation and early stopping with patience 10. The data guide explains how we construct 22 inputs.\nFor the live demonstration, inspect the architecture and saved loss plot below. To train the network yourself, install the optional neural-network dependencies and configure Keras first. Training runs separately because it needs a Python backend.\n\n\nCode\n# Article section 2.2.3, using the current keras3 interface.\nsource(\"R/01-data.R\")\nlibrary(mlr3)\nlibrary(keras3)\nset_random_seed(20261023)\nheart_task &lt;- as_task_classif(heart, target = \"heart_disease\", positive = \"present\", id = \"heart\")\nset.seed(20261023)\nsplit &lt;- partition(heart_task, ratio = 2/3)\n# Binary predictors use 0/1; remaining nominal predictors use all indicators.\n# This explicit reconstruction yields the article's 22 input columns.\nx_data &lt;- heart[, setdiff(names(heart), \"heart_disease\")]\nfor (nm in c(\"sex\", \"fasting_blood_sugar\", \"exercise_induced_angina\")) {\n  x_data[[nm]] &lt;- as.integer(x_data[[nm]]) - 1L\n}\nnominal &lt;- names(x_data)[vapply(x_data, is.factor, logical(1))]\ncontrasts_full &lt;- lapply(x_data[nominal], function(x) contrasts(x, contrasts = FALSE))\nx &lt;- model.matrix(~ . - 1, data = x_data, contrasts.arg = contrasts_full)\nstopifnot(ncol(x) == 22L, all(is.finite(x)))\n# Added for numerical stability: fit numeric scaling on inner training rows only.\n# Keras takes the final 20% of supplied training rows for validation.\ninner_n &lt;- floor(length(split$train) * 0.8)\nfit_rows &lt;- split$train[seq_len(inner_n)]\ncontinuous &lt;- names(x_data)[vapply(x_data, is.numeric, logical(1))]\ncontinuous &lt;- setdiff(continuous, c(\"sex\", \"fasting_blood_sugar\", \"exercise_induced_angina\"))\ncentre &lt;- colMeans(x[fit_rows, continuous, drop = FALSE])\nspread &lt;- apply(x[fit_rows, continuous, drop = FALSE], 2, sd)\nstopifnot(all(spread &gt; 0))\nx[, continuous] &lt;- sweep(sweep(x[, continuous, drop = FALSE], 2, centre), 2, spread, \"/\")\ny &lt;- as.integer(heart$heart_disease == \"present\")\nnetwork &lt;- keras_model_sequential(input_shape = c(22)) |&gt;\n  layer_dense(units = 64, activation = \"relu\") |&gt;\n  layer_dropout(rate = 0.4) |&gt;\n  layer_dense(units = 32, activation = \"relu\") |&gt;\n  layer_dropout(rate = 0.4) |&gt;\n  layer_dense(units = 1, activation = \"sigmoid\")\ncompile(network, optimizer = optimizer_adam(learning_rate = 0.002),\n        loss = \"binary_crossentropy\", metrics = \"accuracy\")\ntraining &lt;- fit(network, x[split$train, ], y[split$train], epochs = 50,\n  batch_size = 32, validation_split = 0.2, verbose = 0,\n  callbacks = list(callback_early_stopping(patience = 10, restore_best_weights = TRUE)))\nprob &lt;- as.numeric(predict(network, x[split$test, ], verbose = 0))\nclass &lt;- ifelse(prob &gt;= 0.5, \"present\", \"absent\")\naccuracy &lt;- mean(class == as.character(heart$heart_disease[split$test]))\nprint(accuracy)\nwrite.csv(data.frame(row_id = split$test, truth = heart$heart_disease[split$test],\n  probability_present = prob, prediction = class), \"outputs/neural-predictions.csv\", row.names = FALSE)\nwrite.csv(data.frame(accuracy = accuracy), \"outputs/neural-accuracy.csv\", row.names = FALSE)\ncurves &lt;- data.frame(epoch = seq_along(training$metrics$loss),\n  loss = training$metrics$loss, val_loss = training$metrics$val_loss)\nwrite.csv(curves, \"outputs/neural-loss.csv\", row.names = FALSE)\npng(\"figures/05-neural-loss.png\", width = 1200, height = 900, res = 150)\nmatplot(curves$epoch, curves[, c(\"loss\", \"val_loss\")], type = \"l\", lty = 1,\n        col = c(\"steelblue\", \"firebrick\"), xlab = \"Epoch\", ylab = \"Binary cross-entropy\")\nlegend(\"topright\", c(\"Training\", \"Validation\"), col = c(\"steelblue\", \"firebrick\"), lty = 1)\ndev.off()\ncapture.output(sessionInfo(), file = \"outputs/session-info-neural.txt\")\n\n\nThe script saves training and validation loss and the observed test accuracy. When a saved network run is available, its results appear below; these files come from the separate network script, rather than the core notebook render.\n\n\n   accuracy\n1 0.8555556\n\n\n\n\n\nTraining and validation binary cross-entropy across 27 training epochs.\n\n\n\n\nCheckpoint: Why do we monitor validation loss as well as training loss? What might it mean if training loss falls while validation loss rises?",
+    "section": "3. Use mlr3 to organise the prediction task",
+    "text": "3. Use mlr3 to organise the prediction task\nWe now ask the same question using a neural network. We keep the same training and test patients so the results can be compared.\nmlr3 helps organise a prediction problem. A task records the data and the outcome we want to predict. Here, present is the positive class: the condition we want to detect. We load the saved split instead of drawing a new one.\n\nlibrary(mlr3)\n# Tell mlr3 which outcome to predict and which class means disease is present.\nheart_task &lt;- as_task_classif(heart,\n  target = \"heart_disease\",\n  positive = \"present\",\n  id = \"heart\"\n)\n# Reuse the patients used to train and test the saved random forest.\nsplit_record &lt;- read.csv(\"outputs/split.csv\")\nsplit &lt;- list(\n  train = split_record$row_id[split_record$subset == \"train\"],\n  test = split_record$row_id[split_record$subset == \"test\"]\n)\n\nThe training group contains 180 patients; the test group contains 90. Keep the test patients aside until the network has finished learning.",
     "crumbs": [
       "Home",
       "Part 2",
@@ -72,11 +72,11 @@
     ]
   },
   {
-    "objectID": "part2/workshop-part-2-trees-to-neural-networks.html#evaluate-predictions-article-section-3.1",
-    "href": "part2/workshop-part-2-trees-to-neural-networks.html#evaluate-predictions-article-section-3.1",
+    "objectID": "part2/workshop-part-2-trees-to-neural-networks.html#prepare-the-inputs",
+    "href": "part2/workshop-part-2-trees-to-neural-networks.html#prepare-the-inputs",
     "title": "Machine Learning in Epidemiology with R — Part 2",
-    "section": "4. Evaluate predictions — article section 3.1",
-    "text": "4. Evaluate predictions — article section 3.1\nWe now train a probability-producing random forest on two-thirds of the observations and evaluate it on the remaining third. These are the results of our seeded run.\n\n\nCode\n# The article alternates task and heart_task; use one name consistently.\nheart_task &lt;- as_task_classif(heart, target = \"heart_disease\", positive = \"present\", id = \"heart\")\nset.seed(20261023)\nsplit &lt;- partition(heart_task, ratio = 2/3)\nwrite.csv(data.frame(row_id = c(split$train, split$test),\n  subset = rep(c(\"train\", \"test\"), c(length(split$train), length(split$test)))), \"outputs/split.csv\", row.names = FALSE)\nforest &lt;- lrn(\"classif.ranger\", predict_type = \"prob\", num.threads = 1)\nforest$train(heart_task, row_ids = split$train)\nforest_pred &lt;- forest$predict(heart_task, row_ids = split$test)\nmeasures &lt;- msrs(c(\"classif.tpr\", \"classif.tnr\", \"classif.ppv\", \"classif.npv\", \"classif.acc\"))\nprint(forest_pred$confusion)\n\n\n         truth\nresponse  present absent\n  present      30      8\n  absent        7     45\n\n\nCode\nprint(forest_pred$score(measures))\n\n\nclassif.tpr classif.tnr classif.ppv classif.npv classif.acc \n  0.8108108   0.8490566   0.7894737   0.8653846   0.8333333 \n\n\nCode\nwrite.csv(as.data.frame(forest_pred$confusion), \"outputs/confusion.csv\", row.names = FALSE)\nwrite.csv(data.frame(measure = names(forest_pred$score(measures)),\n  value = unname(forest_pred$score(measures))), \"outputs/holdout-measures.csv\", row.names = FALSE)\nfor (kind in c(\"roc\", \"threshold\", \"prc\")) {\n  ggplot2::ggsave(paste0(\"figures/04-\", kind, \".png\"),\n    ggplot2::autoplot(forest_pred, type = kind), width = 7, height = 5)\n}\n\n\n\n\n\nROC curve for the random-forest holdout predictions.\n\n\n\n\n\nClassification error across probability thresholds on the holdout set.\n\n\n\n\n\nPrecision-recall curve for the random-forest holdout predictions.\n\n\nDiscuss sensitivity, specificity, positive and negative predictive value, accuracy and the consequences of choosing a threshold. A good score does not establish causation.\nCheckpoint: What does a false negative mean here? How would changing the probability threshold affect sensitivity and specificity?",
+    "section": "4. Prepare the inputs",
+    "text": "4. Prepare the inputs\nKeras needs numerical inputs. We turn categories into numbers and indicator columns. An indicator is a column containing 0 or 1 to show whether a category applies. This gives us 22 input columns from the original 13 predictors.\nWe also scale numerical measurements so differences in units, such as age and cholesterol, do not dominate the learning process. Scaling is learned from the fitting rows only, keeping validation and test patients out of that step.\n\n\nShow input preparation\n# Exclude the outcome from the inputs. Keras needs numbers, so use 0/1 for\n# binary categories and indicator columns for the others. An indicator is 1\n# when a category applies and 0 otherwise. Together these give 22 inputs.\nx_data &lt;- heart[, setdiff(names(heart), \"heart_disease\")]\nfor (nm in c(\"sex\", \"fasting_blood_sugar\", \"exercise_induced_angina\")) {\n  x_data[[nm]] &lt;- as.integer(x_data[[nm]]) - 1L\n}\nnominal &lt;- names(x_data)[vapply(x_data, is.factor, logical(1))]\ncontrasts_full &lt;- lapply(x_data[nominal], function(x) contrasts(x, contrasts = FALSE))\nx &lt;- model.matrix(~ . - 1, data = x_data, contrasts.arg = contrasts_full)\nstopifnot(ncol(x) == 22L, all(is.finite(x)))\n# Keras reserves the last 20% of training rows for validation.\n# Calculate scaling from the other 80% only, keeping validation and test\n# patients out of this calculation.\ninner_n &lt;- floor(length(split$train) * 0.8)\nfit_rows &lt;- split$train[seq_len(inner_n)]\ncontinuous &lt;- names(x_data)[vapply(x_data, is.numeric, logical(1))]\ncontinuous &lt;- setdiff(\n  continuous,\n  c(\"sex\", \"fasting_blood_sugar\", \"exercise_induced_angina\")\n)\n# Subtract each measurement's mean and divide by its standard deviation.\n# This puts measurements with different units on a comparable scale.\ncentre &lt;- colMeans(x[fit_rows, continuous, drop = FALSE])\nspread &lt;- apply(x[fit_rows, continuous, drop = FALSE], 2, sd)\nstopifnot(all(spread &gt; 0))\nx[, continuous] &lt;- sweep(\n  sweep(x[, continuous, drop = FALSE], 2, centre),\n  2, spread, \"/\"\n)\n# Code the outcome as 1 for present and 0 for absent.\ny &lt;- as.integer(heart$heart_disease == \"present\")\n\n\nCheck the number of input columns and the outcome coding:\n\nncol(x)\ntable(y)\n\nThe outcome is coded as 1 for heart disease and 0 for its absence.",
     "crumbs": [
       "Home",
       "Part 2",
@@ -84,11 +84,11 @@
     ]
   },
   {
-    "objectID": "part2/workshop-part-2-trees-to-neural-networks.html#extension-resample-article-section-3.2",
-    "href": "part2/workshop-part-2-trees-to-neural-networks.html#extension-resample-article-section-3.2",
+    "objectID": "part2/workshop-part-2-trees-to-neural-networks.html#build-the-network-with-keras",
+    "href": "part2/workshop-part-2-trees-to-neural-networks.html#build-the-network-with-keras",
     "title": "Machine Learning in Epidemiology with R — Part 2",
-    "section": "5. Extension: Resample — article section 3.2",
-    "text": "5. Extension: Resample — article section 3.2\nThe next examples use a 100-tree forest, 3-fold cross-validation, 100 repeated subsamples and 40 bootstrap repetitions. The core script retains those counts.\n\n\nCode\n# Section 3.2 uses a 100-tree forest, rather than the learner default above.\nforest100 &lt;- lrn(\"classif.ranger\", predict_type = \"prob\", num.trees = 100, num.threads = 1)\nset.seed(20261024)\nforest100$train(heart_task, row_ids = split$train)\nauc &lt;- msr(\"classif.auc\")\nauc_by_subset &lt;- data.frame(subset = c(\"train\", \"test\"), auc = c(\n  forest100$predict(heart_task, row_ids = split$train)$score(auc),\n  forest100$predict(heart_task, row_ids = split$test)$score(auc)))\nprint(auc_by_subset)\n\n\n  subset       auc\n1  train 0.9954043\n2   test 0.8980112\n\n\nCode\nwrite.csv(auc_by_subset, \"outputs/train-test-auc.csv\", row.names = FALSE)\nset.seed(20261025)\ncv3 &lt;- resample(heart_task, forest100, rsmp(\"cv\", folds = 3))\nwrite.csv(cv3$score(auc)[, c(\"iteration\", \"classif.auc\"), with = FALSE],\n  \"outputs/cv3.csv\", row.names = FALSE)\nprint(cv3$aggregate(auc))\n\n\nclassif.auc \n  0.8994852 \n\n\nCode\n# Same repeat counts as section 3.2; no reduced demonstration budgets.\nset.seed(20261026)\nsubsampling &lt;- resample(heart_task, forest100, rsmp(\"subsampling\", ratio = 2/3, repeats = 100))\nset.seed(20261027)\nbootstrap &lt;- resample(heart_task, forest100, rsmp(\"bootstrap\", repeats = 40))\nresampling_scores &lt;- data.frame(method = c(\"cv3\", \"subsampling100\", \"bootstrap40\"),\n  auc = c(cv3$aggregate(auc), subsampling$aggregate(auc), bootstrap$aggregate(auc)))\nprint(resampling_scores)\n\n\n          method       auc\n1            cv3 0.8994852\n2 subsampling100 0.9025847\n3    bootstrap40 0.9028705\n\n\nCode\nwrite.csv(resampling_scores, \"outputs/resampling-summary.csv\", row.names = FALSE)\ncapture.output(sessionInfo(), file = \"outputs/session-info-core.txt\")\n\n\nTraining and test AUC answer different questions. Resampling estimates how performance changes when the training sample changes.",
+    "section": "5. Build the network with Keras",
+    "text": "5. Build the network with Keras\nKeras defines and trains the neural network. We use it directly here, then bring its predictions into mlr3 for evaluation.\nThink of the network as a sequence:\nPatient measurements → hidden layers → probability of heart disease\nA hidden layer combines inputs into patterns that the network learns. The final layer returns one probability between 0 and 1. The two hidden layers below contain 64 and 32 units. Dropout temporarily switches off some units during training to help limit overfitting: learning the training examples too closely to work well on new patients.\n\nlibrary(keras3)\n# Fix the random starting point for the network.\nset_random_seed(20261023)\n\n# Pass 22 inputs through two hidden layers to one output probability.\n# Dropout temporarily switches off some units during training to limit overfitting.\nnetwork &lt;- keras_model_sequential(input_shape = c(22)) |&gt;\n  layer_dense(units = 64, activation = \"relu\") |&gt;\n  layer_dropout(rate = 0.4) |&gt;\n  layer_dense(units = 32, activation = \"relu\") |&gt;\n  layer_dropout(rate = 0.4) |&gt;\n  layer_dense(units = 1, activation = \"sigmoid\")\n# Choose how to update the weights and measure prediction error.\n# Binary cross-entropy is a loss for a two-class outcome.\ncompile(network,\n  optimizer = optimizer_adam(learning_rate = 0.002),\n  loss = \"binary_crossentropy\", metrics = \"accuracy\"\n)\n\ncompile() sets how the network learns. The optimiser updates its weights (the values controlling its connections). The loss measures prediction error; binary cross-entropy is used for this two-class outcome.",
     "crumbs": [
       "Home",
       "Part 2",
@@ -96,11 +96,11 @@
     ]
   },
   {
-    "objectID": "part2/workshop-part-2-trees-to-neural-networks.html#extension-tune-within-the-training-data-article-section-4",
-    "href": "part2/workshop-part-2-trees-to-neural-networks.html#extension-tune-within-the-training-data-article-section-4",
+    "objectID": "part2/workshop-part-2-trees-to-neural-networks.html#fit-the-network-and-watch-it-learn",
+    "href": "part2/workshop-part-2-trees-to-neural-networks.html#fit-the-network-and-watch-it-learn",
     "title": "Machine Learning in Epidemiology with R — Part 2",
-    "section": "6. Extension: Tune within the training data — article section 4",
-    "text": "6. Extension: Tune within the training data — article section 4\nThe tuning script defines the training objects and uses the article’s search ranges and budgets. Run one method at a time from a terminal in this folder:\nRscript R/04-tuning.R grid_search\nRscript R/04-tuning.R random_search\nRscript R/04-tuning.R mbo\nRscript R/04-tuning.R nested\nThe grid uses resolution 10; random search evaluates 500 configurations; MBO evaluates 30. Nested tuning uses 100 configurations per inner search, 10 inner folds and 10 outer folds. These are substantial runs, so the workshop can inspect the code before running the full searches outside the live session. The test set is excluded from search selection.",
+    "section": "6. Fit the network and watch it learn",
+    "text": "6. Fit the network and watch it learn\nAn epoch is one pass through the fitting data. A batch is a smaller group processed before updating the weights.\nWe reserve 20% of the training group for validation: checking progress during learning. The network updates its weights using 144 patients and monitors its progress on 36 validation patients. These are separate from the 90 test patients. Early stopping ends training if validation loss stops improving.\n\n# An epoch is one pass through the fitting rows; batches contain 32 rows.\n# Monitor validation loss and stop after 10 epochs without improvement,\n# restoring the weights from the best validation epoch.\ntraining &lt;- fit(\n  network,\n  x[split$train, ],\n  y[split$train],\n  epochs = 50,\n  batch_size = 32,\n  validation_split = 0.2,\n  verbose = 1,\n  callbacks = list(callback_early_stopping(patience = 10, restore_best_weights = TRUE))\n)\n\nPlot the history from your own run:\n\n# Compare training and validation loss as learning progresses.\nplot(training)\n\nLook for training and validation loss in this plot. The figure below comes from the saved workshop run; your run may produce a different curve.\n\n\n\nSaved neural-network run: training and validation loss across successive passes through the fitting data. Lower loss means smaller prediction error.\n\n\nIf training loss keeps falling while validation loss rises, the network may be overfitting.\nDiscuss: Why do we need validation patients as well as training patients?",
     "crumbs": [
       "Home",
       "Part 2",
@@ -108,11 +108,11 @@
     ]
   },
   {
-    "objectID": "part2/workshop-part-2-trees-to-neural-networks.html#extension-interpret-article-section-5",
-    "href": "part2/workshop-part-2-trees-to-neural-networks.html#extension-interpret-article-section-5",
+    "objectID": "part2/workshop-part-2-trees-to-neural-networks.html#evaluate-the-network-and-compare-results",
+    "href": "part2/workshop-part-2-trees-to-neural-networks.html#evaluate-the-network-and-compare-results",
     "title": "Machine Learning in Epidemiology with R — Part 2",
-    "section": "7. Extension: Interpret — article section 5",
-    "text": "7. Extension: Interpret — article section 5\nFeature importance describes how much a predictor contributes to a fitted model. Feature effects describe how predictions vary with a predictor, while local explanations focus on one prediction. Discuss what each approach can tell us about this example. Predictive importance does not identify a causal effect. This section is a conceptual discussion.",
+    "section": "7. Evaluate the network and compare results",
+    "text": "7. Evaluate the network and compare results\nUse the trained network to predict probabilities for the 90 test patients. For this example, classify a probability of 0.5 or more as present.\nPredictionClassif$new() puts the Keras predictions into an mlr3 prediction object. It stores the observed outcomes, predicted classes and probabilities. We can then request the same measures used for the forest.\n\n# Predict unseen test patients. Use 0.5 as the cut-off for a present prediction.\nprob &lt;- as.numeric(predict(network, x[split$test, ], verbose = 0))\nclass &lt;- ifelse(prob &gt;= 0.5, \"present\", \"absent\")\naccuracy &lt;- mean(class == as.character(heart$heart_disease[split$test]))\naccuracy\n\n# Bring the Keras predictions into mlr3 for the same evaluation measures.\nnetwork_pred &lt;- PredictionClassif$new(\n  task = heart_task,\n  row_ids = split$test,\n  truth = heart_task$truth(rows = split$test),\n  response = class,\n  prob = cbind(present = prob, absent = 1 - prob)\n)\nnetwork_pred$confusion\nnetwork_pred$score(msrs(c(\"classif.acc\", \"classif.tpr\", \"classif.tnr\")))\n\n\nWhat happened in the saved run?\nThe next table uses the saved network predictions, rather than fitting a new network when the page opens.\n\n\nCompare the saved results\nsaved_network &lt;- read.csv(\"outputs/neural-predictions.csv\")\nstopifnot(\n  identical(saved_network$row_id, split$test),\n  identical(saved_network$truth, as.character(heart$heart_disease[split$test]))\n)\nsaved_prediction &lt;- PredictionClassif$new(\n  task = heart_task,\n  row_ids = saved_network$row_id,\n  truth = heart_task$truth(rows = saved_network$row_id),\n  response = saved_network$prediction,\n  prob = cbind(\n    present = saved_network$probability_present,\n    absent = 1 - saved_network$probability_present\n  )\n)\nnetwork_values &lt;- unname(saved_prediction$score(msrs(measure_ids)))\nknitr::kable(\n  data.frame(\n    Measure = measure_labels,\n    `Random forest (%)` = round(100 * forest_values, 1),\n    `Neural network (%)` = round(100 * network_values, 1),\n    check.names = FALSE\n  ),\n  caption = \"Saved results for the same 90 test patients\"\n)\n\n\n\nSaved results for the same 90 test patients\n\n\nMeasure\nRandom forest (%)\nNeural network (%)\n\n\n\n\nAccuracy\n83.3\n85.6\n\n\nSensitivity\n81.1\n78.4\n\n\nSpecificity\n84.9\n90.6\n\n\n\n\n\nThe saved network classified 77 of the 90 test patients correctly, compared with 75 for the forest. That small difference in one split does not establish that neural networks are generally better. Compare the types of mistakes as well as the overall accuracy. After your own run, use network_pred above to inspect your results; this saved comparison table remains a reference.\nDiscuss: Which model missed fewer cases? Is the difference large enough to change your conclusion?",
     "crumbs": [
       "Home",
       "Part 2",
@@ -120,11 +120,11 @@
     ]
   },
   {
-    "objectID": "part2/workshop-part-2-trees-to-neural-networks.html#extension-generate-synthetic-observations-article-section-6.2.5",
-    "href": "part2/workshop-part-2-trees-to-neural-networks.html#extension-generate-synthetic-observations-article-section-6.2.5",
+    "objectID": "part2/workshop-part-2-trees-to-neural-networks.html#where-to-go-next",
+    "href": "part2/workshop-part-2-trees-to-neural-networks.html#where-to-go-next",
     "title": "Machine Learning in Epidemiology with R — Part 2",
-    "section": "8. Extension: Generate synthetic observations — article section 6.2.5",
-    "text": "8. Extension: Generate synthetic observations — article section 6.2.5\nThe synthetic-data script follows the adversarial random forest, density estimation and sampling sequence. Its output is labelled synthetic.\n\n\nCode\n# Article section 6.2.5: adversarial random forests.\nsource(\"R/01-data.R\")\nlibrary(arf)\nset.seed(20261023)\ngenerator &lt;- adversarial_rf(heart)\ndensity &lt;- forde(generator, heart)\nsynthetic_heart &lt;- forge(density, n_synth = nrow(heart))\nstopifnot(nrow(synthetic_heart) == nrow(heart))\nwrite.csv(synthetic_heart, \"outputs/synthetic-heart.csv\", row.names = FALSE)\ncapture.output(sessionInfo(), file = \"outputs/session-info-synthetic.txt\")\n\n\nSynthetic rows are generated examples, not additional observed patients.",
+    "section": "Where to go next",
+    "text": "Where to go next\nThe main session ends here. Choose an extension when you want to explore a specific question further:\n\n\n\nQuestion\nFollow-up material\n\n\n\n\nHow does a single tree work, and why simplify it?\nTrees and pruning\n\n\nWould another training sample give different results?\nResampling in the same script\n\n\nCan different model settings improve predictions?\nTuning\n\n\nWhich measurements influence predictions?\nDiscuss feature importance and effects; predictive importance does not establish causation.\n\n\nCan we create artificial records resembling these patients?\nSynthetic data: generate the records, then compare age summaries and outcome proportions with heart.\n\n\n\nThese scripts run separately. The tree/evaluation script also refits the random forest; it is not needed for the main session.",
     "crumbs": [
       "Home",
       "Part 2",
@@ -132,11 +132,11 @@
     ]
   },
   {
-    "objectID": "part2/workshop-part-2-trees-to-neural-networks.html#reproducibility",
-    "href": "part2/workshop-part-2-trees-to-neural-networks.html#reproducibility",
+    "objectID": "part2/workshop-part-2-trees-to-neural-networks.html#sources-and-further-details",
+    "href": "part2/workshop-part-2-trees-to-neural-networks.html#sources-and-further-details",
     "title": "Machine Learning in Epidemiology with R — Part 2",
-    "section": "Reproducibility",
-    "text": "Reproducibility\nObserved results, seeds, split membership and package versions are saved in outputs/. The raw data remain unchanged. See the replication record and validation results for differences from the published snippets and validation status.",
+    "section": "Sources and further details",
+    "text": "Sources and further details\nThe examples draw on Wright et al. (2026). Exact model settings and implementation choices are in the replication record; data preparation is in the data guide. Saved results describe the recorded workshop runs and may differ from a new run.\nFor the tools, see the mlr3 prediction documentation and the Keras training guide.",
     "crumbs": [
       "Home",
       "Part 2",
@@ -148,7 +148,7 @@
     "href": "part2/outputs/validation.html",
     "title": "Part 2 — Validation record",
     "section": "",
-    "text": "The original data file uses ARFF (Attribute–Relation File Format), a text format that describes column names and types, followed by one patient per row. “Raw” means the downloaded file before workshop preparation. Its checksum (a fingerprint of the file contents) matches the saved OpenML metadata, confirming that the file has not changed.\n270 complete rows; 13 predictors; target counts 150 absent and 120 present.\nTrain/test split: 180/90 disjoint rows covering all patients.\nDefault/deep/pruned trees, confusion matrix, five classification measures and three evaluation plots.\nThree-fold CV, 100 subsampling repetitions and 40 bootstrap repetitions at the article’s settings.\nNeural network with 22 inputs and the article’s architecture/training settings: early stopping after 27 epochs; test accuracy 0.8556. TensorFlow 2.21.0, Python Keras 3.12.4, R keras3 1.5.1.\nBayesian tuning: all 30 configurations, ten-fold inner CV; held-out accuracy 0.7889.\nRandom search: all 500 configurations, ten-fold inner CV; held-out accuracy 0.8111.\nGrid and nested-CV execution paths: reduced smoke runs (grid resolution 2, two folds; nested two evaluations and two inner/outer folds).\nARF/FORDE/FORGE: 270 synthetic observations, saved separately from real data.\nR scripts parse, notebook executes and renders with its results and figures.\n\nThese are locally observed results, not replacements for the article’s reported results. The notebook reruns the core workflow; saved network and tuning outputs come from separate runs. Package versions for the completed full runs are in the accompanying session-info files.",
+    "text": "The original data file uses ARFF (Attribute–Relation File Format), a text format that describes column names and types, followed by one patient per row. “Raw” means the downloaded file before workshop preparation. Its checksum (a fingerprint of the file contents) matches the saved OpenML metadata, confirming that the file has not changed.\n270 complete rows; 13 predictors; target counts 150 absent and 120 present.\nTrain/test split: 180/90 disjoint rows covering all patients.\nDefault/deep/pruned trees, confusion matrix, five classification measures and three evaluation plots.\nThree-fold CV, 100 subsampling repetitions and 40 bootstrap repetitions at the article’s settings.\nNeural network with 22 inputs and the article’s architecture/training settings: early stopping after 27 epochs; test accuracy 0.8556. TensorFlow 2.21.0, Python Keras 3.12.4, R keras3 1.5.1.\nBayesian tuning: all 30 configurations, ten-fold inner CV; held-out accuracy 0.7889.\nRandom search: all 500 configurations, ten-fold inner CV; held-out accuracy 0.8111.\nGrid and nested-CV execution paths: reduced smoke runs (grid resolution 2, two folds; nested two evaluations and two inner/outer folds).\nARF/FORDE/FORGE: 270 synthetic observations, saved separately from real data.\nR scripts parse, notebook executes and renders with its results and figures.\n\nThese are locally observed results, not replacements for the article’s reported results. The original notebook reran the core workflow; saved network and tuning outputs came from separate runs. The teaching route was revised on 23 October 2026: the current notebook reads saved forest and network results when rendered. Students fit the network interactively; the tree, forest and resampling script remains a separate extension. Package versions for the completed full runs are in the accompanying session-info files.",
     "crumbs": [
       "Home",
       "Part 2",
@@ -160,7 +160,7 @@
     "href": "part2/outputs/validation.html#completed",
     "title": "Part 2 — Validation record",
     "section": "",
-    "text": "The original data file uses ARFF (Attribute–Relation File Format), a text format that describes column names and types, followed by one patient per row. “Raw” means the downloaded file before workshop preparation. Its checksum (a fingerprint of the file contents) matches the saved OpenML metadata, confirming that the file has not changed.\n270 complete rows; 13 predictors; target counts 150 absent and 120 present.\nTrain/test split: 180/90 disjoint rows covering all patients.\nDefault/deep/pruned trees, confusion matrix, five classification measures and three evaluation plots.\nThree-fold CV, 100 subsampling repetitions and 40 bootstrap repetitions at the article’s settings.\nNeural network with 22 inputs and the article’s architecture/training settings: early stopping after 27 epochs; test accuracy 0.8556. TensorFlow 2.21.0, Python Keras 3.12.4, R keras3 1.5.1.\nBayesian tuning: all 30 configurations, ten-fold inner CV; held-out accuracy 0.7889.\nRandom search: all 500 configurations, ten-fold inner CV; held-out accuracy 0.8111.\nGrid and nested-CV execution paths: reduced smoke runs (grid resolution 2, two folds; nested two evaluations and two inner/outer folds).\nARF/FORDE/FORGE: 270 synthetic observations, saved separately from real data.\nR scripts parse, notebook executes and renders with its results and figures.\n\nThese are locally observed results, not replacements for the article’s reported results. The notebook reruns the core workflow; saved network and tuning outputs come from separate runs. Package versions for the completed full runs are in the accompanying session-info files.",
+    "text": "The original data file uses ARFF (Attribute–Relation File Format), a text format that describes column names and types, followed by one patient per row. “Raw” means the downloaded file before workshop preparation. Its checksum (a fingerprint of the file contents) matches the saved OpenML metadata, confirming that the file has not changed.\n270 complete rows; 13 predictors; target counts 150 absent and 120 present.\nTrain/test split: 180/90 disjoint rows covering all patients.\nDefault/deep/pruned trees, confusion matrix, five classification measures and three evaluation plots.\nThree-fold CV, 100 subsampling repetitions and 40 bootstrap repetitions at the article’s settings.\nNeural network with 22 inputs and the article’s architecture/training settings: early stopping after 27 epochs; test accuracy 0.8556. TensorFlow 2.21.0, Python Keras 3.12.4, R keras3 1.5.1.\nBayesian tuning: all 30 configurations, ten-fold inner CV; held-out accuracy 0.7889.\nRandom search: all 500 configurations, ten-fold inner CV; held-out accuracy 0.8111.\nGrid and nested-CV execution paths: reduced smoke runs (grid resolution 2, two folds; nested two evaluations and two inner/outer folds).\nARF/FORDE/FORGE: 270 synthetic observations, saved separately from real data.\nR scripts parse, notebook executes and renders with its results and figures.\n\nThese are locally observed results, not replacements for the article’s reported results. The original notebook reran the core workflow; saved network and tuning outputs came from separate runs. The teaching route was revised on 23 October 2026: the current notebook reads saved forest and network results when rendered. Students fit the network interactively; the tree, forest and resampling script remains a separate extension. Package versions for the completed full runs are in the accompanying session-info files.",
     "crumbs": [
       "Home",
       "Part 2",
@@ -185,6 +185,18 @@
     "title": "Part 2 — Validation record",
     "section": "Environment notes",
     "text": "Environment notes\nThe installed mlr3learners/XGBoost combination completed the runs but emitted XGBoost deprecation warnings about legacy parameter passing. MBO invoked its built-in random-forest surrogate fallback during this run. ARF ran sequentially without a registered parallel backend.",
+    "crumbs": [
+      "Home",
+      "Part 2",
+      "Validation"
+    ]
+  },
+  {
+    "objectID": "part2/outputs/validation.html#teaching-route-checks-23-october-2026",
+    "href": "part2/outputs/validation.html#teaching-route-checks-23-october-2026",
+    "title": "Part 2 — Validation record",
+    "section": "Teaching-route checks — 23 October 2026",
+    "text": "Teaching-route checks — 23 October 2026\n\nThe revised notebook and supporting pages render successfully using saved results; no forest or network is trained during rendering.\nThe live notebook blocks match the corresponding sections of R/03-neural-network.R.\nThe saved split contains 180 training patients and 90 test patients, with no overlap. Both models use these same test patients.\nNeural-network preparation produces 22 numerical inputs. Scaling uses only the 144 fitting patients, keeping the 36 validation patients and 90 test patients separate.\nSaved Keras predictions can be evaluated with mlr3::PredictionClassif: accuracy 85.6%, sensitivity 78.4%, specificity 90.6%. Forest accuracy is 83.3%, sensitivity 81.1%, specificity 84.9%.\nThe revised live training path has not been retrained during this review. The current command-line R session did not locate a configured Keras Python backend. Confirm Keras setup before the live session; the historical training results above remain saved-run results.",
     "crumbs": [
       "Home",
       "Part 2",
@@ -260,7 +272,7 @@
     "href": "part1/guide.html#follow-the-session",
     "title": "Part 1 — Session guide",
     "section": "Follow the session",
-    "text": "Follow the session\n\nOpen machine-learning-in-epidemiology-with-r.Rproj from the repository root in RStudio, then run setwd(\"part1\") in the Console. Open the project afresh before switching parts so the Console starts at the repository root.\nRun source(\"install-packages.R\"), then source(\"check-setup.R\").\nStart with the teaching notebook.\nWork through the student practice script.\nTry the exercise and compare it with the solution.\n\nSlide viewer · PowerPoint · Rendered notebook\nThe gradient descent app is an optional interactive demonstration. See the data guide and sources for the evidence behind the teaching example.\nThe student practice requires rpart and rpart.plot. To run every section of the instructor notebook, also install ggplot2, dplyr, data.table, maps, pROC, mlr3, mlr3learners and ranger.\nRender the complete website with quarto render from the repository root. The current website output is _site/. The copied rendered files are the original workshop snapshot; copying them does not rerun the models.\nSeries guide · Part 2",
+    "text": "Follow the session\n\nOpen machine-learning-in-epidemiology-with-r.Rproj from the repository root in RStudio, then run setwd(\"part1\") in the Console. Open the project afresh before switching parts so the Console starts at the repository root.\nRun source(\"install-packages.R\"), then source(\"check-setup.R\").\nStart with the teaching notebook.\nWork through the student practice script.\nTry the exercise and compare it with the solution.\n\nSlide viewer · PDF · Rendered notebook\nThe gradient descent app is an optional interactive demonstration. See the data guide and sources for the evidence behind the teaching example.\nThe student practice requires rpart and rpart.plot. To run every section of the instructor notebook, also install ggplot2, dplyr, data.table, maps, pROC, mlr3, mlr3learners and ranger.\nRender the complete website with quarto render from the repository root. The current website output is _site/. The copied rendered files are the original workshop snapshot; copying them does not rerun the models.\nSeries guide · Part 2",
     "crumbs": [
       "Home",
       "Part 1",
@@ -294,7 +306,7 @@
     "href": "resources.html#workshop-files",
     "title": "Resources",
     "section": "Workshop files",
-    "text": "Workshop files\n\nGitHub repository\nPart 1 session guide · Part 1 presentation · PowerPoint\nPart 2 session guide · Heart-disease data guide\nDownload the prepared heart-disease data · Original OpenML dataset\nReplication record · Validation record\n\nBack to the workshop home",
+    "text": "Workshop files\n\nGitHub repository\nPart 1 session guide · Part 1 presentation · PDF\nPart 2 session guide · Part 2 presentation · PDF · Heart-disease data guide\nDownload the prepared heart-disease data · Original OpenML dataset\nReplication record · Validation record\n\nBack to the workshop home",
     "crumbs": [
       "Home",
       "Resources"
@@ -305,7 +317,7 @@
     "href": "index.html",
     "title": "Machine Learning in Epidemiology with R",
     "section": "",
-    "text": "Learn machine learning through epidemiological examples, from model fundamentals to an article-based prediction workflow.\n\n\nPart 1 — 28 September 2026\nHow models learn, gradient descent, and West Nile virus prediction.\nExplore Part 1 · Open the notebook\n\n\nPart 2 — 23 October 2026\nAn article-based heart-disease workflow with trees, neural networks, and model evaluation.\nExplore Part 2 · Open the notebook\n\n\nBrowse the workshop resources, or start with a session above.",
+    "text": "Learn machine learning through epidemiological examples, from model fundamentals to an article-based prediction workflow.\n\n\nPart 1 — 28 September 2026\nHow models learn, gradient descent, and West Nile virus prediction.\nExplore Part 1 · Open the notebook\n\n\nPart 2 — 23 October 2026\nRead heart-data random forest results, then fit and evaluate a neural network with Keras and mlr3.\nExplore Part 2 · Open the notebook\n\n\nBrowse the workshop resources, or start with a session above.",
     "crumbs": [
       "Home"
     ]
@@ -409,7 +421,7 @@
     "href": "part2/guide.html",
     "title": "Part 2 — Session guide",
     "section": "",
-    "text": "We use the 270-patient heart-disease dataset matching Wright et al. (2026), with 13 predictors and an absent/present outcome.\nThe main session covers the data, trees, a neural-network demonstration using saved results, and evaluation. Resampling, tuning, interpretation and synthetic data provide follow-up practice. Full neural-network training is optional.\nRender the complete website with quarto render from the repository root; output is written to _site/. Neural-network, full tuning and synthetic-data scripts are separate runs. Full tuning retains the article budgets and can take much longer than the two-hour session.",
+    "text": "We use clinical measurements from 270 patients to distinguish heart disease from its absence. During the session, we will read the saved random forest results, fit a neural network with Keras, and evaluate its predictions with mlr3. We will not fit another random forest.",
     "crumbs": [
       "Home",
       "Part 2",
@@ -417,11 +429,11 @@
     ]
   },
   {
-    "objectID": "part2/guide.html#optional-extensions",
-    "href": "part2/guide.html#optional-extensions",
+    "objectID": "part2/guide.html#before-the-session",
+    "href": "part2/guide.html#before-the-session",
     "title": "Part 2 — Session guide",
-    "section": "Optional extensions",
-    "text": "Optional extensions\nFrom part2/, install only the dependencies you need:\nRscript install-optional-packages.R neural\nRscript install-optional-packages.R tuning\nRscript install-optional-packages.R synthetic\n\nKeras setup\nInstall the neural-network dependency with Rscript install-optional-packages.R neural, then configure a supported Python backend using keras3::install_keras() in a fresh R session. Alternatively, select an existing compatible Python environment before loading Keras. See the official Keras for R setup guide. Backend installation is a separate step from installing the R package.\nThe core workflow, neural network, full random/MBO searches and synthetic-data example have been run. See validation results for the results and remaining full-budget checks.",
+    "section": "Before the session",
+    "text": "Before the session\n\nOpen machine-learning-in-epidemiology-with-r.Rproj in RStudio.\nIn a fresh project session, run setwd(\"part2\") in the Console.\nInstall the workshop packages once:\nsource(\"install-packages.R\")\ninstall.packages(\"keras3\")\nIn a fresh R session, configure Keras with keras3::install_keras(). This sets up the Python software Keras uses for training. If you already have a compatible environment, use that instead. Follow the Keras for R setup guide.\nRun source(\"check-setup.R\") to check the core packages and data. This check does not test the Keras backend. Before the session, also check that library(keras3) and keras3::keras_model_sequential(input_shape = c(22)) work in your selected environment.\n\nInstallation is preparation for the session; it does not need to interrupt the lesson.",
     "crumbs": [
       "Home",
       "Part 2",
@@ -429,11 +441,35 @@
     ]
   },
   {
-    "objectID": "part2/guide.html#scope-and-provenance",
-    "href": "part2/guide.html#scope-and-provenance",
+    "objectID": "part2/guide.html#during-the-session",
+    "href": "part2/guide.html#during-the-session",
     "title": "Part 2 — Session guide",
-    "section": "Scope and provenance",
-    "text": "Scope and provenance\nThese scripts implement the published examples. The data guide and replication record document data preparation, implementation choices and completed checks. The article’s printed scores are not guaranteed for a different split or environment.\nSeries guide · Part 1",
+    "section": "During the session",
+    "text": "During the session\nOpen the teaching notebook and follow sections 1–7:\n\nMeet the heart data.\nExplain the saved random forest predictions and mistakes.\nUse mlr3 to define the task and reuse the saved training/test groups.\nPrepare numerical inputs for the network.\nBuild the network with Keras.\nFit it and examine training and validation loss.\nEvaluate its predictions with mlr3 and compare with the forest.\n\nRun the code blocks in order in RStudio. Network fitting is a live activity; rendering the webpage uses saved results and does not train either model. The saved comparison remains a reference when your own results differ.\nThe complete neural-network script contains the same steps, followed by code to save a new run’s results. Running that complete script replaces the saved neural-network CSV files and loss figure. Use the notebook blocks during the lesson if you want to keep the recorded results.",
+    "crumbs": [
+      "Home",
+      "Part 2",
+      "Session guide"
+    ]
+  },
+  {
+    "objectID": "part2/guide.html#after-the-session",
+    "href": "part2/guide.html#after-the-session",
+    "title": "Part 2 — Session guide",
+    "section": "After the session",
+    "text": "After the session\nChoose a question to explore further:\n\n\n\nQuestion\nScript\n\n\n\n\nHow do trees and pruning work? How stable are the scores across samples?\nTrees, evaluation and resampling\n\n\nCan we improve predictions by changing model settings?\nTuning\n\n\nCan generated records resemble the original patients?\nSynthetic data\n\n\n\nThe tree/evaluation script refits the forest and runs resampling; it is separate from the main lesson. Full tuning can take much longer than the workshop. Install extra packages only when you choose an extension:\nRscript install-optional-packages.R tuning\nRscript install-optional-packages.R synthetic",
+    "crumbs": [
+      "Home",
+      "Part 2",
+      "Session guide"
+    ]
+  },
+  {
+    "objectID": "part2/guide.html#sources-and-reproducibility",
+    "href": "part2/guide.html#sources-and-reproducibility",
+    "title": "Part 2 — Session guide",
+    "section": "Sources and reproducibility",
+    "text": "Sources and reproducibility\nThe examples draw on Wright et al. (2026). The data guide, replication record and validation results contain the source details, exact settings and recorded checks. Saved scores describe individual runs, rather than guaranteed performance.\nTo build the website, run quarto render from the repository root. The current output folder is _site/.\nSeries guide · Part 1",
     "crumbs": [
       "Home",
       "Part 2",
@@ -445,7 +481,7 @@
     "href": "part2/references/replication-notes.html",
     "title": "Part 2 — Source and replication record",
     "section": "",
-    "text": "Wright et al. (2026), Machine Learning in Epidemiology, arXiv v1.\nOpenML dataset 53, version 1; saved metadata and raw data are in data/raw/.\nThis workshop implements the article’s published workflow with teaching scripts and explanatory notes. Models and settings follow the published examples.",
+    "text": "Wright et al. (2026), Machine Learning in Epidemiology, arXiv v1.\nOpenML dataset 53, version 1; saved metadata and raw data are in data/raw/.\nThe scripts retain the article’s published examples and model settings. The main lesson uses a student-facing order: read saved random forest results, then fit a neural network with Keras and evaluate its predictions with mlr3. Tree fitting, resampling, tuning and synthetic data remain separate extensions. Rendering the notebook reads saved results without refitting either model.",
     "crumbs": [
       "Home",
       "Part 2",
@@ -457,7 +493,7 @@
     "href": "part2/references/replication-notes.html#workshop-implementation",
     "title": "Part 2 — Source and replication record",
     "section": "Workshop implementation",
-    "text": "Workshop implementation\nThe scripts define data preparation, train/test objects and tuning code, use heart_task consistently and set explicit seeds. Keras uses keras3 instead of the article’s older keras interface, retaining the architecture and training settings. Data encoding/scaling choices are recorded in the data guide. Random-forest threading is fixed to one for reproducibility. The initial forest uses the learner default; the resampling examples use 100 trees, as printed. Tuning is restricted to the training task; nested CV uses an outer and inner 10-fold design. The article’s full grid has up to 10,000 configurations and is not run during a normal notebook render.\nThe article reports a 100% neural-network test accuracy. That is a reported result for its run, not an expected or guaranteed workshop result. Our outputs are saved separately. Results depend on the random seed, data split, preprocessing and software versions.",
+    "text": "Workshop implementation\nThe scripts define data preparation, train/test objects and tuning code, use heart_task consistently and set explicit seeds. Keras uses keras3 instead of the article’s older keras interface, retaining the architecture and training settings. The network now reads outputs/split.csv to reuse the forest’s saved training/test patients explicitly. Keras predictions are wrapped in an mlr3 PredictionClassif object to evaluate both models using the same measures. Data encoding/scaling choices are recorded in the data guide. Random-forest threading is fixed to one for reproducibility. The initial forest uses the learner default; the resampling examples use 100 trees, as printed. Tuning is restricted to the training task; nested CV uses an outer and inner 10-fold design. The article’s full grid has up to 10,000 configurations and is not run during a normal notebook render.\nThe article reports a 100% neural-network test accuracy. That is a reported result for its run, not an expected or guaranteed workshop result. Our outputs are saved separately. Results depend on the random seed, data split, preprocessing and software versions.",
     "crumbs": [
       "Home",
       "Part 2",
@@ -505,7 +541,7 @@
     "href": "part1/index.html#slide-presentation",
     "title": "How a Model Learns in Epidemiology",
     "section": "Slide presentation",
-    "text": "Slide presentation\nOpen the 12-slide presentation Download the editable PowerPoint\nThe slide deck introduces the broader multi-model workflow. The model-performance and variable-importance values shown in the deck are illustrative. The executable notebook below contains the observed results.\nBy the end, we should be able to answer four questions:\n\nWhat is the model?\nWhat is the loss?\nWhat is the optimisation procedure?\nWhat is learned?\n\nThe central message is:\n\nLearning means using data to determine a model’s parameters or structure. Optimisation is the procedure used to find useful values or structures according to an objective.",
+    "text": "Slide presentation\nOpen the Part 1 presentation Download the PDF\nThe slide deck introduces the broader multi-model workflow. The model-performance and variable-importance values shown in the deck are illustrative. The executable notebook below contains the observed results.\nBy the end, we should be able to answer four questions:\n\nWhat is the model?\nWhat is the loss?\nWhat is the optimisation procedure?\nWhat is learned?\n\nThe central message is:\n\nLearning means using data to determine a model’s parameters or structure. Optimisation is the procedure used to find useful values or structures according to an objective.",
     "crumbs": [
       "Home",
       "Part 1",

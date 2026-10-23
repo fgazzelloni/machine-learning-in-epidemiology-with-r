@@ -1,54 +1,82 @@
-# Part 2 — Replicate the article workflow
+# Part 2 — From random forest results to neural networks
 
-We use the 270-patient heart-disease dataset matching
-Wright et al. (2026), with 13 predictors and an absent/present outcome.
+We use clinical measurements from 270 patients to distinguish heart disease
+from its absence. During the session, we will read the saved random forest
+results, fit a neural network with Keras, and evaluate its predictions with
+`mlr3`. We will not fit another random forest.
 
-1. Open `machine-learning-in-epidemiology-with-r.Rproj` from the repository root in RStudio, then run `setwd("part2")` in the Console. Open the project afresh before switching parts so the Console starts at the repository root.
-2. Run `source("install-packages.R")` once, then `source("check-setup.R")`.
-3. Follow [ml-workflow-2.qmd](ml-workflow-2.qmd).
-4. Follow sections 1–4 during the main session. Use sections 5–8 as extensions.
+## Before the session
 
-The main session covers the data, trees, a neural-network demonstration using saved results, and evaluation. Resampling, tuning, interpretation and synthetic data provide follow-up practice. Full neural-network training is optional.
+1. Open `machine-learning-in-epidemiology-with-r.Rproj` in RStudio.
+2. In a fresh project session, run `setwd("part2")` in the Console.
+3. Install the workshop packages once:
 
-| Script | Article workflow |
+   ```r
+   source("install-packages.R")
+   install.packages("keras3")
+   ```
+
+4. In a fresh R session, configure Keras with `keras3::install_keras()`.
+   This sets up the Python software Keras uses for training. If you already
+   have a compatible environment, use that instead. Follow the
+   [Keras for R setup guide](https://keras3.posit.co/articles/getting_started.html).
+5. Run `source("check-setup.R")` to check the core packages and data.
+   This check does not test the Keras backend. Before the session, also check
+   that `library(keras3)` and `keras3::keras_model_sequential(input_shape = c(22))`
+   work in your selected environment.
+
+Installation is preparation for the session; it does not need to interrupt
+the lesson.
+
+## During the session
+
+Open [the teaching notebook](ml-workflow-2.qmd) and follow sections 1–7:
+
+1. Meet the heart data.
+2. Explain the saved random forest predictions and mistakes.
+3. Use `mlr3` to define the task and reuse the saved training/test groups.
+4. Prepare numerical inputs for the network.
+5. Build the network with Keras.
+6. Fit it and examine training and validation loss.
+7. Evaluate its predictions with `mlr3` and compare with the forest.
+
+Run the code blocks in order in RStudio. Network fitting is a live activity;
+rendering the webpage uses saved results and does not train either model.
+The saved comparison remains a reference when your own results differ.
+
+The [complete neural-network script](R/03-neural-network.R) contains the same
+steps, followed by code to save a new run's results. Running that complete
+script replaces the saved neural-network CSV files and loss figure. Use the
+notebook blocks during the lesson if you want to keep the recorded results.
+
+## After the session
+
+Choose a question to explore further:
+
+| Question | Script |
 | --- | --- |
-| [01-data.R](R/01-data.R) | Frozen OpenML data and category definitions |
-| [02-trees-and-evaluation.R](R/02-trees-and-evaluation.R) | Trees, pruning, random forest, evaluation and resampling |
-| [03-neural-network.R](R/03-neural-network.R) | Published neural-network architecture and training settings |
-| [04-tuning.R](R/04-tuning.R) | Grid/random/MBO tuning and nested cross-validation |
-| [05-synthetic-data.R](R/05-synthetic-data.R) | ARF, FORDE and FORGE |
+| How do trees and pruning work? How stable are the scores across samples? | [Trees, evaluation and resampling](R/02-trees-and-evaluation.R) |
+| Can we improve predictions by changing model settings? | [Tuning](R/04-tuning.R) |
+| Can generated records resemble the original patients? | [Synthetic data](R/05-synthetic-data.R) |
 
-Render the complete website with `quarto render` from the repository root; output is written to `_site/`. Neural-network, full tuning and
-synthetic-data scripts are separate runs. Full tuning retains the article budgets
-and can take much longer than the two-hour session.
-
-## Optional extensions
-
-From `part2/`, install only the dependencies you need:
+The tree/evaluation script refits the forest and runs resampling; it is separate
+from the main lesson. Full tuning can take much longer than the workshop.
+Install extra packages only when you choose an extension:
 
 ```bash
-Rscript install-optional-packages.R neural
 Rscript install-optional-packages.R tuning
 Rscript install-optional-packages.R synthetic
 ```
 
-### Keras setup
+## Sources and reproducibility
 
-Install the neural-network dependency with `Rscript install-optional-packages.R neural`, then configure a supported Python backend using
-`keras3::install_keras()` in a fresh R session. Alternatively, select an existing
-compatible Python environment before loading Keras. See the
-[official Keras for R setup guide](https://keras3.posit.co/articles/getting_started.html).
-Backend installation is a separate step from installing the R package.
+The examples draw on Wright et al. (2026). The [data guide](data/README.md),
+[replication record](references/replication-notes.md) and
+[validation results](outputs/VALIDATION.md) contain the source details, exact
+settings and recorded checks. Saved scores describe individual runs, rather
+than guaranteed performance.
 
-The core workflow, neural network, full random/MBO searches and synthetic-data
-example have been run. See [validation results](outputs/VALIDATION.md) for the
-results and remaining full-budget checks.
-
-## Scope and provenance
-
-These scripts implement the published examples. The [data guide](data/README.md)
-and [replication record](references/replication-notes.md) document data preparation,
-implementation choices and completed checks. The article's printed scores
-are not guaranteed for a different split or environment.
+To build the website, run `quarto render` from the repository root. The current
+output folder is `_site/`.
 
 [Series guide](../README.md) · [Part 1](../part1/README.md)

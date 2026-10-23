@@ -76,11 +76,15 @@ ul.task-list li input[type="checkbox"] {
           link.hasAttribute('download') || link.getAttribute('role') === 'tab' ||
           link.hasAttribute('data-bs-toggle')) return;
       var destination = new URL(href, document.baseURI);
-      if (destination.origin === location.origin &&
-          destination.pathname === location.pathname &&
-          destination.search === location.search && destination.hash) return;
-      link.target = '_blank';
-      link.relList.add('noopener', 'noreferrer');
+      var external = /^https?:$/.test(destination.protocol) &&
+          destination.origin !== location.origin;
+      if (external) {
+        link.target = '_blank';
+        link.relList.add('noopener', 'noreferrer');
+      } else {
+        link.removeAttribute('target');
+        link.relList.remove('noopener', 'noreferrer');
+      }
     });
   }
   if (document.readyState === 'loading') {
@@ -304,8 +308,8 @@ ul.task-list li input[type="checkbox"] {
 <h2 class="anchored" data-anchor-id="workshop-files">Workshop files</h2>
 <ul>
 <li><a href="https://github.com/fgazzelloni/machine-learning-in-epidemiology-with-r">GitHub repository</a></li>
-<li><a href="./part1/guide.html">Part 1 session guide</a> · <a href="part1/presentation/index.html">Part 1 presentation</a> · <a href="part1/presentation/introduction-to-ml-in-epidemiology-with-r.pptx">PowerPoint</a></li>
-<li><a href="./part2/guide.html">Part 2 session guide</a> · <a href="./part2/data/guide.html">Heart-disease data guide</a></li>
+<li><a href="./part1/guide.html">Part 1 session guide</a> · <a href="part1/presentation/index.html">Part 1 presentation</a> · <a href="part1/presentation/introduction-to-ml-in-epidemiology-with-r.pdf">PDF</a></li>
+<li><a href="./part2/guide.html">Part 2 session guide</a> · <a href="part2/presentation/index.html">Part 2 presentation</a> · <a href="part2/presentation/updated-workshop/heart-data-neural-networks.pdf">PDF</a> · <a href="./part2/data/guide.html">Heart-disease data guide</a></li>
 <li><a href="part2/data/processed/heart.csv">Download the prepared heart-disease data</a> · <a href="https://www.openml.org/d/53">Original OpenML dataset</a></li>
 <li><a href="./part2/references/replication-notes.html">Replication record</a> · <a href="./part2/outputs/validation.html">Validation record</a></li>
 </ul>

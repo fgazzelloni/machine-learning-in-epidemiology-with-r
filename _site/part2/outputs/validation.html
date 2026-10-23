@@ -76,11 +76,15 @@ ul.task-list li input[type="checkbox"] {
           link.hasAttribute('download') || link.getAttribute('role') === 'tab' ||
           link.hasAttribute('data-bs-toggle')) return;
       var destination = new URL(href, document.baseURI);
-      if (destination.origin === location.origin &&
-          destination.pathname === location.pathname &&
-          destination.search === location.search && destination.hash) return;
-      link.target = '_blank';
-      link.relList.add('noopener', 'noreferrer');
+      var external = /^https?:$/.test(destination.protocol) &&
+          destination.origin !== location.origin;
+      if (external) {
+        link.target = '_blank';
+        link.relList.add('noopener', 'noreferrer');
+      } else {
+        link.removeAttribute('target');
+        link.relList.remove('noopener', 'noreferrer');
+      }
     });
   }
   if (document.readyState === 'loading') {
@@ -259,6 +263,7 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#completed" id="toc-completed" class="nav-link active" data-scroll-target="#completed">Completed</a></li>
   <li><a href="#not-executed-at-full-budget" id="toc-not-executed-at-full-budget" class="nav-link" data-scroll-target="#not-executed-at-full-budget">Not executed at full budget</a></li>
   <li><a href="#environment-notes" id="toc-environment-notes" class="nav-link" data-scroll-target="#environment-notes">Environment notes</a></li>
+  <li><a href="#teaching-route-checks-23-october-2026" id="toc-teaching-route-checks-23-october-2026" class="nav-link" data-scroll-target="#teaching-route-checks-23-october-2026">Teaching-route checks — 23 October 2026</a></li>
   </ul>
 </nav>
     </div>
@@ -299,7 +304,7 @@ ul.task-list li input[type="checkbox"] {
 <li>ARF/FORDE/FORGE: 270 synthetic observations, saved separately from real data.</li>
 <li>R scripts parse, notebook executes and renders with its results and figures.</li>
 </ul>
-<p>These are locally observed results, not replacements for the article’s reported results. The notebook reruns the core workflow; saved network and tuning outputs come from separate runs. Package versions for the completed full runs are in the accompanying session-info files.</p>
+<p>These are locally observed results, not replacements for the article’s reported results. The original notebook reran the core workflow; saved network and tuning outputs came from separate runs. The teaching route was revised on 23 October 2026: the current notebook reads saved forest and network results when rendered. Students fit the network interactively; the tree, forest and resampling script remains a separate extension. Package versions for the completed full runs are in the accompanying session-info files.</p>
 </section>
 <section id="not-executed-at-full-budget" class="level2">
 <h2 class="anchored" data-anchor-id="not-executed-at-full-budget">Not executed at full budget</h2>
@@ -308,6 +313,17 @@ ul.task-list li input[type="checkbox"] {
 <section id="environment-notes" class="level2">
 <h2 class="anchored" data-anchor-id="environment-notes">Environment notes</h2>
 <p>The installed mlr3learners/XGBoost combination completed the runs but emitted XGBoost deprecation warnings about legacy parameter passing. MBO invoked its built-in random-forest surrogate fallback during this run. ARF ran sequentially without a registered parallel backend.</p>
+</section>
+<section id="teaching-route-checks-23-october-2026" class="level2">
+<h2 class="anchored" data-anchor-id="teaching-route-checks-23-october-2026">Teaching-route checks — 23 October 2026</h2>
+<ul>
+<li>The revised notebook and supporting pages render successfully using saved results; no forest or network is trained during rendering.</li>
+<li>The live notebook blocks match the corresponding sections of <code>R/03-neural-network.R</code>.</li>
+<li>The saved split contains 180 training patients and 90 test patients, with no overlap. Both models use these same test patients.</li>
+<li>Neural-network preparation produces 22 numerical inputs. Scaling uses only the 144 fitting patients, keeping the 36 validation patients and 90 test patients separate.</li>
+<li>Saved Keras predictions can be evaluated with <code>mlr3::PredictionClassif</code>: accuracy 85.6%, sensitivity 78.4%, specificity 90.6%. Forest accuracy is 83.3%, sensitivity 81.1%, specificity 84.9%.</li>
+<li>The revised live training path has not been retrained during this review. The current command-line R session did not locate a configured Keras Python backend. Confirm Keras setup before the live session; the historical training results above remain saved-run results.</li>
+</ul>
 
 
 </section>

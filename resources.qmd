@@ -35,8 +35,8 @@ This book connects health metrics, infectious-disease research, machine learning
 ## Workshop files
 
 - [GitHub repository](https://github.com/fgazzelloni/machine-learning-in-epidemiology-with-r)
-- [Part 1 session guide](part1/guide.qmd) · [Part 1 presentation](part1/presentation/index.html) · [PowerPoint](part1/presentation/introduction-to-ml-in-epidemiology-with-r.pptx)
-- [Part 2 session guide](part2/guide.qmd) · [Heart-disease data guide](part2/data/guide.qmd)
+- [Part 1 session guide](part1/guide.qmd) · [Part 1 presentation](part1/presentation/index.html) · [PDF](part1/presentation/introduction-to-ml-in-epidemiology-with-r.pdf)
+- [Part 2 session guide](part2/guide.qmd) · [Part 2 presentation](part2/presentation/index.html) · [PDF](part2/presentation/updated-workshop/heart-data-neural-networks.pdf) · [Heart-disease data guide](part2/data/guide.qmd)
 - [Download the prepared heart-disease data](part2/data/processed/heart.csv) · [Original OpenML dataset](https://www.openml.org/d/53)
 - [Replication record](part2/references/replication-notes.qmd) · [Validation record](part2/outputs/validation.qmd)
 

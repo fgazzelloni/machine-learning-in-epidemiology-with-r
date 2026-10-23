@@ -32,8 +32,8 @@ The goal is to understand both the mathematical idea of learning and the practic
 
 ## Slide presentation
 
-[Open the 12-slide presentation](presentation/index.html){.btn .btn-primary}
-[Download the editable PowerPoint](presentation/introduction-to-ml-in-epidemiology-with-r.pptx){.btn .btn-outline-primary}
+[Open the Part 1 presentation](presentation/index.html){.btn .btn-primary}
+[Download the PDF](presentation/introduction-to-ml-in-epidemiology-with-r.pdf){.btn .btn-outline-primary download="introduction-to-ml-in-epidemiology-with-r.pdf"}
 
 The slide deck introduces the broader multi-model workflow. The model-performance and variable-importance values shown in the deck are illustrative. The executable notebook below contains the observed results.
 
@@ -334,13 +334,17 @@ wnv <- read.csv(wnv_path, stringsAsFactors = FALSE)
 # Keep useful columns
 wnv <- wnv %>%
   filter(week >= 18, week <= 44) %>%
-  select(state, region, year, week, 
-         cases_last4, active_weeks_last8, 
-         activity_next_4w)
+  select(
+    state, region, year, week,
+    cases_last4, active_weeks_last8,
+    activity_next_4w
+  )
 
 # Rename columns
-names(wnv) <- c("state", "region", "year", "week",
-                "recent_cases", "recent_active_weeks", "outcome")
+names(wnv) <- c(
+  "state", "region", "year", "week",
+  "recent_cases", "recent_active_weeks", "outcome"
+)
 
 # Prepare the target for classification
 wnv$region <- factor(wnv$region)
@@ -369,10 +373,10 @@ This is a classic supervised learning setup: a model learns from historical stat
 model <- glm(
   outcome ~ week + recent_cases + recent_active_weeks + region,
   data = train,
-  family = binomial)
+  family = binomial
+)
 
 summary(model)
-
 ```
 
 ```{r}
@@ -413,16 +417,23 @@ library(mlr3learners)
 ```{r}
 wnv_ml <- fread(wnv_path) |> # Similar to read.csv() and read.delim()
   filter(week >= 18, week <= 44) |>
-  select(state, region, year, week,
-         cases_lag1, cases_lag2, cases_lag4,
-         cases_last4, cases_last8, active_weeks_last8,
-         week_sin, week_cos, activity_next_4w) |>
+  select(
+    state, region, year, week,
+    cases_lag1, cases_lag2, cases_lag4,
+    cases_last4, cases_last8, active_weeks_last8,
+    week_sin, week_cos, activity_next_4w
+  ) |>
   mutate(
-    region = factor(region, 
-                    levels = c("Northeast", "South", 
-                               "North Central", "West")),
-    activity_next_4w = factor(activity_next_4w, 
-                              levels = c("no", "yes")))
+    region = factor(region,
+      levels = c(
+        "Northeast", "South",
+        "North Central", "West"
+      )
+    ),
+    activity_next_4w = factor(activity_next_4w,
+      levels = c("no", "yes")
+    )
+  )
 
 feature_columns <- c(
   "region",
@@ -442,16 +453,20 @@ test_data <- wnv_ml |> filter(year == 2025)
 train_task <- TaskClassif$new(
   id = "wnv-train",
   backend = train_data[, c("activity_next_4w", feature_columns),
-                       with = FALSE],
+    with = FALSE
+  ],
   target = "activity_next_4w",
-  positive = "yes")
+  positive = "yes"
+)
 
 test_task <- TaskClassif$new(
   id = "wnv-test",
   backend = test_data[, c("activity_next_4w", feature_columns),
-                      with = FALSE],
+    with = FALSE
+  ],
   target = "activity_next_4w",
-  positive = "yes")
+  positive = "yes"
+)
 ```
 
 
@@ -459,7 +474,8 @@ test_task <- TaskClassif$new(
 learner_logistic <- lrn(
   "classif.log_reg",
   id = "Logistic regression",
-  predict_type = "prob")
+  predict_type = "prob"
+)
 
 learner_tree <- lrn(
   "classif.rpart",
@@ -468,7 +484,8 @@ learner_tree <- lrn(
   cp = 0.01,
   maxdepth = 5,
   minsplit = 40,
-  xval = 0)
+  xval = 0
+)
 
 learner_forest <- lrn(
   "classif.ranger",
@@ -479,12 +496,14 @@ learner_forest <- lrn(
   min.node.size = 10,
   importance = "permutation",
   num.threads = 1,
-  seed = 20260927)
+  seed = 20260927
+)
 
 learners <- list(
   logistic = learner_logistic,
   tree = learner_tree,
-  forest = learner_forest)
+  forest = learner_forest
+)
 
 fitted <- lapply(learners, function(l) {
   l$clone(deep = TRUE)$train(train_task)
@@ -541,9 +560,15 @@ summarise_model <- function(df, threshold = 0.5) {
 
 
 ```{r}
-summary_table <- rbindlist(lapply(split(holdout_predictions, by = "model", keep.by = TRUE), function(x) {
-  summarise_model(x, threshold = 0.5)
-}), idcol = "model")
+summary_table <- rbindlist(lapply(
+  split(holdout_predictions,
+    by = "model",
+    keep.by = TRUE
+  ),
+  function(x) {
+    summarise_model(x, threshold = 0.5)
+  }
+), idcol = "model")
 
 summary_table
 ```
@@ -563,22 +588,27 @@ library(pROC)
 ```{r}
 #| fig-cap: "ROC curves for the candidate WNV prediction models on the 2025 holdout set."
 #| fig-align: center
-roc_data <- rbindlist(lapply(unique(holdout_predictions$model), 
-                             function(m) {
-  pred <- holdout_predictions[model == m]
-  obj <- roc(pred$truth, pred$probability, 
-             levels = c("no", "yes"), quiet = TRUE)
-  data.table(
-    model = m,
-    fpr = rev(obj$specificities),
-    tpr = rev(obj$sensitivities)
-  )
-}))
+roc_data <- rbindlist(lapply(
+  unique(holdout_predictions$model),
+  function(m) {
+    pred <- holdout_predictions[model == m]
+    obj <- roc(pred$truth, pred$probability,
+      levels = c("no", "yes"), quiet = TRUE
+    )
+    data.table(
+      model = m,
+      fpr = rev(obj$specificities),
+      tpr = rev(obj$sensitivities)
+    )
+  }
+))
 
 ggplot(roc_data, aes(x = 1 - fpr, y = tpr, colour = model)) +
   geom_line(linewidth = 1) +
-  geom_abline(intercept = 0, slope = 1, 
-              linetype = 2, colour = "grey55") +
+  geom_abline(
+    intercept = 0, slope = 1,
+    linetype = 2, colour = "grey55"
+  ) +
   labs(
     title = "ROC curves for WNV prediction models",
     x = "False-positive rate",
@@ -609,7 +639,7 @@ ggplot(confusion_data, aes(response, truth, fill = count)) +
   geom_tile(color = "white") +
   geom_text(aes(label = count), fontface = "bold") +
   scale_fill_gradient(low = "#F3E8FF", high = "#6D28D9") +
-  facet_wrap(~ model) +
+  facet_wrap(~model) +
   labs(
     title = "Confusion matrices on the 2025 holdout set",
     x = "Predicted class",
@@ -624,7 +654,7 @@ ggplot(confusion_data, aes(response, truth, fill = count)) +
 ```{r}
 #| fig-cap: "Mean predicted probability of WNV activity by state in the 2025 holdout data."
 #| fig-align: center
-state_predictions <- holdout_predictions |> 
+state_predictions <- holdout_predictions |>
   group_by(state) |>
   summarise(predicted_probability = mean(probability), .groups = "drop")
 

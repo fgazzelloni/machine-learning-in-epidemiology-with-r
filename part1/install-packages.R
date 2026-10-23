@@ -1,4 +1,4 @@
-# Packages used across the workshop project.
+# Run from part1/ before the session to install the required R packages.
 required <- c(
   "shiny",
   "ggplot2",
@@ -12,6 +12,7 @@ required <- c(
   "rpart.plot"
 )
 
+# Check what is already installed so only missing packages are downloaded.
 missing <- required[!vapply(required, requireNamespace, logical(1), quietly = TRUE)]
 
 if (length(missing) == 0L) {

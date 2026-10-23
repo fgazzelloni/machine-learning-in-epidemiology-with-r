@@ -20,6 +20,12 @@ project:
   resources:
     - machine-learning-in-epidemiology-with-r.Rproj
     - part1/presentation/**
+    - part2/presentation/index.html
+    - part2/presentation/presentation.js
+    - part2/presentation/styles.css
+    - part2/presentation/slides/**
+    - part2/presentation/updated-workshop/*.pptx
+    - part2/presentation/updated-workshop/*.pdf
     - part1/R/**
     - part1/exercises/**
     - part1/solutions/**

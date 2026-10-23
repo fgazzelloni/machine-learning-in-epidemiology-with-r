@@ -111,11 +111,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           link.hasAttribute('download') || link.getAttribute('role') === 'tab' ||
           link.hasAttribute('data-bs-toggle')) return;
       var destination = new URL(href, document.baseURI);
-      if (destination.origin === location.origin &&
-          destination.pathname === location.pathname &&
-          destination.search === location.search && destination.hash) return;
-      link.target = '_blank';
-      link.relList.add('noopener', 'noreferrer');
+      var external = /^https?:$/.test(destination.protocol) &&
+          destination.origin !== location.origin;
+      if (external) {
+        link.target = '_blank';
+        link.relList.add('noopener', 'noreferrer');
+      } else {
+        link.removeAttribute('target');
+        link.relList.remove('noopener', 'noreferrer');
+      }
     });
   }
   if (document.readyState === 'loading') {
@@ -291,11 +295,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#optional-extensions" id="toc-optional-extensions" class="nav-link active" data-scroll-target="#optional-extensions">Optional extensions</a>
-  <ul class="collapse">
-  <li><a href="#keras-setup" id="toc-keras-setup" class="nav-link" data-scroll-target="#keras-setup">Keras setup</a></li>
-  </ul></li>
-  <li><a href="#scope-and-provenance" id="toc-scope-and-provenance" class="nav-link" data-scroll-target="#scope-and-provenance">Scope and provenance</a></li>
+  <li><a href="#before-the-session" id="toc-before-the-session" class="nav-link active" data-scroll-target="#before-the-session">Before the session</a></li>
+  <li><a href="#during-the-session" id="toc-during-the-session" class="nav-link" data-scroll-target="#during-the-session">During the session</a></li>
+  <li><a href="#after-the-session" id="toc-after-the-session" class="nav-link" data-scroll-target="#after-the-session">After the session</a></li>
+  <li><a href="#sources-and-reproducibility" id="toc-sources-and-reproducibility" class="nav-link" data-scroll-target="#sources-and-reproducibility">Sources and reproducibility</a></li>
   </ul>
 </nav>
     </div>
@@ -321,60 +324,68 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>We use the 270-patient heart-disease dataset matching Wright et al.&nbsp;(2026), with 13 predictors and an absent/present outcome.</p>
+<p>We use clinical measurements from 270 patients to distinguish heart disease from its absence. During the session, we will read the saved random forest results, fit a neural network with Keras, and evaluate its predictions with <code>mlr3</code>. We will not fit another random forest.</p>
+<section id="before-the-session" class="level2">
+<h2 class="anchored" data-anchor-id="before-the-session">Before the session</h2>
 <ol type="1">
-<li>Open <code>machine-learning-in-epidemiology-with-r.Rproj</code> from the repository root in RStudio, then run <code>setwd("part2")</code> in the Console. Open the project afresh before switching parts so the Console starts at the repository root.</li>
-<li>Run <code>source("install-packages.R")</code> once, then <code>source("check-setup.R")</code>.</li>
-<li>Follow <a href="../part2/workshop-part-2-trees-to-neural-networks.html">ml-workflow-2.qmd</a>.</li>
-<li>Follow sections 1–4 during the main session. Use sections 5–8 as extensions.</li>
+<li><p>Open <code>machine-learning-in-epidemiology-with-r.Rproj</code> in RStudio.</p></li>
+<li><p>In a fresh project session, run <code>setwd("part2")</code> in the Console.</p></li>
+<li><p>Install the workshop packages once:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"install-packages.R"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"keras3"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+<li><p>In a fresh R session, configure Keras with <code>keras3::install_keras()</code>. This sets up the Python software Keras uses for training. If you already have a compatible environment, use that instead. Follow the <a href="https://keras3.posit.co/articles/getting_started.html">Keras for R setup guide</a>.</p></li>
+<li><p>Run <code>source("check-setup.R")</code> to check the core packages and data. This check does not test the Keras backend. Before the session, also check that <code>library(keras3)</code> and <code>keras3::keras_model_sequential(input_shape = c(22))</code> work in your selected environment.</p></li>
 </ol>
-<p>The main session covers the data, trees, a neural-network demonstration using saved results, and evaluation. Resampling, tuning, interpretation and synthetic data provide follow-up practice. Full neural-network training is optional.</p>
+<p>Installation is preparation for the session; it does not need to interrupt the lesson.</p>
+</section>
+<section id="during-the-session" class="level2">
+<h2 class="anchored" data-anchor-id="during-the-session">During the session</h2>
+<p>Open <a href="../part2/workshop-part-2-trees-to-neural-networks.html">the teaching notebook</a> and follow sections 1–7:</p>
+<ol type="1">
+<li>Meet the heart data.</li>
+<li>Explain the saved random forest predictions and mistakes.</li>
+<li>Use <code>mlr3</code> to define the task and reuse the saved training/test groups.</li>
+<li>Prepare numerical inputs for the network.</li>
+<li>Build the network with Keras.</li>
+<li>Fit it and examine training and validation loss.</li>
+<li>Evaluate its predictions with <code>mlr3</code> and compare with the forest.</li>
+</ol>
+<p>Run the code blocks in order in RStudio. Network fitting is a live activity; rendering the webpage uses saved results and does not train either model. The saved comparison remains a reference when your own results differ.</p>
+<p>The <a href="R/03-neural-network.R">complete neural-network script</a> contains the same steps, followed by code to save a new run’s results. Running that complete script replaces the saved neural-network CSV files and loss figure. Use the notebook blocks during the lesson if you want to keep the recorded results.</p>
+</section>
+<section id="after-the-session" class="level2">
+<h2 class="anchored" data-anchor-id="after-the-session">After the session</h2>
+<p>Choose a question to explore further:</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
+<th>Question</th>
 <th>Script</th>
-<th>Article workflow</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><a href="R/01-data.R">01-data.R</a></td>
-<td>Frozen OpenML data and category definitions</td>
+<td>How do trees and pruning work? How stable are the scores across samples?</td>
+<td><a href="R/02-trees-and-evaluation.R">Trees, evaluation and resampling</a></td>
 </tr>
 <tr class="even">
-<td><a href="R/02-trees-and-evaluation.R">02-trees-and-evaluation.R</a></td>
-<td>Trees, pruning, random forest, evaluation and resampling</td>
+<td>Can we improve predictions by changing model settings?</td>
+<td><a href="R/04-tuning.R">Tuning</a></td>
 </tr>
 <tr class="odd">
-<td><a href="R/03-neural-network.R">03-neural-network.R</a></td>
-<td>Published neural-network architecture and training settings</td>
-</tr>
-<tr class="even">
-<td><a href="R/04-tuning.R">04-tuning.R</a></td>
-<td>Grid/random/MBO tuning and nested cross-validation</td>
-</tr>
-<tr class="odd">
-<td><a href="R/05-synthetic-data.R">05-synthetic-data.R</a></td>
-<td>ARF, FORDE and FORGE</td>
+<td>Can generated records resemble the original patients?</td>
+<td><a href="R/05-synthetic-data.R">Synthetic data</a></td>
 </tr>
 </tbody>
 </table>
-<p>Render the complete website with <code>quarto render</code> from the repository root; output is written to <code>_site/</code>. Neural-network, full tuning and synthetic-data scripts are separate runs. Full tuning retains the article budgets and can take much longer than the two-hour session.</p>
-<section id="optional-extensions" class="level2">
-<h2 class="anchored" data-anchor-id="optional-extensions">Optional extensions</h2>
-<p>From <code>part2/</code>, install only the dependencies you need:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> install-optional-packages.R neural</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> install-optional-packages.R tuning</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> install-optional-packages.R synthetic</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<section id="keras-setup" class="level3">
-<h3 class="anchored" data-anchor-id="keras-setup">Keras setup</h3>
-<p>Install the neural-network dependency with <code>Rscript install-optional-packages.R neural</code>, then configure a supported Python backend using <code>keras3::install_keras()</code> in a fresh R session. Alternatively, select an existing compatible Python environment before loading Keras. See the <a href="https://keras3.posit.co/articles/getting_started.html">official Keras for R setup guide</a>. Backend installation is a separate step from installing the R package.</p>
-<p>The core workflow, neural network, full random/MBO searches and synthetic-data example have been run. See <a href="outputs/validation.html">validation results</a> for the results and remaining full-budget checks.</p>
+<p>The tree/evaluation script refits the forest and runs resampling; it is separate from the main lesson. Full tuning can take much longer than the workshop. Install extra packages only when you choose an extension:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> install-optional-packages.R tuning</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> install-optional-packages.R synthetic</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
-</section>
-<section id="scope-and-provenance" class="level2">
-<h2 class="anchored" data-anchor-id="scope-and-provenance">Scope and provenance</h2>
-<p>These scripts implement the published examples. The <a href="data/guide.html">data guide</a> and <a href="references/replication-notes.html">replication record</a> document data preparation, implementation choices and completed checks. The article’s printed scores are not guaranteed for a different split or environment.</p>
+<section id="sources-and-reproducibility" class="level2">
+<h2 class="anchored" data-anchor-id="sources-and-reproducibility">Sources and reproducibility</h2>
+<p>The examples draw on Wright et al.&nbsp;(2026). The <a href="data/guide.html">data guide</a>, <a href="references/replication-notes.html">replication record</a> and <a href="outputs/validation.html">validation results</a> contain the source details, exact settings and recorded checks. Saved scores describe individual runs, rather than guaranteed performance.</p>
+<p>To build the website, run <code>quarto render</code> from the repository root. The current output folder is <code>_site/</code>.</p>
 <p><a href="../guide.html">Series guide</a> · <a href="../part1/guide.html">Part 1</a></p>
 
 

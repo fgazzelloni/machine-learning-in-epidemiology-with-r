@@ -1,6 +1,6 @@
 ---
 title: "Machine Learning in Epidemiology with R — Part 2"
-subtitle: "Replicating the heart-disease workflow in Wright et al. (2026)"
+subtitle: "From random forest results to fitting a neural network"
 author: "Federica Gazzelloni"
 date: "2026-10-23"
 format:
@@ -8,7 +8,7 @@ format:
     toc: true
     toc-depth: 3
     toc-location: right
-    code-fold: true
+    code-fold: false
     code-copy: true
     code-overflow: wrap
     page-layout: article
@@ -20,177 +20,392 @@ execute:
   message: false
 ---
 
+## Slide presentation
+
+[Open the Part 2 presentation](presentation/index.html){.btn .btn-primary}
+[Download the PDF](presentation/updated-workshop/heart-data-neural-networks.pdf){.btn .btn-outline-primary download="heart-data-neural-networks.pdf"}
+
+The presentation follows this notebook, with 19 main slides and 10 optional
+appendix slides. Results shown are saved local workshop runs. Use the complete
+code blocks below for the hands-on exercises.
+
+## What will we learn?
+
+Can clinical measurements help us distinguish patients with and without heart
+disease? We will first read the results of a random forest already fitted to
+these data. Then we will build a neural network and examine its predictions.
+
+By the end, you should be able to explain a model's mistakes, fit a neural
+network with Keras, and use `mlr3` to evaluate its predictions.
+
+Have the [session guide](guide.qmd) ready before starting. It covers opening the
+project and installing Keras. The code below assumes your working folder is
+`part2/`. Run the code blocks in order in RStudio during the session. Saved results let
+us discuss the examples before fitting our own network.
+
+## 1. Meet the heart data
+
+Each row describes one patient. There are 270 patients and 13 measurements,
+including age, chest pain and cholesterol. The outcome, `heart_disease`, tells
+us whether heart disease is `absent` or `present`. We are classifying existing
+heart disease, rather than estimating future risk.
+
+Load the prepared data. The data script gives the categories readable labels.
+
 ```{r}
-#| include: false
-knitr::read_chunk("R/02-trees-and-evaluation.R")
+#| label: neural-data
+# Load the patient measurements and outcome labels.
+source("R/01-data.R")
 ```
 
-## From Part 1 to the heart-disease workflow {#from-the-september-introduction-to-the-article-workflow}
+Count the patients in each outcome group:
 
-In Part 1, we explored how learning works and applied it to West Nile surveillance.
-In this session, we use the heart-disease data from
-[Wright et al.](https://arxiv.org/html/2602.16352v1) and follow the order of their
-published examples. Open `machine-learning-in-epidemiology-with-r.Rproj` from
-the repository root in RStudio. This single project contains both parts.
-In a fresh project session, run the following in the Console before using the
-Part 2 scripts:
+```{r}
+table(heart$heart_disease)
+```
+
+There are 150 patients without heart disease and 120 with heart disease.
+A **predictor** is a measurement we use to help predict the outcome. The outcome
+itself must not be included among the predictors.
+
+**Discuss:** Which measurements might help distinguish the two groups?
+
+## 2. Read the random forest results
+
+A random forest combines predictions from many decision trees. We have already
+fitted this model using 180 patients and tested it on the other 90. The test
+patients were kept out of training so we could assess predictions on unseen
+observations. We will use the saved results here, without fitting the forest
+again.
+
+### What did the model get right and wrong?
+
+A **confusion matrix** counts correct predictions and mistakes. Read the rows
+as the model's predictions and the columns as the patients' recorded outcomes.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Read the saved confusion matrix"
+forest_confusion <- read.csv("outputs/confusion.csv")
+forest_table <- xtabs(Freq ~ response + truth, data = forest_confusion)
+knitr::kable(forest_table, caption = "Random forest: predictions for 90 test patients")
+```
+
+The model correctly identified 30 patients with heart disease and 45 without it.
+It missed 7 patients who had heart disease (**false negatives**) and raised
+8 false alarms in patients without heart disease (**false positives**).
+
+**Discuss:** What might a missed case mean for a patient? What might a false
+alarm lead to?
+
+### How well did it perform?
+
+**Accuracy** is the proportion of all test patients classified correctly.
+**Sensitivity** is the proportion of patients with heart disease correctly
+identified. **Specificity** is the proportion without heart disease correctly
+identified.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Read the saved forest scores"
+forest_scores <- read.csv("outputs/holdout-measures.csv")
+measure_ids <- c("classif.acc", "classif.tpr", "classif.tnr")
+measure_labels <- c("Accuracy", "Sensitivity", "Specificity")
+forest_values <- forest_scores$value[match(measure_ids, forest_scores$measure)]
+
+knitr::kable(
+  data.frame(Measure = measure_labels, Percent = round(100 * forest_values, 1)),
+  caption = "Saved random forest results (%)"
+)
+```
+
+Accuracy is 83.3%: 75 correct predictions out of 90. Sensitivity is 81.1% and
+specificity is 84.9%. Looking at all three helps us see what accuracy alone
+can hide.
+
+The forest predicts probabilities. A **threshold** is the probability at which
+we decide to classify a patient as having heart disease. Lowering the threshold
+usually catches more cases, but also raises more false alarms.
+
+![The ROC curve shows sensitivity against the false-positive rate as the probability threshold changes. The diagonal represents chance-level discrimination.](figures/04-roc.png){fig-align="center"}
+
+**Discuss:** Would you choose a threshold using accuracy alone?
+
+## 3. Use mlr3 to organise the prediction task
+
+We now ask the same question using a neural network. We keep the same training
+and test patients so the results can be compared.
+
+`mlr3` helps organise a prediction problem. A **task** records the data and the
+outcome we want to predict. Here, `present` is the **positive class**: the
+condition we want to detect. We load the saved split instead of drawing a new
+one.
+
+```{r}
+#| label: neural-task
+library(mlr3)
+# Tell mlr3 which outcome to predict and which class means disease is present.
+heart_task <- as_task_classif(heart,
+  target = "heart_disease",
+  positive = "present",
+  id = "heart"
+)
+# Reuse the patients used to train and test the saved random forest.
+split_record <- read.csv("outputs/split.csv")
+split <- list(
+  train = split_record$row_id[split_record$subset == "train"],
+  test = split_record$row_id[split_record$subset == "test"]
+)
+```
+
+The training group contains 180 patients; the test group contains 90. Keep the
+test patients aside until the network has finished learning.
+
+## 4. Prepare the inputs
+
+Keras needs numerical inputs. We turn categories into numbers and indicator
+columns. An **indicator** is a column containing 0 or 1 to show whether a category
+applies. This gives us 22 input columns from the original 13 predictors.
+
+We also **scale** numerical measurements so differences in units, such as age
+and cholesterol, do not dominate the learning process. Scaling is learned from
+the fitting rows only, keeping validation and test patients out of that step.
+
+```{r}
+#| label: neural-inputs
+#| eval: false
+#| code-fold: true
+#| code-summary: "Show input preparation"
+# Exclude the outcome from the inputs. Keras needs numbers, so use 0/1 for
+# binary categories and indicator columns for the others. An indicator is 1
+# when a category applies and 0 otherwise. Together these give 22 inputs.
+x_data <- heart[, setdiff(names(heart), "heart_disease")]
+for (nm in c("sex", "fasting_blood_sugar", "exercise_induced_angina")) {
+  x_data[[nm]] <- as.integer(x_data[[nm]]) - 1L
+}
+nominal <- names(x_data)[vapply(x_data, is.factor, logical(1))]
+contrasts_full <- lapply(x_data[nominal], function(x) contrasts(x, contrasts = FALSE))
+x <- model.matrix(~ . - 1, data = x_data, contrasts.arg = contrasts_full)
+stopifnot(ncol(x) == 22L, all(is.finite(x)))
+# Keras reserves the last 20% of training rows for validation.
+# Calculate scaling from the other 80% only, keeping validation and test
+# patients out of this calculation.
+inner_n <- floor(length(split$train) * 0.8)
+fit_rows <- split$train[seq_len(inner_n)]
+continuous <- names(x_data)[vapply(x_data, is.numeric, logical(1))]
+continuous <- setdiff(
+  continuous,
+  c("sex", "fasting_blood_sugar", "exercise_induced_angina")
+)
+# Subtract each measurement's mean and divide by its standard deviation.
+# This puts measurements with different units on a comparable scale.
+centre <- colMeans(x[fit_rows, continuous, drop = FALSE])
+spread <- apply(x[fit_rows, continuous, drop = FALSE], 2, sd)
+stopifnot(all(spread > 0))
+x[, continuous] <- sweep(
+  sweep(x[, continuous, drop = FALSE], 2, centre),
+  2, spread, "/"
+)
+# Code the outcome as 1 for present and 0 for absent.
+y <- as.integer(heart$heart_disease == "present")
+```
+
+Check the number of input columns and the outcome coding:
 
 ```{r}
 #| eval: false
-setwd("part2")
+ncol(x)
+table(y)
 ```
 
-The scripts use `part2/` as their working directory. Quarto runs this notebook
-from its own folder when rendering.
+The outcome is coded as 1 for heart disease and 0 for its absence.
 
-This workshop implements the published examples. Implementation details are documented in
-[the replication record](references/replication-notes.qmd).
-The frozen data and transformation details are in [the data guide](data/guide.qmd).
+## 5. Build the network with Keras
 
-## Session route
+Keras defines and trains the neural network. We use it directly here, then bring
+its predictions into `mlr3` for evaluation.
 
-During the main session, work through sections 1–4: understand the data, fit and prune a tree, explore a neural network using saved results, and evaluate predictions. Allow time to discuss each checkpoint.
+Think of the network as a sequence:
 
-Sections 5–8 are extensions for follow-up study. Full neural-network training, tuning and synthetic-data generation run separately; they are not required to follow the main session.
+**Patient measurements → hidden layers → probability of heart disease**
 
-## 1. Meet the data
-
-The task is to distinguish existing heart disease from its absence using clinical
-measurements. This is a classification example, not a future cardiovascular risk score.
-
-```{r, code=readLines("R/01-data.R")}
-```
+A **hidden layer** combines inputs into patterns that the network learns.
+The final layer returns one probability between 0 and 1. The two hidden layers
+below contain 64 and 32 units. **Dropout** temporarily switches off some units
+during training to help limit overfitting: learning the training examples too
+closely to work well on new patients.
 
 ```{r}
-dim(heart)
-table(heart$heart_disease)
-str(heart)
+#| label: neural-build
+#| eval: false
+library(keras3)
+# Fix the random starting point for the network.
+set_random_seed(20261023)
+
+# Pass 22 inputs through two hidden layers to one output probability.
+# Dropout temporarily switches off some units during training to limit overfitting.
+network <- keras_model_sequential(input_shape = c(22)) |>
+  layer_dense(units = 64, activation = "relu") |>
+  layer_dropout(rate = 0.4) |>
+  layer_dense(units = 32, activation = "relu") |>
+  layer_dropout(rate = 0.4) |>
+  layer_dense(units = 1, activation = "sigmoid")
+# Choose how to update the weights and measure prediction error.
+# Binary cross-entropy is a loss for a two-class outcome.
+compile(network,
+  optimizer = optimizer_adam(learning_rate = 0.002),
+  loss = "binary_crossentropy", metrics = "accuracy"
+)
 ```
 
-There are 270 patients and 13 predictors. The outcome is `heart_disease`, and
-`present` is the positive class. Examine age, chest pain, cholesterol and exercise
-measurements before discussing what information a learner receives.
+`compile()` sets how the network learns. The **optimiser** updates its weights
+(the values controlling its connections). The **loss** measures prediction error;
+binary cross-entropy is used for this two-class outcome.
 
-**Checkpoint:** Which column is the outcome? What does one row represent, and why is this a classification task?
+## 6. Fit the network and watch it learn
 
-## 2. Fit and prune a tree — article section 2.1.3
+An **epoch** is one pass through the fitting data. A **batch** is a smaller group
+processed before updating the weights.
 
-The [core script](R/02-trees-and-evaluation.R) follows the tree examples, then
-continues through evaluation and resampling. Read it section by section in RStudio.
-The first trees use the complete dataset for illustration, as in the article;
-their fitted accuracy would not estimate performance on new patients.
-
-```{r article-trees}
-```
-
-![Default classification tree fitted to the complete heart-disease dataset.](figures/01-tree.png){fig-align="center"}
-
-Compare the default tree with the deep tree. The complexity plot connects pruning
-to the balance between fitting the observed sample and generalising beyond it.
-The article uses `cp = 0.031`; we retain that value for the replication.
-
-![Cross-validated relative error across candidate complexity parameter values.](figures/02-complexity.png){fig-align="center"}
-
-![Classification tree pruned using cp = 0.031.](figures/03-pruned-tree.png){fig-align="center"}
-
-**Checkpoint:** Compare the default and pruned trees. How could pruning help predictions on new patients?
-
-## 3. Explore a neural network — article section 2.2.3
-
-The [network script](R/03-neural-network.R) retains the published 64/32-unit
-architecture, dropout of 0.4, sigmoid output, Adam learning rate of 0.002,
-binary cross-entropy, 50 epochs, batches of 32, 20% validation and early stopping
-with patience 10. The data guide explains how we construct 22 inputs.
-
-For the live demonstration, inspect the architecture and saved loss plot below. To train the network yourself, install the optional neural-network dependencies and configure Keras first. Training runs separately because it needs a Python backend.
-
-```{r, code=readLines("R/03-neural-network.R"), eval=FALSE}
-```
-
-The script saves training and validation loss and the observed test accuracy.
-When a saved network run is available, its results appear below; these files
-come from the separate network script, rather than the core notebook render.
+We reserve 20% of the training group for **validation**: checking progress during
+learning. The network updates its weights using 144 patients and monitors its
+progress on 36 validation patients. These are separate from the 90 test patients.
+Early stopping ends training if validation loss stops improving.
 
 ```{r}
-#| echo: false
-#| fig-cap: "Training and validation binary cross-entropy across 27 training epochs."
-#| fig-align: center
-if (file.exists("outputs/neural-accuracy.csv")) {
-  print(read.csv("outputs/neural-accuracy.csv"))
-  knitr::include_graphics("figures/05-neural-loss.png")
-}
+#| label: neural-fit
+#| eval: false
+# An epoch is one pass through the fitting rows; batches contain 32 rows.
+# Monitor validation loss and stop after 10 epochs without improvement,
+# restoring the weights from the best validation epoch.
+training <- fit(
+  network,
+  x[split$train, ],
+  y[split$train],
+  epochs = 50,
+  batch_size = 32,
+  validation_split = 0.2,
+  verbose = 1,
+  callbacks = list(callback_early_stopping(patience = 10, restore_best_weights = TRUE))
+)
 ```
 
-**Checkpoint:** Why do we monitor validation loss as well as training loss? What might it mean if training loss falls while validation loss rises?
+Plot the history from your own run:
 
-## 4. Evaluate predictions — article section 3.1
-
-We now train a probability-producing random forest on two-thirds of the
-observations and evaluate it on the remaining third. These are the results
-of our seeded run.
-
-```{r article-evaluation}
+```{r}
+#| label: neural-history
+#| eval: false
+# Compare training and validation loss as learning progresses.
+plot(training)
 ```
 
-![ROC curve for the random-forest holdout predictions.](figures/04-roc.png){fig-align="center"}
+Look for training and validation loss in this plot. The figure below comes
+from the saved workshop run; your run may produce a different curve.
 
-![Classification error across probability thresholds on the holdout set.](figures/04-threshold.png){fig-align="center"}
+![Saved neural-network run: training and validation loss across successive passes through the fitting data. Lower loss means smaller prediction error.](figures/05-neural-loss.png){fig-align="center"}
 
-![Precision-recall curve for the random-forest holdout predictions.](figures/04-prc.png){fig-align="center"}
+If training loss keeps falling while validation loss rises, the network may be
+overfitting.
 
-Discuss sensitivity, specificity, positive and negative predictive value, accuracy
-and the consequences of choosing a threshold. A good score does not establish causation.
+**Discuss:** Why do we need validation patients as well as training patients?
 
-**Checkpoint:** What does a false negative mean here? How would changing the probability threshold affect sensitivity and specificity?
+## 7. Evaluate the network and compare results
 
-## 5. Extension: Resample — article section 3.2
+Use the trained network to predict probabilities for the 90 test patients.
+For this example, classify a probability of 0.5 or more as `present`.
 
-The next examples use a 100-tree forest, 3-fold cross-validation, 100 repeated
-subsamples and 40 bootstrap repetitions. The core script retains those counts.
+`PredictionClassif$new()` puts the Keras predictions into an `mlr3` prediction
+object. It stores the observed outcomes, predicted classes and probabilities.
+We can then request the same measures used for the forest.
 
-```{r article-resampling}
+```{r}
+#| label: neural-predict
+#| eval: false
+# Predict unseen test patients. Use 0.5 as the cut-off for a present prediction.
+prob <- as.numeric(predict(network, x[split$test, ], verbose = 0))
+class <- ifelse(prob >= 0.5, "present", "absent")
+accuracy <- mean(class == as.character(heart$heart_disease[split$test]))
+accuracy
+
+# Bring the Keras predictions into mlr3 for the same evaluation measures.
+network_pred <- PredictionClassif$new(
+  task = heart_task,
+  row_ids = split$test,
+  truth = heart_task$truth(rows = split$test),
+  response = class,
+  prob = cbind(present = prob, absent = 1 - prob)
+)
+network_pred$confusion
+network_pred$score(msrs(c("classif.acc", "classif.tpr", "classif.tnr")))
 ```
 
-Training and test AUC answer different questions. Resampling estimates how
-performance changes when the training sample changes.
+### What happened in the saved run?
 
-## 6. Extension: Tune within the training data — article section 4
+The next table uses the saved network predictions, rather than fitting a new
+network when the page opens.
 
-The [tuning script](R/04-tuning.R) defines the training objects and
-uses the article’s search ranges and budgets. Run one method at a time
-from a terminal in this folder:
-
-```bash
-Rscript R/04-tuning.R grid_search
-Rscript R/04-tuning.R random_search
-Rscript R/04-tuning.R mbo
-Rscript R/04-tuning.R nested
+```{r}
+#| code-fold: true
+#| code-summary: "Compare the saved results"
+saved_network <- read.csv("outputs/neural-predictions.csv")
+stopifnot(
+  identical(saved_network$row_id, split$test),
+  identical(saved_network$truth, as.character(heart$heart_disease[split$test]))
+)
+saved_prediction <- PredictionClassif$new(
+  task = heart_task,
+  row_ids = saved_network$row_id,
+  truth = heart_task$truth(rows = saved_network$row_id),
+  response = saved_network$prediction,
+  prob = cbind(
+    present = saved_network$probability_present,
+    absent = 1 - saved_network$probability_present
+  )
+)
+network_values <- unname(saved_prediction$score(msrs(measure_ids)))
+knitr::kable(
+  data.frame(
+    Measure = measure_labels,
+    `Random forest (%)` = round(100 * forest_values, 1),
+    `Neural network (%)` = round(100 * network_values, 1),
+    check.names = FALSE
+  ),
+  caption = "Saved results for the same 90 test patients"
+)
 ```
 
-The grid uses resolution 10; random search evaluates 500 configurations;
-MBO evaluates 30. Nested tuning uses 100 configurations per inner search,
-10 inner folds and 10 outer folds. These are substantial runs, so the workshop
-can inspect the code before running the full searches outside the live session.
-The test set is excluded from search selection.
+The saved network classified 77 of the 90 test patients correctly, compared
+with 75 for the forest. That small difference in one split does not establish
+that neural networks are generally better. Compare the types of mistakes as
+well as the overall accuracy. After your own run, use `network_pred` above to
+inspect your results; this saved comparison table remains a reference.
 
-## 7. Extension: Interpret — article section 5
+**Discuss:** Which model missed fewer cases? Is the difference large enough to
+change your conclusion?
 
-Feature importance describes how much a predictor contributes to a fitted model. Feature effects describe how predictions vary with a predictor, while local explanations focus on one prediction. Discuss what each approach can tell us about this example. Predictive importance does not identify a causal effect. This section is a conceptual discussion.
+## Where to go next
 
-## 8. Extension: Generate synthetic observations — article section 6.2.5
+The main session ends here. Choose an extension when you want to explore a
+specific question further:
 
-The [synthetic-data script](R/05-synthetic-data.R) follows the adversarial random
-forest, density estimation and sampling sequence. Its output is labelled synthetic.
+| Question | Follow-up material |
+| --- | --- |
+| How does a single tree work, and why simplify it? | [Trees and pruning](R/02-trees-and-evaluation.R) |
+| Would another training sample give different results? | Resampling in the [same script](R/02-trees-and-evaluation.R) |
+| Can different model settings improve predictions? | [Tuning](R/04-tuning.R) |
+| Which measurements influence predictions? | Discuss feature importance and effects; predictive importance does not establish causation. |
+| Can we create artificial records resembling these patients? | [Synthetic data](R/05-synthetic-data.R): generate the records, then compare age summaries and outcome proportions with `heart`. |
 
-```{r, code=readLines("R/05-synthetic-data.R"), eval=FALSE}
-```
+These scripts run separately. The tree/evaluation script also refits the random
+forest; it is not needed for the main session.
 
-Synthetic rows are generated examples, not additional observed patients.
+## Sources and further details
 
-## Reproducibility
+The examples draw on [Wright et al. (2026)](https://arxiv.org/html/2602.16352v1).
+Exact model settings and implementation choices are in the
+[replication record](references/replication-notes.qmd); data preparation is in
+the [data guide](data/guide.qmd). Saved results describe the recorded workshop
+runs and may differ from a new run.
 
-Observed results, seeds, split membership and package versions are saved in
-`outputs/`. The raw data remain unchanged. See the
-[replication record](references/replication-notes.qmd) and
-[validation results](outputs/validation.qmd) for differences from the
-published snippets and validation status.
+For the tools, see the [mlr3 prediction documentation](https://mlr3.mlr-org.com/reference/PredictionClassif.html)
+and the [Keras training guide](https://keras.io/guides/training_with_built_in_methods/).
