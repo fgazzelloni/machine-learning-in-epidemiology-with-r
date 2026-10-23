@@ -13,6 +13,7 @@ script_dir <- if (length(commandArgs(trailingOnly = FALSE)) > 0) {
 } else {
   getwd()
 }
+
 project_dir <- dirname(script_dir)
 setwd(project_dir)
 
@@ -36,7 +37,8 @@ split <- partition(heart_task, ratio = 2 / 3)
 # The categories are fixed by the data guide; this step estimates no values
 # from the patients held out during cross-validation.
 encoded <- model.matrix(~ . - 1, 
-                        heart[, setdiff(names(heart), "heart_disease")])
+                        heart[, setdiff(names(heart),
+                                        "heart_disease")])
 
 boost_task <- as_task_classif(
   data.frame(encoded, heart_disease = heart$heart_disease),
@@ -61,7 +63,10 @@ mode <- commandArgs(trailingOnly = TRUE)
 if (length(mode) == 0) stop("Choose grid_search, random_search, mbo or nested; see README.md.")
 
 mode <- match.arg(mode[1], 
-                  c("grid_search", "random_search", "mbo", "nested"))
+                  c("grid_search", 
+                    "random_search", 
+                    "mbo", "nested"))
+
 measure <- msr("classif.acc")
 
 # Nested cross-validation separates setting selection from evaluation.
@@ -106,12 +111,17 @@ if (mode == "nested") {
 
   # Compare settings using cross-validation within the training group.
   instance <- tune(
-    tuner = tuner, task = train_task, learner = boost,
-    resampling = rsmp("cv", folds = 10), measures = measure, terminator = budget
+    tuner = tuner, 
+    task = train_task, 
+    learner = boost,
+    resampling = rsmp("cv", folds = 10), 
+    measures = measure, 
+    terminator = budget
   )
 
   # Refit the chosen settings on all training patients, then score the test group.
   final <- lrn("classif.xgboost", nthread = 1)
+  
   final$param_set$values <- instance$result_learner_param_vals
   final$train(boost_task, row_ids = split$train)
   score <- final$predict(boost_task, row_ids = split$test)$score(measure)
@@ -138,4 +148,5 @@ if (mode == "nested") {
 
 # Record the package versions used for this search.
 capture.output(sessionInfo(), 
-               file = paste0("outputs/session-info-", mode, ".txt"))
+               file = paste0("outputs/session-info-", 
+                             mode, ".txt"))
