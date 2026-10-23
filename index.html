@@ -76,11 +76,15 @@ ul.task-list li input[type="checkbox"] {
           link.hasAttribute('download') || link.getAttribute('role') === 'tab' ||
           link.hasAttribute('data-bs-toggle')) return;
       var destination = new URL(href, document.baseURI);
-      if (destination.origin === location.origin &&
-          destination.pathname === location.pathname &&
-          destination.search === location.search && destination.hash) return;
-      link.target = '_blank';
-      link.relList.add('noopener', 'noreferrer');
+      var external = /^https?:$/.test(destination.protocol) &&
+          destination.origin !== location.origin;
+      if (external) {
+        link.target = '_blank';
+        link.relList.add('noopener', 'noreferrer');
+      } else {
+        link.removeAttribute('target');
+        link.relList.remove('noopener', 'noreferrer');
+      }
     });
   }
   if (document.readyState === 'loading') {
@@ -284,7 +288,7 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="part-2-23-october-2026" class="level3 session-card">
 <h3 class="anchored" data-anchor-id="part-2-23-october-2026">Part 2 — 23 October 2026</h3>
-<p>An article-based heart-disease workflow with trees, neural networks, and model evaluation.</p>
+<p>Read heart-data random forest results, then fit and evaluate a neural network with Keras and mlr3.</p>
 <p><a href="./part2/guide.html">Explore Part 2</a> · <a href="./part2/workshop-part-2-trees-to-neural-networks.html">Open the notebook</a></p>
 </section>
 </div>

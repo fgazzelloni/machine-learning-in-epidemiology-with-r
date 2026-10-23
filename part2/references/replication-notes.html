@@ -76,11 +76,15 @@ ul.task-list li input[type="checkbox"] {
           link.hasAttribute('download') || link.getAttribute('role') === 'tab' ||
           link.hasAttribute('data-bs-toggle')) return;
       var destination = new URL(href, document.baseURI);
-      if (destination.origin === location.origin &&
-          destination.pathname === location.pathname &&
-          destination.search === location.search && destination.hash) return;
-      link.target = '_blank';
-      link.relList.add('noopener', 'noreferrer');
+      var external = /^https?:$/.test(destination.protocol) &&
+          destination.origin !== location.origin;
+      if (external) {
+        link.target = '_blank';
+        link.relList.add('noopener', 'noreferrer');
+      } else {
+        link.removeAttribute('target');
+        link.relList.remove('noopener', 'noreferrer');
+      }
     });
   }
   if (document.readyState === 'loading') {
@@ -287,7 +291,7 @@ ul.task-list li input[type="checkbox"] {
 <li>Wright et al.&nbsp;(2026), <a href="https://arxiv.org/html/2602.16352v1">Machine Learning in Epidemiology, arXiv v1</a>.</li>
 <li><a href="https://www.openml.org/d/53">OpenML dataset 53</a>, version 1; saved metadata and raw data are in <code>data/raw/</code>.</li>
 </ul>
-<p>This workshop implements the article’s published workflow with teaching scripts and explanatory notes. Models and settings follow the published examples.</p>
+<p>The scripts retain the article’s published examples and model settings. The main lesson uses a student-facing order: read saved random forest results, then fit a neural network with Keras and evaluate its predictions with mlr3. Tree fitting, resampling, tuning and synthetic data remain separate extensions. Rendering the notebook reads saved results without refitting either model.</p>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 33%">
@@ -329,7 +333,7 @@ ul.task-list li input[type="checkbox"] {
 </tr>
 <tr class="even">
 <td>5</td>
-<td>Notebook discussion</td>
+<td>Optional follow-up discussion</td>
 <td>No executable iml example is printed in the paper</td>
 </tr>
 <tr class="odd">
@@ -341,7 +345,7 @@ ul.task-list li input[type="checkbox"] {
 </table>
 <section id="workshop-implementation" class="level2">
 <h2 class="anchored" data-anchor-id="workshop-implementation">Workshop implementation</h2>
-<p>The scripts define data preparation, train/test objects and tuning code, use <code>heart_task</code> consistently and set explicit seeds. Keras uses <code>keras3</code> instead of the article’s older <code>keras</code> interface, retaining the architecture and training settings. Data encoding/scaling choices are recorded in the data guide. Random-forest threading is fixed to one for reproducibility. The initial forest uses the learner default; the resampling examples use 100 trees, as printed. Tuning is restricted to the training task; nested CV uses an outer and inner 10-fold design. The article’s full grid has up to 10,000 configurations and is not run during a normal notebook render.</p>
+<p>The scripts define data preparation, train/test objects and tuning code, use <code>heart_task</code> consistently and set explicit seeds. Keras uses <code>keras3</code> instead of the article’s older <code>keras</code> interface, retaining the architecture and training settings. The network now reads <code>outputs/split.csv</code> to reuse the forest’s saved training/test patients explicitly. Keras predictions are wrapped in an mlr3 <code>PredictionClassif</code> object to evaluate both models using the same measures. Data encoding/scaling choices are recorded in the data guide. Random-forest threading is fixed to one for reproducibility. The initial forest uses the learner default; the resampling examples use 100 trees, as printed. Tuning is restricted to the training task; nested CV uses an outer and inner 10-fold design. The article’s full grid has up to 10,000 configurations and is not run during a normal notebook render.</p>
 <p>The article reports a 100% neural-network test accuracy. That is a reported result for its run, not an expected or guaranteed workshop result. Our outputs are saved separately. Results depend on the random seed, data split, preprocessing and software versions.</p>
 </section>
 <section id="validation" class="level2">

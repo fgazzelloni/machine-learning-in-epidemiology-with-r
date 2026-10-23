@@ -1,5 +1,6 @@
-# Check that the introductory workshop can run from this folder.
+# Run from part1/ to check that the lesson has its files, packages and data.
 
+# List the files needed for the lesson and report any that are missing.
 required_files <- c(
   "R/workshop.R",
   "data/processed/wnv_state_week.csv",
@@ -16,6 +17,7 @@ if (length(missing_files) > 0L) {
   )
 }
 
+# Check for installed packages without loading them.
 required_packages <- c("rpart", "rpart.plot")
 missing_packages <- required_packages[
   !vapply(required_packages, requireNamespace, logical(1), quietly = TRUE)
@@ -28,6 +30,7 @@ if (length(missing_packages) > 0L) {
   )
 }
 
+# Check that the prepared table has the columns used in the exercises.
 wnv <- read.csv("data/processed/wnv_state_week.csv")
 required_columns <- c(
   "state", "region", "year", "week", "cases_last4",

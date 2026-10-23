@@ -22,6 +22,8 @@ names(wnv) <- c(
   "state", "region", "year", "week", "recent_cases",
   "recent_active_weeks", "outcome"
 )
+
+# Store region and outcome as categories rather than free text.
 wnv$region <- factor(wnv$region)
 wnv$outcome <- factor(wnv$outcome, levels = c("no", "yes"))
 
@@ -30,6 +32,7 @@ head(wnv)
 table(wnv$outcome)
 round(prop.table(table(wnv$outcome)), 3)
 
+# Save a plot of the outcome proportions for the lesson.
 png("figures/intro-01-outcome.png", width = 1000, height = 650, res = 150)
 barplot(
   prop.table(table(wnv$outcome)),
@@ -60,7 +63,7 @@ tree <- rpart(
   control = rpart.control(maxdepth = 3, minsplit = 30, cp = 0.005)
 )
 
-print(tree)
+tree
 
 png("figures/intro-02-decision-tree.png", width = 1500, height = 900, res = 150)
 rpart.plot::rpart.plot(
@@ -74,6 +77,8 @@ dev.off()
 
 # 5. Ask the model to predict the unseen 2025 data.
 test$probability_yes <- predict(tree, newdata = test, type = "prob")[, "yes"]
+
+# A probability of at least 0.5 becomes a yes prediction.
 test$predicted <- factor(
   ifelse(test$probability_yes >= 0.50, "yes", "no"),
   levels = c("no", "yes")
@@ -81,8 +86,10 @@ test$predicted <- factor(
 
 # 6. Compare predictions with what was observed.
 confusion <- table(Actual = test$outcome, Predicted = test$predicted)
-print(confusion)
+confusion
 
+# Accuracy counts all correct predictions. Sensitivity counts detected activity;
+# specificity counts correctly identified observations without activity.
 accuracy <- sum(diag(confusion)) / sum(confusion)
 sensitivity <- confusion["yes", "yes"] / sum(confusion["yes", ])
 specificity <- confusion["no", "no"] / sum(confusion["no", ])
@@ -92,10 +99,14 @@ performance <- data.frame(
   value = c(accuracy, sensitivity, specificity)
 )
 
-print(performance)
+performance
 
+# Save predictions, mistake counts and scores for later discussion.
 write.csv(test, "outputs/intro-predictions.csv", row.names = FALSE)
-write.csv(as.data.frame(confusion), "outputs/intro-confusion-matrix.csv", row.names = FALSE)
+write.csv(as.data.frame(confusion),
+  "outputs/intro-confusion-matrix.csv",
+  row.names = FALSE
+)
 write.csv(performance, "outputs/intro-performance.csv", row.names = FALSE)
 
 # 7. Interpretation for the workshop.

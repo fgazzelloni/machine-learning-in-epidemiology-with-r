@@ -76,11 +76,15 @@ ul.task-list li input[type="checkbox"] {
           link.hasAttribute('download') || link.getAttribute('role') === 'tab' ||
           link.hasAttribute('data-bs-toggle')) return;
       var destination = new URL(href, document.baseURI);
-      if (destination.origin === location.origin &&
-          destination.pathname === location.pathname &&
-          destination.search === location.search && destination.hash) return;
-      link.target = '_blank';
-      link.relList.add('noopener', 'noreferrer');
+      var external = /^https?:$/.test(destination.protocol) &&
+          destination.origin !== location.origin;
+      if (external) {
+        link.target = '_blank';
+        link.relList.add('noopener', 'noreferrer');
+      } else {
+        link.removeAttribute('target');
+        link.relList.remove('noopener', 'noreferrer');
+      }
     });
   }
   if (document.readyState === 'loading') {
@@ -292,7 +296,7 @@ ul.task-list li input[type="checkbox"] {
 <li>Work through the <a href="R/workshop.R">student practice script</a>.</li>
 <li>Try the <a href="exercises/workshop-exercise.R">exercise</a> and compare it with the <a href="solutions/workshop-exercise.R">solution</a>.</li>
 </ol>
-<p><a href="presentation/index.html">Slide viewer</a> · <a href="presentation/introduction-to-ml-in-epidemiology-with-r.pptx">PowerPoint</a> · <a href="index.html">Rendered notebook</a></p>
+<p><a href="presentation/index.html">Slide viewer</a> · <a href="presentation/introduction-to-ml-in-epidemiology-with-r.pdf">PDF</a> · <a href="index.html">Rendered notebook</a></p>
 <p>The <a href="app.R">gradient descent app</a> is an optional interactive demonstration. See the <a href="data/guide.html">data guide</a> and <a href="references/sources.html">sources</a> for the evidence behind the teaching example.</p>
 <p>The student practice requires <code>rpart</code> and <code>rpart.plot</code>. To run every section of the instructor notebook, also install <code>ggplot2</code>, <code>dplyr</code>, <code>data.table</code>, <code>maps</code>, <code>pROC</code>, <code>mlr3</code>, <code>mlr3learners</code> and <code>ranger</code>.</p>
 <p>Render the complete website with <code>quarto render</code> from the repository root. The current website output is <code>_site/</code>. The copied rendered files are the original workshop snapshot; copying them does not rerun the models.</p>

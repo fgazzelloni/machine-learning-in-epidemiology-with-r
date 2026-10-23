@@ -1,12 +1,14 @@
-# Short participant exercise
+# Practice: predict West Nile virus activity using earlier surveillance data.
+# Run from part1/. Load dplyr before running the preparation below.
 
+# Keep mosquito-season weeks and the variables needed for this exercise.
 wnv <- read.csv("data/processed/wnv_state_week.csv")
 wnv <- wnv %>%
   filter(week >= 18, week <= 44) %>%
   select(year, week, cases_last4, active_weeks_last8, activity_next_4w)
 
-names(wnv) <- c("year", "week", "recent_cases",
-                "recent_active_weeks", "outcome")
+# Use shorter names, and tell R that the outcome has two categories.
+names(wnv) <- c("year", "week", "recent_cases", "recent_active_weeks", "outcome")
 
 wnv$outcome <- factor(wnv$outcome, levels = c("no", "yes"))
 
