@@ -72,12 +72,19 @@ boost <- lrn("classif.xgboost",
 
 # Read the search method supplied after the script name in the terminal.
 mode <- commandArgs(trailingOnly = TRUE)
-if (length(mode) == 0) stop("Choose grid_search, random_search, mbo or nested; see README.md.")
+choices <- c("grid_search", "random_search", "mbo", "nested")
+if (length(mode) == 0 && interactive()) {
+  mode <- utils::select.list(
+    choices,
+    title = "Choose a tuning method",
+    multiple = FALSE
+  )
+}
+if (length(mode) == 0 || !nzchar(mode[1])) {
+  stop("Choose grid_search, random_search, mbo or nested; see README.md.")
+}
 
-mode <- match.arg(mode[1], 
-                  c("grid_search", 
-                    "random_search", 
-                    "mbo", "nested"))
+mode <- match.arg(mode[1], choices)
 
 measure <- msr("classif.acc")
 
