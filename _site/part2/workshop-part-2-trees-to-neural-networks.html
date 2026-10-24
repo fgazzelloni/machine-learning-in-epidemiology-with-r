@@ -304,16 +304,39 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#what-did-the-model-get-right-and-wrong" id="toc-what-did-the-model-get-right-and-wrong" class="nav-link" data-scroll-target="#what-did-the-model-get-right-and-wrong">What did the model get right and wrong?</a></li>
   <li><a href="#how-well-did-it-perform" id="toc-how-well-did-it-perform" class="nav-link" data-scroll-target="#how-well-did-it-perform">How well did it perform?</a></li>
+  <li><a href="#how-to-read-the-evaluation-curves" id="toc-how-to-read-the-evaluation-curves" class="nav-link" data-scroll-target="#how-to-read-the-evaluation-curves">How to read the evaluation curves</a></li>
+  <li><a href="#why-move-to-a-neural-network" id="toc-why-move-to-a-neural-network" class="nav-link" data-scroll-target="#why-move-to-a-neural-network">Why move to a neural network?</a></li>
   </ul></li>
-  <li><a href="#use-mlr3-to-organise-the-prediction-task" id="toc-use-mlr3-to-organise-the-prediction-task" class="nav-link" data-scroll-target="#use-mlr3-to-organise-the-prediction-task">3. Use mlr3 to organise the prediction task</a></li>
-  <li><a href="#prepare-the-inputs" id="toc-prepare-the-inputs" class="nav-link" data-scroll-target="#prepare-the-inputs">4. Prepare the inputs</a></li>
-  <li><a href="#build-the-network-with-keras" id="toc-build-the-network-with-keras" class="nav-link" data-scroll-target="#build-the-network-with-keras">5. Build the network with Keras</a></li>
-  <li><a href="#fit-the-network-and-watch-it-learn" id="toc-fit-the-network-and-watch-it-learn" class="nav-link" data-scroll-target="#fit-the-network-and-watch-it-learn">6. Fit the network and watch it learn</a></li>
+  <li><a href="#use-mlr3-to-organise-the-prediction-task" id="toc-use-mlr3-to-organise-the-prediction-task" class="nav-link" data-scroll-target="#use-mlr3-to-organise-the-prediction-task">3. Use mlr3 to organise the prediction task</a>
+  <ul class="collapse">
+  <li><a href="#why-separate-a-task-from-a-learner" id="toc-why-separate-a-task-from-a-learner" class="nav-link" data-scroll-target="#why-separate-a-task-from-a-learner">Why separate a task from a learner?</a></li>
+  </ul></li>
+  <li><a href="#prepare-the-inputs" id="toc-prepare-the-inputs" class="nav-link" data-scroll-target="#prepare-the-inputs">4. Prepare the inputs</a>
+  <ul class="collapse">
+  <li><a href="#why-are-there-22-inputs" id="toc-why-are-there-22-inputs" class="nav-link" data-scroll-target="#why-are-there-22-inputs">Why are there 22 inputs?</a></li>
+  <li><a href="#what-do-centre-spread-and-sweep-do" id="toc-what-do-centre-spread-and-sweep-do" class="nav-link" data-scroll-target="#what-do-centre-spread-and-sweep-do">What do centre, spread and sweep do?</a></li>
+  </ul></li>
+  <li><a href="#build-the-network-with-keras" id="toc-build-the-network-with-keras" class="nav-link" data-scroll-target="#build-the-network-with-keras">5. Build the network with Keras</a>
+  <ul class="collapse">
+  <li><a href="#what-does-each-layer-do" id="toc-what-does-each-layer-do" class="nav-link" data-scroll-target="#what-does-each-layer-do">What does each layer do?</a></li>
+  </ul></li>
+  <li><a href="#fit-the-network-and-watch-it-learn" id="toc-fit-the-network-and-watch-it-learn" class="nav-link" data-scroll-target="#fit-the-network-and-watch-it-learn">6. Fit the network and watch it learn</a>
+  <ul class="collapse">
+  <li><a href="#why-keep-fitting-validation-and-test-patients-separate" id="toc-why-keep-fitting-validation-and-test-patients-separate" class="nav-link" data-scroll-target="#why-keep-fitting-validation-and-test-patients-separate">Why keep fitting, validation and test patients separate?</a></li>
+  <li><a href="#how-to-read-figure-5" id="toc-how-to-read-figure-5" class="nav-link" data-scroll-target="#how-to-read-figure-5">How to read Figure 5</a></li>
+  </ul></li>
   <li><a href="#evaluate-the-network-and-compare-results" id="toc-evaluate-the-network-and-compare-results" class="nav-link" data-scroll-target="#evaluate-the-network-and-compare-results">7. Evaluate the network and compare results</a>
   <ul class="collapse">
   <li><a href="#what-happened-in-the-saved-run" id="toc-what-happened-in-the-saved-run" class="nav-link" data-scroll-target="#what-happened-in-the-saved-run">What happened in the saved run?</a></li>
+  <li><a href="#what-improved-and-what-did-not" id="toc-what-improved-and-what-did-not" class="nav-link" data-scroll-target="#what-improved-and-what-did-not">What improved, and what did not?</a></li>
   </ul></li>
-  <li><a href="#where-to-go-next" id="toc-where-to-go-next" class="nav-link" data-scroll-target="#where-to-go-next">Where to go next</a></li>
+  <li><a href="#what-have-we-learned-about-machine-learning" id="toc-what-have-we-learned-about-machine-learning" class="nav-link" data-scroll-target="#what-have-we-learned-about-machine-learning">What have we learned about machine learning?</a></li>
+  <li><a href="#where-to-go-next" id="toc-where-to-go-next" class="nav-link" data-scroll-target="#where-to-go-next">Where to go next</a>
+  <ul class="collapse">
+  <li><a href="#resampling-how-stable-are-the-results" id="toc-resampling-how-stable-are-the-results" class="nav-link" data-scroll-target="#resampling-how-stable-are-the-results">Resampling: how stable are the results?</a></li>
+  <li><a href="#tuning-can-different-settings-help" id="toc-tuning-can-different-settings-help" class="nav-link" data-scroll-target="#tuning-can-different-settings-help">Tuning: can different settings help?</a></li>
+  <li><a href="#synthetic-data-what-do-artificial-records-represent" id="toc-synthetic-data-what-do-artificial-records-represent" class="nav-link" data-scroll-target="#synthetic-data-what-do-artificial-records-represent">Synthetic data: what do artificial records represent?</a></li>
+  </ul></li>
   <li><a href="#sources-and-further-details" id="toc-sources-and-further-details" class="nav-link" data-scroll-target="#sources-and-further-details">Sources and further details</a></li>
   </ul>
 </nav>
@@ -383,6 +406,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>There are 150 patients without heart disease and 120 with heart disease. A <strong>predictor</strong> is a measurement we use to help predict the outcome. The outcome itself must not be included among the predictors.</p>
 <p><strong>Discuss:</strong> Which measurements might help distinguish the two groups?</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Discussion: possible predictors">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Discussion: possible predictors
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Chest-pain type, exercise-induced angina, maximum heart rate and exercise ECG measurements are plausible candidates. The vessel count and thal test result may also help distinguish the groups. Age, blood pressure and cholesterol may contribute alongside these measurements. These are starting hypotheses, not a computed ranking of importance. We need data and evaluation to establish which patterns help prediction in this sample. Predictive usefulness does not establish that a measurement causes disease.</p>
+</div>
+</div>
+</div>
+<p>For a visual explanation of single trees, see the optional <a href="../part2/trees-and-pruning.html">Trees and pruning companion</a>. It explains Figures 1–3 and why pruning can leave a tree looking similar to the default tree.</p>
 </section>
 <section id="read-the-random-forest-results" class="level2">
 <h2 class="anchored" data-anchor-id="read-the-random-forest-results">2. Read the random forest results</h2>
@@ -477,6 +517,43 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p><strong>Discuss:</strong> Would you choose a threshold using accuracy alone?</p>
 </section>
+<section id="how-to-read-the-evaluation-curves" class="level3">
+<h3 class="anchored" data-anchor-id="how-to-read-the-evaluation-curves">How to read the evaluation curves</h3>
+<p>The <strong>ROC curve (Figure 4)</strong> compares sensitivity with the false-positive rate (<code>1 − specificity</code>) as the probability threshold changes. The saved curve sits above the diagonal: it shows useful discrimination on these test patients. The upper-left corner represents high sensitivity with few false alarms. The curve does not identify a clinically appropriate cut-off on its own.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Figure 4 extensions: precision–recall and thresholds">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Figure 4 extensions: precision–recall and thresholds
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>The optional script also saves two other views of the same forest predictions. <strong>Recall</strong> is sensitivity, and <strong>precision</strong> is positive predictive value: the share of positive predictions that are correct. Their curve shows the balance as the threshold changes; precision also depends on disease frequency.</p>
+<p>The threshold plot shows <strong>classification error</strong>, the fraction of incorrect predictions, for different cut-offs. A lower point means fewer total mistakes on these test patients. It does not give separate sensitivity/specificity curves or establish an optimal clinical threshold. Missed cases and false alarms can have different consequences. Choose a threshold using training/validation data and a stated purpose, then assess it on separate evaluation data.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/04-prc.png" class="img-fluid figure-img"></p>
+<figcaption>Saved forest precision–recall curve for the 90 test patients.</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/04-threshold.png" class="img-fluid figure-img"></p>
+<figcaption>Saved forest classification error across probability thresholds.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="why-move-to-a-neural-network" class="level3">
+<h3 class="anchored" data-anchor-id="why-move-to-a-neural-network">Why move to a neural network?</h3>
+<p>The forest provides a baseline. A neural network gives us a different way to learn from the same measurements: trees divide patients into groups, whereas a network learns weighted combinations of inputs. We explore whether that change affects accuracy and the types of mistake. We keep the test patients consistent; adding complexity does not guarantee better predictions.</p>
+</section>
 </section>
 <section id="use-mlr3-to-organise-the-prediction-task" class="level2">
 <h2 class="anchored" data-anchor-id="use-mlr3-to-organise-the-prediction-task">3. Use mlr3 to organise the prediction task</h2>
@@ -498,6 +575,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The training group contains 180 patients; the test group contains 90. Keep the test patients aside until the network has finished learning.</p>
+<section id="why-separate-a-task-from-a-learner" class="level3">
+<h3 class="anchored" data-anchor-id="why-separate-a-task-from-a-learner">Why separate a task from a learner?</h3>
+<p>A <strong>task</strong> defines the prediction problem: the dataset, outcome and positive class. A <strong>learner</strong> defines the method used to learn predictions. In script 2, <code>lrn("classif.ranger", predict_type = "prob")</code> creates a random-forest learner; <code>train()</code> fits it on the training rows and <code>predict()</code> evaluates other rows. The task itself does not create the split.</p>
+<p>In script 3, we define the task again and reuse the saved row numbers, but <strong>Keras builds and trains the neural network directly</strong>. We do not create an mlr3 neural-network learner here. Later, <code>PredictionClassif</code> lets mlr3 evaluate Keras predictions with the same measures as the forest.</p>
+<p>If you explored the tree plots first, the transition is from understanding fitted structure to evaluating predictions. The forest is a new model combining many trees; it does not reuse the single <code>rpart</code> tree we plotted.</p>
+</section>
 </section>
 <section id="prepare-the-inputs" class="level2">
 <h2 class="anchored" data-anchor-id="prepare-the-inputs">4. Prepare the inputs</h2>
@@ -546,6 +629,46 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(y)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The outcome is coded as 1 for heart disease and 0 for its absence.</p>
+<section id="why-are-there-22-inputs" class="level3">
+<h3 class="anchored" data-anchor-id="why-are-there-22-inputs">Why are there 22 inputs?</h3>
+<p><code>model.matrix(~ . - 1, data = x_data, contrasts.arg = contrasts_full)</code> creates one numerical row per patient. In the formula, <code>.</code> includes all predictors and <code>- 1</code> removes the intercept column. <code>contrasts_full</code> requests an indicator for every level of each remaining categorical predictor.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Original predictors</th>
+<th style="text-align: right;">Columns in <code>x</code></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Six numerical measurements/counts</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="even">
+<td>Three binary predictors, already converted to 0/1</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="odd">
+<td>Chest-pain type (4), resting ECG (3), ST slope (3), thal (3)</td>
+<td style="text-align: right;">13</td>
+</tr>
+<tr class="even">
+<td><strong>Total</strong></td>
+<td style="text-align: right;"><strong>22</strong></td>
+</tr>
+</tbody>
+</table>
+<p>For example, a patient with typical angina has 1 in that chest-pain indicator column and 0 in the other three. The result is a <strong>270 × 22 matrix</strong>. The outcome is excluded from <code>x</code> and stored separately in <code>y</code>.</p>
+</section>
+<section id="what-do-centre-spread-and-sweep-do" class="level3">
+<h3 class="anchored" data-anchor-id="what-do-centre-spread-and-sweep-do">What do centre, spread and sweep do?</h3>
+<p><code>centre</code> stores each selected column’s mean among the <strong>144 fitting patients</strong>. <code>spread</code> stores its standard deviation, a measure of variation. We standardise each continuous column using:</p>
+<pre class="text"><code>centred value = original value − fitting mean
+scaled value = centred value / fitting standard deviation</code></pre>
+<p>The inner <code>sweep()</code> subtracts <code>centre</code>; subtraction is its default operation. The outer <code>sweep()</code> divides by <code>spread</code> using <code>"/"</code>. The argument <code>2</code> means operate column by column. <code>drop = FALSE</code> keeps the selection as a matrix even if only one column is selected. The assignment writes the scaled values back into the continuous columns of <code>x</code>, leaving binary and indicator columns unchanged.</p>
+<p>For a conceptual example, a fitting mean age of 55 and standard deviation of 10 would transform age 65 into <code>(65 − 55) / 10 = 1</code>. These example values are illustrative, not summaries calculated from our data.</p>
+<p>We apply the <strong>same fitting means and standard deviations</strong> to validation and test patients. This puts measurements with different units on comparable scales without using those patients to estimate the scaling. Once <code>x</code> and <code>y</code> are ready, we can define the network.</p>
+</section>
 </section>
 <section id="build-the-network-with-keras" class="level2">
 <h2 class="anchored" data-anchor-id="build-the-network-with-keras">5. Build the network with Keras</h2>
@@ -554,50 +677,106 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><strong>Patient measurements → hidden layers → probability of heart disease</strong></p>
 <p>A <strong>hidden layer</strong> combines inputs into patterns that the network learns. The final layer returns one probability between 0 and 1. The two hidden layers below contain 64 and 32 units. <strong>Dropout</strong> temporarily switches off some units during training to help limit overfitting: learning the training examples too closely to work well on new patients.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(keras3)</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Fix the random starting point for the network.</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set_random_seed</span>(<span class="dv">20261023</span>)</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Pass 22 inputs through two hidden layers to one output probability.</span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Dropout temporarily switches off some units during training to limit overfitting.</span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>network <span class="ot">&lt;-</span> <span class="fu">keras_model_sequential</span>(<span class="at">input_shape =</span> <span class="fu">c</span>(<span class="dv">22</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">64</span>, <span class="at">activation =</span> <span class="st">"relu"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dropout</span>(<span class="at">rate =</span> <span class="fl">0.4</span>) <span class="sc">|&gt;</span></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">32</span>, <span class="at">activation =</span> <span class="st">"relu"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dropout</span>(<span class="at">rate =</span> <span class="fl">0.4</span>) <span class="sc">|&gt;</span></span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">1</span>, <span class="at">activation =</span> <span class="st">"sigmoid"</span>)</span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Choose how to update the weights and measure prediction error.</span></span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Binary cross-entropy is a loss for a two-class outcome.</span></span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="fu">compile</span>(network,</span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">optimizer =</span> <span class="fu">optimizer_adam</span>(<span class="at">learning_rate =</span> <span class="fl">0.002</span>),</span>
-<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">loss =</span> <span class="st">"binary_crossentropy"</span>, <span class="at">metrics =</span> <span class="st">"accuracy"</span></span>
-<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(keras3)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Fix the random starting point for the network.</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set_random_seed</span>(<span class="dv">20261023</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Pass 22 inputs through two hidden layers to one output probability.</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Dropout temporarily switches off some units during training to limit overfitting.</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>network <span class="ot">&lt;-</span> <span class="fu">keras_model_sequential</span>(<span class="at">input_shape =</span> <span class="fu">c</span>(<span class="dv">22</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">64</span>, <span class="at">activation =</span> <span class="st">"relu"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dropout</span>(<span class="at">rate =</span> <span class="fl">0.4</span>) <span class="sc">|&gt;</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">32</span>, <span class="at">activation =</span> <span class="st">"relu"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dropout</span>(<span class="at">rate =</span> <span class="fl">0.4</span>) <span class="sc">|&gt;</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">1</span>, <span class="at">activation =</span> <span class="st">"sigmoid"</span>)</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Choose how to update the weights and measure prediction error.</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Binary cross-entropy is a loss for a two-class outcome.</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a><span class="fu">compile</span>(network,</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">optimizer =</span> <span class="fu">optimizer_adam</span>(<span class="at">learning_rate =</span> <span class="fl">0.002</span>),</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">loss =</span> <span class="st">"binary_crossentropy"</span>, <span class="at">metrics =</span> <span class="st">"accuracy"</span></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><code>compile()</code> sets how the network learns. The <strong>optimiser</strong> updates its weights (the values controlling its connections). The <strong>loss</strong> measures prediction error; binary cross-entropy is used for this two-class outcome.</p>
+<section id="what-does-each-layer-do" class="level3">
+<h3 class="anchored" data-anchor-id="what-does-each-layer-do">What does each layer do?</h3>
+<p><code>keras_model_sequential(input_shape = c(22))</code> defines a model whose layers connect in order. Each patient supplies 22 numbers; 22 is the number of input columns, not the number of patients. A container created with only this input shape can show no layers and zero parameters. The dense layers add the trainable weights.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Component</th>
+<th>Role in this network</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Dense, 64 units, ReLU</td>
+<td>Each unit combines all 22 inputs using learned weights and a bias. ReLU keeps positive signals and returns zero for negative ones, allowing nonlinear patterns.</td>
+</tr>
+<tr class="even">
+<td>Dropout, rate 0.4</td>
+<td>Randomly sets 40% of the preceding layer’s outputs to zero at each training step to help limit overfitting.</td>
+</tr>
+<tr class="odd">
+<td>Dense, 32 units, ReLU</td>
+<td>Learns further combinations of the signals from the preceding layer.</td>
+</tr>
+<tr class="even">
+<td>Dropout, rate 0.4</td>
+<td>Also regularises the second hidden layer.</td>
+</tr>
+<tr class="odd">
+<td>Dense, 1 unit, sigmoid</td>
+<td>Converts the final signal into a value between 0 and 1, interpreted as an estimated probability of disease present.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Dense</strong> means every unit connects to every output of the preceding layer. Dropout operates during training and switches off for prediction. The 64/32 units and 0.4 dropout follow the reference architecture; they are settings we could investigate through tuning, rather than proven optimal choices. The complete architecture has 3,585 trainable parameters, including biases.</p>
+<p>The architecture defines the calculation. <code>compile()</code> selects the learning rules: Adam updates the weights, and binary cross-entropy measures probability prediction error. <strong><code>fit()</code> is the step that learns the weights from patients.</strong></p>
+<div class="callout callout-style-default callout-note callout-titled" title="If creating the model takes time">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>If creating the model takes time
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>The first Keras call in a fresh R session may also initialise Python and the backend. Creating the model container does not train the network. A persistent wait or an error warrants checking the Keras setup in the <a href="../part2/guide.html">session guide</a>; it is not evidence that 22 inputs are too many.</p>
+</div>
+</div>
+</div>
+</section>
 </section>
 <section id="fit-the-network-and-watch-it-learn" class="level2">
 <h2 class="anchored" data-anchor-id="fit-the-network-and-watch-it-learn">6. Fit the network and watch it learn</h2>
 <p>An <strong>epoch</strong> is one pass through the fitting data. A <strong>batch</strong> is a smaller group processed before updating the weights.</p>
 <p>We reserve 20% of the training group for <strong>validation</strong>: checking progress during learning. The network updates its weights using 144 patients and monitors its progress on 36 validation patients. These are separate from the 90 test patients. Early stopping ends training if validation loss stops improving.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># An epoch is one pass through the fitting rows; batches contain 32 rows.</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Monitor validation loss and stop after 10 epochs without improvement,</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co"># restoring the weights from the best validation epoch.</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>training <span class="ot">&lt;-</span> <span class="fu">fit</span>(</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  network,</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  x[split<span class="sc">$</span>train, ],</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  y[split<span class="sc">$</span>train],</span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">epochs =</span> <span class="dv">50</span>,</span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">batch_size =</span> <span class="dv">32</span>,</span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">validation_split =</span> <span class="fl">0.2</span>,</span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">verbose =</span> <span class="dv">1</span>,</span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">callbacks =</span> <span class="fu">list</span>(<span class="fu">callback_early_stopping</span>(<span class="at">patience =</span> <span class="dv">10</span>, <span class="at">restore_best_weights =</span> <span class="cn">TRUE</span>))</span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># An epoch is one pass through the fitting rows; batches contain 32 rows.</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Monitor validation loss and stop after 10 epochs without improvement,</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co"># restoring the weights from the best validation epoch.</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>training <span class="ot">&lt;-</span> <span class="fu">fit</span>(</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  network,</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  x[split<span class="sc">$</span>train, ],</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  y[split<span class="sc">$</span>train],</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">epochs =</span> <span class="dv">50</span>,</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">batch_size =</span> <span class="dv">32</span>,</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">validation_split =</span> <span class="fl">0.2</span>,</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">verbose =</span> <span class="dv">1</span>,</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">callbacks =</span> <span class="fu">list</span>(<span class="fu">callback_early_stopping</span>(<span class="at">patience =</span> <span class="dv">10</span>, <span class="at">restore_best_weights =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Plot the history from your own run:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compare training and validation loss as learning progresses.</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(training)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compare training and validation loss as learning progresses.</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(training)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Look for training and validation loss in this plot. The figure below comes from the saved workshop run; your run may produce a different curve.</p>
 <div class="quarto-figure quarto-figure-center">
@@ -608,28 +787,69 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>If training loss keeps falling while validation loss rises, the network may be overfitting.</p>
 <p><strong>Discuss:</strong> Why do we need validation patients as well as training patients?</p>
+<section id="why-keep-fitting-validation-and-test-patients-separate" class="level3">
+<h3 class="anchored" data-anchor-id="why-keep-fitting-validation-and-test-patients-separate">Why keep fitting, validation and test patients separate?</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 30%">
+<col style="width: 40%">
+<col style="width: 30%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Group</th>
+<th style="text-align: right;">Patients</th>
+<th>What we use them for</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Fitting</td>
+<td style="text-align: right;">144</td>
+<td>Update the network weights using prediction errors.</td>
+</tr>
+<tr class="even">
+<td>Validation</td>
+<td style="text-align: right;">36</td>
+<td>Monitor learning and select the stopping epoch, without updating weights from these rows.</td>
+</tr>
+<tr class="odd">
+<td>Test</td>
+<td style="text-align: right;">90</td>
+<td>Assess predictions after fitting and model choices are complete.</td>
+</tr>
+</tbody>
+</table>
+<p>Training error alone can fall because the network learns details of its examples. Validation asks whether those improvements also help patients outside the weight updates. Because validation influences the stopping decision, it cannot replace the final test group. Early stopping uses patience 10: after ten epochs without improvement in validation loss, training ends and restores the best weights.</p>
+</section>
+<section id="how-to-read-figure-5" class="level3">
+<h3 class="anchored" data-anchor-id="how-to-read-figure-5">How to read Figure 5</h3>
+<p>The blue curve is fitting/training loss and the red curve is validation loss. Both initially fall, suggesting that learning also helps the validation patients. Later, training loss continues downward, while validation loss levels off and rises slightly. More training is then improving the fit without improving validation performance, a warning of overfitting.</p>
+<p>The saved history contains 27 epochs; its lowest validation loss occurs at epoch 17. This agrees with stopping after ten further epochs without improvement. These are the saved run’s curves, not a guarantee for a new run.</p>
+<p>This connects to tree pruning: both pruning and early stopping help control complexity, through different mechanisms. Neither proves performance on new patients; the separate test group supplies the final evaluation.</p>
+</section>
 </section>
 <section id="evaluate-the-network-and-compare-results" class="level2">
 <h2 class="anchored" data-anchor-id="evaluate-the-network-and-compare-results">7. Evaluate the network and compare results</h2>
 <p>Use the trained network to predict probabilities for the 90 test patients. For this example, classify a probability of 0.5 or more as <code>present</code>.</p>
 <p><code>PredictionClassif$new()</code> puts the Keras predictions into an <code>mlr3</code> prediction object. It stores the observed outcomes, predicted classes and probabilities. We can then request the same measures used for the forest.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Predict unseen test patients. Use 0.5 as the cut-off for a present prediction.</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>prob <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">predict</span>(network, x[split<span class="sc">$</span>test, ], <span class="at">verbose =</span> <span class="dv">0</span>))</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>class <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(prob <span class="sc">&gt;=</span> <span class="fl">0.5</span>, <span class="st">"present"</span>, <span class="st">"absent"</span>)</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>accuracy <span class="ot">&lt;-</span> <span class="fu">mean</span>(class <span class="sc">==</span> <span class="fu">as.character</span>(heart<span class="sc">$</span>heart_disease[split<span class="sc">$</span>test]))</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>accuracy</span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Bring the Keras predictions into mlr3 for the same evaluation measures.</span></span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>network_pred <span class="ot">&lt;-</span> PredictionClassif<span class="sc">$</span><span class="fu">new</span>(</span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">task =</span> heart_task,</span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">row_ids =</span> split<span class="sc">$</span>test,</span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">truth =</span> heart_task<span class="sc">$</span><span class="fu">truth</span>(<span class="at">rows =</span> split<span class="sc">$</span>test),</span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">response =</span> class,</span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">prob =</span> <span class="fu">cbind</span>(<span class="at">present =</span> prob, <span class="at">absent =</span> <span class="dv">1</span> <span class="sc">-</span> prob)</span>
-<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>network_pred<span class="sc">$</span>confusion</span>
-<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>network_pred<span class="sc">$</span><span class="fu">score</span>(<span class="fu">msrs</span>(<span class="fu">c</span>(<span class="st">"classif.acc"</span>, <span class="st">"classif.tpr"</span>, <span class="st">"classif.tnr"</span>)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Predict unseen test patients. Use 0.5 as the cut-off for a present prediction.</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>prob <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">predict</span>(network, x[split<span class="sc">$</span>test, ], <span class="at">verbose =</span> <span class="dv">0</span>))</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>class <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(prob <span class="sc">&gt;=</span> <span class="fl">0.5</span>, <span class="st">"present"</span>, <span class="st">"absent"</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>accuracy <span class="ot">&lt;-</span> <span class="fu">mean</span>(class <span class="sc">==</span> <span class="fu">as.character</span>(heart<span class="sc">$</span>heart_disease[split<span class="sc">$</span>test]))</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>accuracy</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Bring the Keras predictions into mlr3 for the same evaluation measures.</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>network_pred <span class="ot">&lt;-</span> PredictionClassif<span class="sc">$</span><span class="fu">new</span>(</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">task =</span> heart_task,</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">row_ids =</span> split<span class="sc">$</span>test,</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">truth =</span> heart_task<span class="sc">$</span><span class="fu">truth</span>(<span class="at">rows =</span> split<span class="sc">$</span>test),</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">response =</span> class,</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">prob =</span> <span class="fu">cbind</span>(<span class="at">present =</span> prob, <span class="at">absent =</span> <span class="dv">1</span> <span class="sc">-</span> prob)</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>network_pred<span class="sc">$</span>confusion</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>network_pred<span class="sc">$</span><span class="fu">score</span>(<span class="fu">msrs</span>(<span class="fu">c</span>(<span class="st">"classif.acc"</span>, <span class="st">"classif.tpr"</span>, <span class="st">"classif.tnr"</span>)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <section id="what-happened-in-the-saved-run" class="level3">
 <h3 class="anchored" data-anchor-id="what-happened-in-the-saved-run">What happened in the saved run?</h3>
@@ -637,31 +857,31 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details class="code-fold">
 <summary>Compare the saved results</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>saved_network <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"outputs/neural-predictions.csv"</span>)</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">stopifnot</span>(</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">identical</span>(saved_network<span class="sc">$</span>row_id, split<span class="sc">$</span>test),</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">identical</span>(saved_network<span class="sc">$</span>truth, <span class="fu">as.character</span>(heart<span class="sc">$</span>heart_disease[split<span class="sc">$</span>test]))</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>saved_prediction <span class="ot">&lt;-</span> PredictionClassif<span class="sc">$</span><span class="fu">new</span>(</span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">task =</span> heart_task,</span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">row_ids =</span> saved_network<span class="sc">$</span>row_id,</span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">truth =</span> heart_task<span class="sc">$</span><span class="fu">truth</span>(<span class="at">rows =</span> saved_network<span class="sc">$</span>row_id),</span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">response =</span> saved_network<span class="sc">$</span>prediction,</span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">prob =</span> <span class="fu">cbind</span>(</span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">present =</span> saved_network<span class="sc">$</span>probability_present,</span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">absent =</span> <span class="dv">1</span> <span class="sc">-</span> saved_network<span class="sc">$</span>probability_present</span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>network_values <span class="ot">&lt;-</span> <span class="fu">unname</span>(saved_prediction<span class="sc">$</span><span class="fu">score</span>(<span class="fu">msrs</span>(measure_ids)))</span>
-<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(</span>
-<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(</span>
-<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">Measure =</span> measure_labels,</span>
-<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Random forest (%)</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">round</span>(<span class="dv">100</span> <span class="sc">*</span> forest_values, <span class="dv">1</span>),</span>
-<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Neural network (%)</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">round</span>(<span class="dv">100</span> <span class="sc">*</span> network_values, <span class="dv">1</span>),</span>
-<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">check.names =</span> <span class="cn">FALSE</span></span>
-<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>  ),</span>
-<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">caption =</span> <span class="st">"Saved results for the same 90 test patients"</span></span>
-<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>saved_network <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"outputs/neural-predictions.csv"</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">stopifnot</span>(</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">identical</span>(saved_network<span class="sc">$</span>row_id, split<span class="sc">$</span>test),</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">identical</span>(saved_network<span class="sc">$</span>truth, <span class="fu">as.character</span>(heart<span class="sc">$</span>heart_disease[split<span class="sc">$</span>test]))</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>saved_prediction <span class="ot">&lt;-</span> PredictionClassif<span class="sc">$</span><span class="fu">new</span>(</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">task =</span> heart_task,</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">row_ids =</span> saved_network<span class="sc">$</span>row_id,</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">truth =</span> heart_task<span class="sc">$</span><span class="fu">truth</span>(<span class="at">rows =</span> saved_network<span class="sc">$</span>row_id),</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">response =</span> saved_network<span class="sc">$</span>prediction,</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">prob =</span> <span class="fu">cbind</span>(</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">present =</span> saved_network<span class="sc">$</span>probability_present,</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">absent =</span> <span class="dv">1</span> <span class="sc">-</span> saved_network<span class="sc">$</span>probability_present</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>network_values <span class="ot">&lt;-</span> <span class="fu">unname</span>(saved_prediction<span class="sc">$</span><span class="fu">score</span>(<span class="fu">msrs</span>(measure_ids)))</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(</span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">Measure =</span> measure_labels,</span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Random forest (%)</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">round</span>(<span class="dv">100</span> <span class="sc">*</span> forest_values, <span class="dv">1</span>),</span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Neural network (%)</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">round</span>(<span class="dv">100</span> <span class="sc">*</span> network_values, <span class="dv">1</span>),</span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">check.names =</span> <span class="cn">FALSE</span></span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">caption =</span> <span class="st">"Saved results for the same 90 test patients"</span></span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
@@ -696,6 +916,44 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>The saved network classified 77 of the 90 test patients correctly, compared with 75 for the forest. That small difference in one split does not establish that neural networks are generally better. Compare the types of mistakes as well as the overall accuracy. After your own run, use <code>network_pred</code> above to inspect your results; this saved comparison table remains a reference.</p>
 <p><strong>Discuss:</strong> Which model missed fewer cases? Is the difference large enough to change your conclusion?</p>
 </section>
+<section id="what-improved-and-what-did-not" class="level3">
+<h3 class="anchored" data-anchor-id="what-improved-and-what-did-not">What improved, and what did not?</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Saved test result</th>
+<th style="text-align: right;">Random forest</th>
+<th style="text-align: right;">Keras network</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Correct predictions</td>
+<td style="text-align: right;">75/90</td>
+<td style="text-align: right;">77/90</td>
+</tr>
+<tr class="even">
+<td>Missed disease cases</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">8</td>
+</tr>
+<tr class="odd">
+<td>False alarms</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">5</td>
+</tr>
+</tbody>
+</table>
+<p>Network accuracy increased by <strong>2.2 percentage points</strong> after rounding. It made three fewer false alarms but missed one more disease case. Whether that balance is preferable depends on the purpose and consequences of the prediction.</p>
+<p>We evaluated the <strong>random forest and Keras network</strong> here. The single-tree plots illustrate fitting and pruning; they do not provide a third held-out score. Both evaluated models use the same 90 test patients, but the forest fits on all 180 training patients and the network uses 144 for fitting plus 36 for validation. The models also use different input representations. These saved local runs support a teaching comparison, not a controlled demonstration that one method is generally superior.</p>
+<p>A prediction estimates the recorded outcome from measurements. It does not identify what caused the patient’s disease, and this example does not forecast future cardiovascular risk.</p>
+</section>
+</section>
+<section id="what-have-we-learned-about-machine-learning" class="level2">
+<h2 class="anchored" data-anchor-id="what-have-we-learned-about-machine-learning">What have we learned about machine learning?</h2>
+<p><strong>Machine learning uses examples to learn a rule for making predictions.</strong> We choose the outcome, available inputs, model structure and learning procedure; the algorithm uses fitting data to determine its internal rules or values. A tree learns splits, a forest combines many trees, and a neural network learns connection weights.</p>
+<p>The full workflow is to prepare inputs, fit the model, monitor validation and assess predictions on patients outside fitting. A lower training error alone is insufficient. We consider accuracy alongside the kinds of mistake, and keep our conclusions within the limits of one small dataset and one test split.</p>
+<p>The main session can end here. Resampling would next ask how stable the results are when the patients used for fitting and evaluation change.</p>
 </section>
 <section id="where-to-go-next" class="level2">
 <h2 class="anchored" data-anchor-id="where-to-go-next">Where to go next</h2>
@@ -710,7 +968,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tbody>
 <tr class="odd">
 <td>How does a single tree work, and why simplify it?</td>
-<td><a href="R/02-trees-and-evaluation.R">Trees and pruning</a></td>
+<td><a href="../part2/trees-and-pruning.html">Trees and pruning companion</a>, with the <a href="R/02-trees-and-evaluation.R">R script</a></td>
 </tr>
 <tr class="even">
 <td>Would another training sample give different results?</td>
@@ -731,6 +989,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tbody>
 </table>
 <p>These scripts run separately. The tree/evaluation script also refits the random forest; it is not needed for the main session.</p>
+<section id="resampling-how-stable-are-the-results" class="level3">
+<h3 class="anchored" data-anchor-id="resampling-how-stable-are-the-results">Resampling: how stable are the results?</h3>
+<p>Cross-validation rotates which group stays out of fitting. Repeated subsampling uses different splits; bootstrap samples fitting rows with replacement. Script 2 includes three-fold cross-validation, 100 subsampling repetitions and 40 bootstrap repetitions for a <strong>100-tree forest</strong>, evaluating AUC. Those scores use a different measure and evaluation design from the main holdout accuracy comparison.</p>
+<p>For a new model comparison, use the same folds and measures for both methods. Estimate preprocessing inside each fitting fold and keep model/threshold selection separate from evaluation. Repeatedly changing a model to improve the test results we have already examined would weaken that test set’s independence.</p>
+</section>
+<section id="tuning-can-different-settings-help" class="level3">
+<h3 class="anchored" data-anchor-id="tuning-can-different-settings-help">Tuning: can different settings help?</h3>
+<p><a href="R/04-tuning.R">Script 4</a> tunes an <strong>XGBoost model</strong>, a boosted-tree method; it does not tune the Keras network or the main random forest. It searches over the number and depth of trees, learning rate and regularisation strength. Grid search tries a fixed collection of settings, random search samples settings, and model-based optimisation uses earlier trials to guide the next ones. Ten-fold cross-validation within the training group compares candidate settings.</p>
+<p>Nested cross-validation separates selection from evaluation: inner folds choose settings and outer folds assess the whole selection process. The saved validation record reports completed 500-configuration random search and 30-configuration model-based search. The full grid and full-budget nested workflow have only had reduced smoke tests; they are not completed full runs. Tuning does not guarantee an improvement. See the <a href="../part2/outputs/validation.html">validation record</a> before running these potentially long extensions.</p>
+</section>
+<section id="synthetic-data-what-do-artificial-records-represent" class="level3">
+<h3 class="anchored" data-anchor-id="synthetic-data-what-do-artificial-records-represent">Synthetic data: what do artificial records represent?</h3>
+<p><a href="R/05-synthetic-data.R">Script 5</a> uses an adversarial random forest to learn patterns in the observed data. <code>forde()</code> estimates a distribution from the fitted forest, and <code>forge()</code> samples 270 artificial records from it. The generated table is saved separately as <code>outputs/synthetic-heart.csv</code>.</p>
+<p>Compare age summaries and outcome proportions with the real data as an initial check, then consider relationships between variables and the intended use. Synthetic records are examples for exploration and teaching, not additional observed patients or independent evidence of predictive performance. Generating them does not automatically guarantee privacy.</p>
+</section>
 </section>
 <section id="sources-and-further-details" class="level2">
 <h2 class="anchored" data-anchor-id="sources-and-further-details">Sources and further details</h2>

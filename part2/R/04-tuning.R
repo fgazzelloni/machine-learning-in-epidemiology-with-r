@@ -3,17 +3,29 @@
 # Run from the part2 folder, or pass the script path from another directory.
 # Example: Rscript part2/R/04-tuning.R random_search
 
-script_dir <- if (length(commandArgs(trailingOnly = FALSE)) > 0) {
-  file_arg <- grep("^--file=", commandArgs(trailingOnly = FALSE), value = TRUE)
-  if (length(file_arg) > 0) {
-    dirname(normalizePath(sub("^--file=", "", file_arg[1])))
-  } else {
-    getwd()
-  }
+file_arg <- grep("^--file=.+", commandArgs(trailingOnly = FALSE), value = TRUE)
+source_files <- vapply(sys.frames(), function(frame) {
+  if (is.null(frame$ofile)) NA_character_ else as.character(frame$ofile)
+}, character(1))
+source_files <- source_files[!is.na(source_files)]
+
+script_file <- if (length(file_arg) > 0) {
+  sub("^--file=", "", file_arg[1])
+} else if (length(source_files) > 0) {
+  tail(source_files, 1)
 } else {
-  getwd()
+  candidates <- c(
+    file.path(getwd(), "R", "04-tuning.R"),
+    file.path(getwd(), "04-tuning.R")
+  )
+  candidates <- candidates[file.exists(candidates)]
+  if (length(candidates) == 0) {
+    stop("Cannot locate 04-tuning.R; run it from part2/ or source the script.")
+  }
+  candidates[1]
 }
 
+script_dir <- dirname(normalizePath(script_file, mustWork = TRUE))
 project_dir <- dirname(script_dir)
 setwd(project_dir)
 
@@ -60,12 +72,19 @@ boost <- lrn("classif.xgboost",
 
 # Read the search method supplied after the script name in the terminal.
 mode <- commandArgs(trailingOnly = TRUE)
-if (length(mode) == 0) stop("Choose grid_search, random_search, mbo or nested; see README.md.")
+choices <- c("grid_search", "random_search", "mbo", "nested")
+if (length(mode) == 0 && interactive()) {
+  mode <- utils::select.list(
+    choices,
+    title = "Choose a tuning method",
+    multiple = FALSE
+  )
+}
+if (length(mode) == 0 || !nzchar(mode[1])) {
+  stop("Choose grid_search, random_search, mbo or nested; see README.md.")
+}
 
-mode <- match.arg(mode[1], 
-                  c("grid_search", 
-                    "random_search", 
-                    "mbo", "nested"))
+mode <- match.arg(mode[1], choices)
 
 measure <- msr("classif.acc")
 

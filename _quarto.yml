@@ -16,6 +16,7 @@ project:
     - part2/outputs/validation.qmd
     - part1/ml-workflow.qmd
     - part2/ml-workflow-2.qmd
+    - part2/trees-and-pruning.qmd
 
   resources:
     - machine-learning-in-epidemiology-with-r.Rproj

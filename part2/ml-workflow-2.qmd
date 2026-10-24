@@ -70,6 +70,20 @@ itself must not be included among the predictors.
 
 **Discuss:** Which measurements might help distinguish the two groups?
 
+::: {.callout-note collapse="true" title="Discussion: possible predictors"}
+Chest-pain type, exercise-induced angina, maximum heart rate and exercise ECG
+measurements are plausible candidates. The vessel count and thal test result
+may also help distinguish the groups. Age, blood pressure and cholesterol may
+contribute alongside these measurements. These are starting hypotheses, not a
+computed ranking of importance. We need data and evaluation to establish which
+patterns help prediction in this sample. Predictive usefulness does not establish
+that a measurement causes disease.
+:::
+
+For a visual explanation of single trees, see the optional
+[Trees and pruning companion](trees-and-pruning.qmd). It explains Figures 1–3
+and why pruning can leave a tree looking similar to the default tree.
+
 ## 2. Read the random forest results
 
 A random forest combines predictions from many decision trees. We have already
@@ -131,6 +145,40 @@ usually catches more cases, but also raises more false alarms.
 
 **Discuss:** Would you choose a threshold using accuracy alone?
 
+### How to read the evaluation curves
+
+The **ROC curve (Figure 4)** compares sensitivity with the false-positive rate
+(`1 − specificity`) as the probability threshold changes. The saved curve sits
+above the diagonal: it shows useful discrimination on these test patients.
+The upper-left corner represents high sensitivity with few false alarms.
+The curve does not identify a clinically appropriate cut-off on its own.
+
+::: {.callout-note collapse="true" title="Figure 4 extensions: precision–recall and thresholds"}
+The optional script also saves two other views of the same forest predictions.
+**Recall** is sensitivity, and **precision** is positive predictive value: the
+share of positive predictions that are correct. Their curve shows the balance
+as the threshold changes; precision also depends on disease frequency.
+
+The threshold plot shows **classification error**, the fraction of incorrect
+predictions, for different cut-offs. A lower point means fewer total mistakes
+on these test patients. It does not give separate sensitivity/specificity curves
+or establish an optimal clinical threshold. Missed cases and false alarms can
+have different consequences. Choose a threshold using training/validation data
+and a stated purpose, then assess it on separate evaluation data.
+
+![Saved forest precision–recall curve for the 90 test patients.](figures/04-prc.png){fig-align="center"}
+
+![Saved forest classification error across probability thresholds.](figures/04-threshold.png){fig-align="center"}
+:::
+
+### Why move to a neural network?
+
+The forest provides a baseline. A neural network gives us a different way to
+learn from the same measurements: trees divide patients into groups, whereas
+a network learns weighted combinations of inputs. We explore whether that
+change affects accuracy and the types of mistake. We keep the test patients
+consistent; adding complexity does not guarantee better predictions.
+
 ## 3. Use mlr3 to organise the prediction task
 
 We now ask the same question using a neural network. We keep the same training
@@ -160,6 +208,23 @@ split <- list(
 
 The training group contains 180 patients; the test group contains 90. Keep the
 test patients aside until the network has finished learning.
+
+### Why separate a task from a learner?
+
+A **task** defines the prediction problem: the dataset, outcome and positive
+class. A **learner** defines the method used to learn predictions. In script 2,
+`lrn("classif.ranger", predict_type = "prob")` creates a random-forest learner;
+`train()` fits it on the training rows and `predict()` evaluates other rows.
+The task itself does not create the split.
+
+In script 3, we define the task again and reuse the saved row numbers, but
+**Keras builds and trains the neural network directly**. We do not create an
+mlr3 neural-network learner here. Later, `PredictionClassif` lets mlr3 evaluate
+Keras predictions with the same measures as the forest.
+
+If you explored the tree plots first, the transition is from understanding
+fitted structure to evaluating predictions. The forest is a new model combining
+many trees; it does not reuse the single `rpart` tree we plotted.
 
 ## 4. Prepare the inputs
 
@@ -220,6 +285,50 @@ table(y)
 
 The outcome is coded as 1 for heart disease and 0 for its absence.
 
+### Why are there 22 inputs?
+
+`model.matrix(~ . - 1, data = x_data, contrasts.arg = contrasts_full)` creates
+one numerical row per patient. In the formula, `.` includes all predictors and
+`- 1` removes the intercept column. `contrasts_full` requests an indicator for
+every level of each remaining categorical predictor.
+
+| Original predictors | Columns in `x` |
+| --- | ---: |
+| Six numerical measurements/counts | 6 |
+| Three binary predictors, already converted to 0/1 | 3 |
+| Chest-pain type (4), resting ECG (3), ST slope (3), thal (3) | 13 |
+| **Total** | **22** |
+
+For example, a patient with typical angina has 1 in that chest-pain indicator
+column and 0 in the other three. The result is a **270 × 22 matrix**. The outcome
+is excluded from `x` and stored separately in `y`.
+
+### What do centre, spread and sweep do?
+
+`centre` stores each selected column's mean among the **144 fitting patients**.
+`spread` stores its standard deviation, a measure of variation. We standardise
+each continuous column using:
+
+```text
+centred value = original value − fitting mean
+scaled value = centred value / fitting standard deviation
+```
+
+The inner `sweep()` subtracts `centre`; subtraction is its default operation.
+The outer `sweep()` divides by `spread` using `"/"`. The argument `2` means
+operate column by column. `drop = FALSE` keeps the selection as a matrix even
+if only one column is selected. The assignment writes the scaled values back
+into the continuous columns of `x`, leaving binary and indicator columns unchanged.
+
+For a conceptual example, a fitting mean age of 55 and standard deviation of
+10 would transform age 65 into `(65 − 55) / 10 = 1`. These example values are
+illustrative, not summaries calculated from our data.
+
+We apply the **same fitting means and standard deviations** to validation and
+test patients. This puts measurements with different units on comparable scales
+without using those patients to estimate the scaling. Once `x` and `y` are ready,
+we can define the network.
+
 ## 5. Build the network with Keras
 
 Keras defines and trains the neural network. We use it directly here, then bring
@@ -261,6 +370,38 @@ compile(network,
 `compile()` sets how the network learns. The **optimiser** updates its weights
 (the values controlling its connections). The **loss** measures prediction error;
 binary cross-entropy is used for this two-class outcome.
+
+### What does each layer do?
+
+`keras_model_sequential(input_shape = c(22))` defines a model whose layers connect
+in order. Each patient supplies 22 numbers; 22 is the number of input columns,
+not the number of patients. A container created with only this input shape can
+show no layers and zero parameters. The dense layers add the trainable weights.
+
+| Component | Role in this network |
+| --- | --- |
+| Dense, 64 units, ReLU | Each unit combines all 22 inputs using learned weights and a bias. ReLU keeps positive signals and returns zero for negative ones, allowing nonlinear patterns. |
+| Dropout, rate 0.4 | Randomly sets 40% of the preceding layer's outputs to zero at each training step to help limit overfitting. |
+| Dense, 32 units, ReLU | Learns further combinations of the signals from the preceding layer. |
+| Dropout, rate 0.4 | Also regularises the second hidden layer. |
+| Dense, 1 unit, sigmoid | Converts the final signal into a value between 0 and 1, interpreted as an estimated probability of disease present. |
+
+**Dense** means every unit connects to every output of the preceding layer.
+Dropout operates during training and switches off for prediction. The 64/32
+units and 0.4 dropout follow the reference architecture; they are settings we
+could investigate through tuning, rather than proven optimal choices.
+The complete architecture has 3,585 trainable parameters, including biases.
+
+The architecture defines the calculation. `compile()` selects the learning rules:
+Adam updates the weights, and binary cross-entropy measures probability prediction
+error. **`fit()` is the step that learns the weights from patients.**
+
+::: {.callout-note collapse="true" title="If creating the model takes time"}
+The first Keras call in a fresh R session may also initialise Python and the
+backend. Creating the model container does not train the network. A persistent
+wait or an error warrants checking the Keras setup in the [session guide](guide.qmd);
+it is not evidence that 22 inputs are too many.
+:::
 
 ## 6. Fit the network and watch it learn
 
@@ -308,6 +449,36 @@ If training loss keeps falling while validation loss rises, the network may be
 overfitting.
 
 **Discuss:** Why do we need validation patients as well as training patients?
+
+### Why keep fitting, validation and test patients separate?
+
+| Group | Patients | What we use them for |
+| --- | ---: | --- |
+| Fitting | 144 | Update the network weights using prediction errors. |
+| Validation | 36 | Monitor learning and select the stopping epoch, without updating weights from these rows. |
+| Test | 90 | Assess predictions after fitting and model choices are complete. |
+
+Training error alone can fall because the network learns details of its examples.
+Validation asks whether those improvements also help patients outside the weight
+updates. Because validation influences the stopping decision, it cannot replace
+the final test group. Early stopping uses patience 10: after ten epochs without
+improvement in validation loss, training ends and restores the best weights.
+
+### How to read Figure 5
+
+The blue curve is fitting/training loss and the red curve is validation loss.
+Both initially fall, suggesting that learning also helps the validation patients.
+Later, training loss continues downward, while validation loss levels off and
+rises slightly. More training is then improving the fit without improving
+validation performance, a warning of overfitting.
+
+The saved history contains 27 epochs; its lowest validation loss occurs at
+epoch 17. This agrees with stopping after ten further epochs without improvement.
+These are the saved run's curves, not a guarantee for a new run.
+
+This connects to tree pruning: both pruning and early stopping help control
+complexity, through different mechanisms. Neither proves performance on new
+patients; the separate test group supplies the final evaluation.
 
 ## 7. Evaluate the network and compare results
 
@@ -383,6 +554,46 @@ inspect your results; this saved comparison table remains a reference.
 **Discuss:** Which model missed fewer cases? Is the difference large enough to
 change your conclusion?
 
+### What improved, and what did not?
+
+| Saved test result | Random forest | Keras network |
+| --- | ---: | ---: |
+| Correct predictions | 75/90 | 77/90 |
+| Missed disease cases | 7 | 8 |
+| False alarms | 8 | 5 |
+
+Network accuracy increased by **2.2 percentage points** after rounding. It made
+three fewer false alarms but missed one more disease case. Whether that balance
+is preferable depends on the purpose and consequences of the prediction.
+
+We evaluated the **random forest and Keras network** here. The single-tree plots
+illustrate fitting and pruning; they do not provide a third held-out score.
+Both evaluated models use the same 90 test patients, but the forest fits on all
+180 training patients and the network uses 144 for fitting plus 36 for validation.
+The models also use different input representations. These saved local runs
+support a teaching comparison, not a controlled demonstration that one method
+is generally superior.
+
+A prediction estimates the recorded outcome from measurements. It does not
+identify what caused the patient's disease, and this example does not forecast
+future cardiovascular risk.
+
+## What have we learned about machine learning?
+
+**Machine learning uses examples to learn a rule for making predictions.** We
+choose the outcome, available inputs, model structure and learning procedure;
+the algorithm uses fitting data to determine its internal rules or values.
+A tree learns splits, a forest combines many trees, and a neural network learns
+connection weights.
+
+The full workflow is to prepare inputs, fit the model, monitor validation and
+assess predictions on patients outside fitting. A lower training error alone
+is insufficient. We consider accuracy alongside the kinds of mistake, and keep
+our conclusions within the limits of one small dataset and one test split.
+
+The main session can end here. Resampling would next ask how stable the results
+are when the patients used for fitting and evaluation change.
+
 ## Where to go next
 
 The main session ends here. Choose an extension when you want to explore a
@@ -390,7 +601,7 @@ specific question further:
 
 | Question | Follow-up material |
 | --- | --- |
-| How does a single tree work, and why simplify it? | [Trees and pruning](R/02-trees-and-evaluation.R) |
+| How does a single tree work, and why simplify it? | [Trees and pruning companion](trees-and-pruning.qmd), with the [R script](R/02-trees-and-evaluation.R) |
 | Would another training sample give different results? | Resampling in the [same script](R/02-trees-and-evaluation.R) |
 | Can different model settings improve predictions? | [Tuning](R/04-tuning.R) |
 | Which measurements influence predictions? | Discuss feature importance and effects; predictive importance does not establish causation. |
@@ -398,6 +609,49 @@ specific question further:
 
 These scripts run separately. The tree/evaluation script also refits the random
 forest; it is not needed for the main session.
+
+### Resampling: how stable are the results?
+
+Cross-validation rotates which group stays out of fitting. Repeated subsampling
+uses different splits; bootstrap samples fitting rows with replacement. Script 2
+includes three-fold cross-validation, 100 subsampling repetitions and 40 bootstrap
+repetitions for a **100-tree forest**, evaluating AUC. Those scores use a different
+measure and evaluation design from the main holdout accuracy comparison.
+
+For a new model comparison, use the same folds and measures for both methods.
+Estimate preprocessing inside each fitting fold and keep model/threshold selection
+separate from evaluation. Repeatedly changing a model to improve the test results
+we have already examined would weaken that test set's independence.
+
+### Tuning: can different settings help?
+
+[Script 4](R/04-tuning.R) tunes an **XGBoost model**, a boosted-tree method; it does
+not tune the Keras network or the main random forest. It searches over the number
+and depth of trees, learning rate and regularisation strength. Grid search tries
+a fixed collection of settings, random search samples settings, and model-based
+optimisation uses earlier trials to guide the next ones. Ten-fold cross-validation
+within the training group compares candidate settings.
+
+Nested cross-validation separates selection from evaluation: inner folds choose
+settings and outer folds assess the whole selection process. The saved validation
+record reports completed 500-configuration random search and 30-configuration
+model-based search. The full grid and full-budget nested workflow have only had
+reduced smoke tests; they are not completed full runs. Tuning does not guarantee
+an improvement. See the [validation record](outputs/validation.qmd) before running
+these potentially long extensions.
+
+### Synthetic data: what do artificial records represent?
+
+[Script 5](R/05-synthetic-data.R) uses an adversarial random forest to learn patterns
+in the observed data. `forde()` estimates a distribution from the fitted forest,
+and `forge()` samples 270 artificial records from it. The generated table is saved
+separately as `outputs/synthetic-heart.csv`.
+
+Compare age summaries and outcome proportions with the real data as an initial
+check, then consider relationships between variables and the intended use.
+Synthetic records are examples for exploration and teaching, not additional
+observed patients or independent evidence of predictive performance. Generating
+them does not automatically guarantee privacy.
 
 ## Sources and further details
 

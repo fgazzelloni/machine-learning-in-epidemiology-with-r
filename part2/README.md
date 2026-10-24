@@ -59,6 +59,10 @@ Choose a question to explore further:
 | Can we improve predictions by changing model settings? | [Tuning](R/04-tuning.R) |
 | Can generated records resemble the original patients? | [Synthetic data](R/05-synthetic-data.R) |
 
+To run the tuning script in RStudio, use the Console from the `part2` folder:
+`source("R/04-tuning.R")`. Choose a method from the prompt. Full grid and
+nested searches can take a long time.
+
 The tree/evaluation script refits the forest and runs resampling; it is separate
 from the main lesson. Full tuning can take much longer than the workshop.
 Install extra packages only when you choose an extension:
@@ -67,6 +71,75 @@ Install extra packages only when you choose an extension:
 Rscript install-optional-packages.R tuning
 Rscript install-optional-packages.R synthetic
 ```
+
+### How to run the tuning script
+
+The tuning script needs a **mode**: the search method you want to use.
+
+**In RStudio (Console or Source)**
+
+Open the workshop `.Rproj` file. From the repository's main folder, run this
+in the **Console**:
+
+```r
+setwd("part2")
+source("R/04-tuning.R")
+```
+
+If your working directory is already `part2`, skip `setwd("part2")`.
+Use `getwd()` to check. The script will prompt you to choose `grid_search`,
+`random_search`, `mbo`, or `nested`. Select one method to start the search.
+Alternatively, open `R/04-tuning.R` in the editor and click **Source** to
+run the whole script and display the same selection prompt.
+The optional tuning packages must already be installed.
+
+**In the Terminal**
+
+You can also supply the mode directly in RStudio's **Terminal** tab:
+The Console's `setwd("part2")` command does not change the Terminal's folder.
+
+1. Open the workshop `.Rproj` file in RStudio, then open **Terminal**.
+   If the tab is not visible, choose **Tools → Terminal → New Terminal**.
+2. From the repository's main folder, enter:
+
+   ```bash
+   cd part2
+   ```
+
+   If your Terminal is already in `part2`, skip this command. You can check
+   the current folder with `pwd` on macOS/Linux or `Get-Location` in Windows
+   PowerShell; the path should end in `part2`.
+3. Install the extra tuning packages once, if you have not already done so:
+
+   ```bash
+   Rscript install-optional-packages.R tuning
+   ```
+
+4. Choose **one** of the following commands, paste it into the Terminal,
+   and press Enter:
+
+   ```bash
+   Rscript R/04-tuning.R grid_search
+   Rscript R/04-tuning.R random_search
+   Rscript R/04-tuning.R mbo
+   Rscript R/04-tuning.R nested
+   ```
+
+`Rscript` runs an R script from the Terminal. `R/04-tuning.R` is the script's
+path relative to `part2`, and the final word selects the mode:
+
+| Mode | What it does |
+| --- | --- |
+| `grid_search` | Tries a fixed grid of model settings. |
+| `random_search` | Tries randomly sampled model settings. |
+| `mbo` | Uses model-based optimisation: earlier trials guide the next settings to try. |
+| `nested` | Tunes settings inside an inner cross-validation loop and evaluates the procedure in an outer loop. |
+
+These are optional extension activities. Full grid and nested searches can
+take a long time; wait for the Terminal prompt to return before entering
+another command. In the Console, wait for the `>` prompt to return.
+If `Rscript` is not recognised, the Terminal
+cannot find your R installation; ask the instructor for help configuring it.
 
 ## Sources and reproducibility
 

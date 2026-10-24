@@ -1,0 +1,144 @@
+---
+title: "Part 2 — Trees and pruning"
+subtitle: "Reading the fitted trees before evaluating predictions"
+format:
+  html:
+    toc: true
+    toc-depth: 2
+---
+
+[Return to the Part 2 teaching notebook](ml-workflow-2.qmd)
+
+This optional companion explains the figures produced by
+[`R/02-trees-and-evaluation.R`](R/02-trees-and-evaluation.R). The main session reads
+saved forest results and then builds a neural network. You do not need to run
+this extension script during that lesson: it also refits the forest and runs
+resampling, replacing its saved outputs.
+
+## Figure 1: how the default tree divides patients
+
+![Figure 1. Default classification tree fitted to all 270 patients.](figures/01-tree.png){fig-align="center"}
+
+Read the tree **from top to bottom**. Each split asks a question about a
+measurement. Follow the branch that matches the patient's value until reaching
+a terminal node, or **leaf**, which supplies the prediction.
+
+The first split uses the **thal test result**. A normal result follows the left
+branch; the other results follow the right branch. Later splits use chest-pain
+type, number of major vessels, exercise-induced angina and age.
+
+Each node shows the predicted class (`absent` or `present`), the proportion with
+disease among patients reaching that node, and the percentage of all patients
+reaching it. At the top, `0.44` means about 44% of the 270 patients have disease.
+The predicted class there is `absent`, the majority group. Blue leaves predict
+absence and green leaves predict presence; the displayed proportions indicate
+that the groups are not necessarily pure.
+
+**Checkpoint:** Follow one path from the top to a leaf. Which combination of
+measurements determines its prediction?
+
+The tree uses **all 270 patients** to illustrate fitted structure. The apparent
+separation in its leaves is not a held-out estimate of performance on new patients.
+
+## Figure 2: complexity and cross-validation error
+
+![Figure 2. Relative cross-validation error as the larger tree becomes more complex.](figures/02-complexity.png){fig-align="center"}
+
+The bottom axis shows the **complexity parameter**, `cp`. Moving right permits
+smaller values of `cp` and more splits. The top axis shows the number of terminal
+leaves. The vertical axis shows relative cross-validation error: lower values
+indicate smaller estimated error. It is a relative error, not an accuracy
+percentage. The vertical bars show one standard error on either side of each
+estimate.
+
+Error falls sharply after the first few splits and then changes relatively
+little as the tree gains branches. This suggests that a simpler tree may retain
+much of the useful structure.
+
+The dotted line marks one standard error above the lowest estimated error.
+A common rule chooses the smallest tree whose error falls below that line,
+accepting similar estimated performance with less complexity. In this workshop,
+**`cp = 0.031` retains the article's setting**; we should distinguish that replication
+choice from selecting a value using this plot.
+
+**Checkpoint:** Would adding branches be persuasive if cross-validation error
+barely changes?
+
+## Figure 3: what pruning actually removed
+
+![Figure 3. Tree obtained by pruning the larger tree at cp = 0.031.](figures/03-pruned-tree.png){fig-align="center"}
+
+We did prune the tree. Figures 1 and 3 look similar because they retain the same
+main branches, but they represent different trees:
+
+| Tree | Splits | Leaves |
+| --- | ---: | ---: |
+| Figure 1: default | 6 | 7 |
+| Larger tree, before pruning | 15 | 16 |
+| Figure 3: pruned | 5 | 6 |
+
+The default tree uses `rpart()` with its default controls. The larger tree uses
+`rpart.control(minsplit = 2)`. We then call `prune(deep_cart, cp = 0.031)` to
+obtain Figure 3.
+
+**Pruning starts from the larger tree with 15 splits and 16 terminal nodes**,
+not from the default tree in Figure 1. The displayed comparison therefore makes
+the reduction look smaller than it is.
+
+Compared with Figure 1, the **`age >= 51` split on the right has disappeared**.
+Those patients now share a single leaf. The main splits on thal, chest pain,
+vessel count and exercise-induced angina remain.
+
+Pruning limits complexity by removing branches that may fit details of this
+sample. A simpler tree is easier to follow and may generalise better, but the
+act of pruning does not establish that it predicts new patients more accurately.
+
+::: {.callout-note collapse="true" title="Check the tree sizes in R"}
+Run this only after creating `cart`, `deep_cart` and `pruned_cart` in the tree
+section of script 2. It inspects the fitted objects without running the later
+forest/resampling sections.
+
+```r
+models <- list(default = cart, larger = deep_cart, pruned = pruned_cart)
+data.frame(
+  tree = names(models),
+  splits = vapply(models, function(m) sum(m$frame$var != "<leaf>"), integer(1)),
+  leaves = vapply(models, function(m) sum(m$frame$var == "<leaf>"), integer(1))
+)
+```
+:::
+
+## From tree plots to mlr3 evaluation
+
+The plots ask **how a fitted model makes decisions**. The next question is
+**how well a model predicts patients it did not learn from**.
+
+In script 2, mlr3 defines a classification task with `heart_disease` as the
+outcome and `present` as the positive class. A learner specifies the method:
+`classif.ranger` is a random forest that combines many trees. It does not reuse
+the single plotted tree.
+
+The saved split assigns 180 patients to training and 90 to testing. Fitting the
+forest on the training rows and predicting the test rows gives a held-out
+assessment. The saved forest correctly classified 75 of 90 test patients,
+missed 7 disease cases and raised 8 false alarms. These are forest results,
+not test scores for the default or pruned single trees.
+
+The main notebook then introduces Keras as another learning method and evaluates
+its predictions on the same 90 test patients. Pruning and the network's early
+stopping are different ways to control complexity. Resampling is a further step
+for examining how stable results are across samples.
+
+[Continue with the saved forest results](ml-workflow-2.qmd#read-the-random-forest-results)
+
+## Sources and scope
+
+The tree expressions are in `R/02-trees-and-evaluation.R`; the three saved images
+are under `figures/`. The counts above were checked against trees fitted with
+those expressions using the prepared heart data. No forest, Keras model or tuning
+search was rerun for this explanation, and saved workshop outputs were preserved.
+
+Model settings follow the workshop's
+[replication record](references/replication-notes.qmd). For the R functions, see
+`?rpart::rpart`, `?rpart::plotcp` and `?rpart::prune`. The [validation record](outputs/validation.qmd)
+distinguishes saved local runs from unfinished full-budget extensions.
