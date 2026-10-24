@@ -297,7 +297,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul>
   <li><a href="#before-the-session" id="toc-before-the-session" class="nav-link active" data-scroll-target="#before-the-session">Before the session</a></li>
   <li><a href="#during-the-session" id="toc-during-the-session" class="nav-link" data-scroll-target="#during-the-session">During the session</a></li>
-  <li><a href="#after-the-session" id="toc-after-the-session" class="nav-link" data-scroll-target="#after-the-session">After the session</a></li>
+  <li><a href="#after-the-session" id="toc-after-the-session" class="nav-link" data-scroll-target="#after-the-session">After the session</a>
+  <ul class="collapse">
+  <li><a href="#how-to-run-the-tuning-script" id="toc-how-to-run-the-tuning-script" class="nav-link" data-scroll-target="#how-to-run-the-tuning-script">How to run the tuning script</a></li>
+  </ul></li>
   <li><a href="#sources-and-reproducibility" id="toc-sources-and-reproducibility" class="nav-link" data-scroll-target="#sources-and-reproducibility">Sources and reproducibility</a></li>
   </ul>
 </nav>
@@ -378,9 +381,66 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 </tbody>
 </table>
+<p>To run the tuning script in RStudio, use the Console from the <code>part2</code> folder: <code>source("R/04-tuning.R")</code>. Choose a method from the prompt. Full grid and nested searches can take a long time.</p>
 <p>The tree/evaluation script refits the forest and runs resampling; it is separate from the main lesson. Full tuning can take much longer than the workshop. Install extra packages only when you choose an extension:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> install-optional-packages.R tuning</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> install-optional-packages.R synthetic</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<section id="how-to-run-the-tuning-script" class="level3">
+<h3 class="anchored" data-anchor-id="how-to-run-the-tuning-script">How to run the tuning script</h3>
+<p>The tuning script needs a <strong>mode</strong>: the search method you want to use.</p>
+<p><strong>In RStudio (Console or Source)</strong></p>
+<p>Open the workshop <code>.Rproj</code> file. From the repository’s main folder, run this in the <strong>Console</strong>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">setwd</span>(<span class="st">"part2"</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"R/04-tuning.R"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>If your working directory is already <code>part2</code>, skip <code>setwd("part2")</code>. Use <code>getwd()</code> to check. The script will prompt you to choose <code>grid_search</code>, <code>random_search</code>, <code>mbo</code>, or <code>nested</code>. Select one method to start the search. Alternatively, open <code>R/04-tuning.R</code> in the editor and click <strong>Source</strong> to run the whole script and display the same selection prompt. The optional tuning packages must already be installed.</p>
+<p><strong>In the Terminal</strong></p>
+<p>You can also supply the mode directly in RStudio’s <strong>Terminal</strong> tab: The Console’s <code>setwd("part2")</code> command does not change the Terminal’s folder.</p>
+<ol type="1">
+<li><p>Open the workshop <code>.Rproj</code> file in RStudio, then open <strong>Terminal</strong>. If the tab is not visible, choose <strong>Tools → Terminal → New Terminal</strong>.</p></li>
+<li><p>From the repository’s main folder, enter:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> part2</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>If your Terminal is already in <code>part2</code>, skip this command. You can check the current folder with <code>pwd</code> on macOS/Linux or <code>Get-Location</code> in Windows PowerShell; the path should end in <code>part2</code>.</p></li>
+<li><p>Install the extra tuning packages once, if you have not already done so:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> install-optional-packages.R tuning</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+<li><p>Choose <strong>one</strong> of the following commands, paste it into the Terminal, and press Enter:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> R/04-tuning.R grid_search</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> R/04-tuning.R random_search</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> R/04-tuning.R mbo</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> R/04-tuning.R nested</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+</ol>
+<p><code>Rscript</code> runs an R script from the Terminal. <code>R/04-tuning.R</code> is the script’s path relative to <code>part2</code>, and the final word selects the mode:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Mode</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>grid_search</code></td>
+<td>Tries a fixed grid of model settings.</td>
+</tr>
+<tr class="even">
+<td><code>random_search</code></td>
+<td>Tries randomly sampled model settings.</td>
+</tr>
+<tr class="odd">
+<td><code>mbo</code></td>
+<td>Uses model-based optimisation: earlier trials guide the next settings to try.</td>
+</tr>
+<tr class="even">
+<td><code>nested</code></td>
+<td>Tunes settings inside an inner cross-validation loop and evaluates the procedure in an outer loop.</td>
+</tr>
+</tbody>
+</table>
+<p>These are optional extension activities. Full grid and nested searches can take a long time; wait for the Terminal prompt to return before entering another command. In the Console, wait for the <code>&gt;</code> prompt to return. If <code>Rscript</code> is not recognised, the Terminal cannot find your R installation; ask the instructor for help configuring it.</p>
+</section>
 </section>
 <section id="sources-and-reproducibility" class="level2">
 <h2 class="anchored" data-anchor-id="sources-and-reproducibility">Sources and reproducibility</h2>

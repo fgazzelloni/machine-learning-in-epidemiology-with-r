@@ -1,5 +1,452 @@
 [
   {
+    "objectID": "part2/trees-and-pruning.html",
+    "href": "part2/trees-and-pruning.html",
+    "title": "Part 2 — Trees and pruning",
+    "section": "",
+    "text": "Return to the Part 2 teaching notebook\nThis optional companion explains the figures produced by R/02-trees-and-evaluation.R. The main session reads saved forest results and then builds a neural network. You do not need to run this extension script during that lesson: it also refits the forest and runs resampling, replacing its saved outputs."
+  },
+  {
+    "objectID": "part2/trees-and-pruning.html#figure-1-how-the-default-tree-divides-patients",
+    "href": "part2/trees-and-pruning.html#figure-1-how-the-default-tree-divides-patients",
+    "title": "Part 2 — Trees and pruning",
+    "section": "Figure 1: how the default tree divides patients",
+    "text": "Figure 1: how the default tree divides patients\n\n\n\nFigure 1. Default classification tree fitted to all 270 patients.\n\n\nRead the tree from top to bottom. Each split asks a question about a measurement. Follow the branch that matches the patient’s value until reaching a terminal node, or leaf, which supplies the prediction.\nThe first split uses the thal test result. A normal result follows the left branch; the other results follow the right branch. Later splits use chest-pain type, number of major vessels, exercise-induced angina and age.\nEach node shows the predicted class (absent or present), the proportion with disease among patients reaching that node, and the percentage of all patients reaching it. At the top, 0.44 means about 44% of the 270 patients have disease. The predicted class there is absent, the majority group. Blue leaves predict absence and green leaves predict presence; the displayed proportions indicate that the groups are not necessarily pure.\nCheckpoint: Follow one path from the top to a leaf. Which combination of measurements determines its prediction?\nThe tree uses all 270 patients to illustrate fitted structure. The apparent separation in its leaves is not a held-out estimate of performance on new patients."
+  },
+  {
+    "objectID": "part2/trees-and-pruning.html#figure-2-complexity-and-cross-validation-error",
+    "href": "part2/trees-and-pruning.html#figure-2-complexity-and-cross-validation-error",
+    "title": "Part 2 — Trees and pruning",
+    "section": "Figure 2: complexity and cross-validation error",
+    "text": "Figure 2: complexity and cross-validation error\n\n\n\nFigure 2. Relative cross-validation error as the larger tree becomes more complex.\n\n\nThe bottom axis shows the complexity parameter, cp. Moving right permits smaller values of cp and more splits. The top axis shows the number of terminal leaves. The vertical axis shows relative cross-validation error: lower values indicate smaller estimated error. It is a relative error, not an accuracy percentage. The vertical bars show one standard error on either side of each estimate.\nError falls sharply after the first few splits and then changes relatively little as the tree gains branches. This suggests that a simpler tree may retain much of the useful structure.\nThe dotted line marks one standard error above the lowest estimated error. A common rule chooses the smallest tree whose error falls below that line, accepting similar estimated performance with less complexity. In this workshop, cp = 0.031 retains the article’s setting; we should distinguish that replication choice from selecting a value using this plot.\nCheckpoint: Would adding branches be persuasive if cross-validation error barely changes?"
+  },
+  {
+    "objectID": "part2/trees-and-pruning.html#figure-3-what-pruning-actually-removed",
+    "href": "part2/trees-and-pruning.html#figure-3-what-pruning-actually-removed",
+    "title": "Part 2 — Trees and pruning",
+    "section": "Figure 3: what pruning actually removed",
+    "text": "Figure 3: what pruning actually removed\n\n\n\nFigure 3. Tree obtained by pruning the larger tree at cp = 0.031.\n\n\nWe did prune the tree. Figures 1 and 3 look similar because they retain the same main branches, but they represent different trees:\n\n\n\nTree\nSplits\nLeaves\n\n\n\n\nFigure 1: default\n6\n7\n\n\nLarger tree, before pruning\n15\n16\n\n\nFigure 3: pruned\n5\n6\n\n\n\nThe default tree uses rpart() with its default controls. The larger tree uses rpart.control(minsplit = 2). We then call prune(deep_cart, cp = 0.031) to obtain Figure 3.\nPruning starts from the larger tree with 15 splits and 16 terminal nodes, not from the default tree in Figure 1. The displayed comparison therefore makes the reduction look smaller than it is.\nCompared with Figure 1, the age &gt;= 51 split on the right has disappeared. Those patients now share a single leaf. The main splits on thal, chest pain, vessel count and exercise-induced angina remain.\nPruning limits complexity by removing branches that may fit details of this sample. A simpler tree is easier to follow and may generalise better, but the act of pruning does not establish that it predicts new patients more accurately.\n\n\n\n\n\n\nNoteCheck the tree sizes in R\n\n\n\n\n\nRun this only after creating cart, deep_cart and pruned_cart in the tree section of script 2. It inspects the fitted objects without running the later forest/resampling sections.\nmodels &lt;- list(default = cart, larger = deep_cart, pruned = pruned_cart)\ndata.frame(\n  tree = names(models),\n  splits = vapply(models, function(m) sum(m$frame$var != \"&lt;leaf&gt;\"), integer(1)),\n  leaves = vapply(models, function(m) sum(m$frame$var == \"&lt;leaf&gt;\"), integer(1))\n)"
+  },
+  {
+    "objectID": "part2/trees-and-pruning.html#from-tree-plots-to-mlr3-evaluation",
+    "href": "part2/trees-and-pruning.html#from-tree-plots-to-mlr3-evaluation",
+    "title": "Part 2 — Trees and pruning",
+    "section": "From tree plots to mlr3 evaluation",
+    "text": "From tree plots to mlr3 evaluation\nThe plots ask how a fitted model makes decisions. The next question is how well a model predicts patients it did not learn from.\nIn script 2, mlr3 defines a classification task with heart_disease as the outcome and present as the positive class. A learner specifies the method: classif.ranger is a random forest that combines many trees. It does not reuse the single plotted tree.\nThe saved split assigns 180 patients to training and 90 to testing. Fitting the forest on the training rows and predicting the test rows gives a held-out assessment. The saved forest correctly classified 75 of 90 test patients, missed 7 disease cases and raised 8 false alarms. These are forest results, not test scores for the default or pruned single trees.\nThe main notebook then introduces Keras as another learning method and evaluates its predictions on the same 90 test patients. Pruning and the network’s early stopping are different ways to control complexity. Resampling is a further step for examining how stable results are across samples.\nContinue with the saved forest results"
+  },
+  {
+    "objectID": "part2/trees-and-pruning.html#sources-and-scope",
+    "href": "part2/trees-and-pruning.html#sources-and-scope",
+    "title": "Part 2 — Trees and pruning",
+    "section": "Sources and scope",
+    "text": "Sources and scope\nThe tree expressions are in R/02-trees-and-evaluation.R; the three saved images are under figures/. The counts above were checked against trees fitted with those expressions using the prepared heart data. No forest, Keras model or tuning search was rerun for this explanation, and saved workshop outputs were preserved.\nModel settings follow the workshop’s replication record. For the R functions, see ?rpart::rpart, ?rpart::plotcp and ?rpart::prune. The validation record distinguishes saved local runs from unfinished full-budget extensions."
+  },
+  {
+    "objectID": "part1/index.html",
+    "href": "part1/index.html",
+    "title": "How a Model Learns in Epidemiology",
+    "section": "",
+    "text": "Perspectives:\n\na conceptual explanation of how machine learning models learn;\na realistic epidemiology workflow for predicting West Nile virus (WNV) activity.\n\nThe goal is to understand both the mathematical idea of learning and the practical pipeline used in applied work.",
+    "crumbs": [
+      "Home",
+      "Part 1",
+      "Teaching notebook"
+    ]
+  },
+  {
+    "objectID": "part1/index.html#workshop-notebook",
+    "href": "part1/index.html#workshop-notebook",
+    "title": "How a Model Learns in Epidemiology",
+    "section": "",
+    "text": "Perspectives:\n\na conceptual explanation of how machine learning models learn;\na realistic epidemiology workflow for predicting West Nile virus (WNV) activity.\n\nThe goal is to understand both the mathematical idea of learning and the practical pipeline used in applied work.",
+    "crumbs": [
+      "Home",
+      "Part 1",
+      "Teaching notebook"
+    ]
+  },
+  {
+    "objectID": "part1/index.html#slide-presentation",
+    "href": "part1/index.html#slide-presentation",
+    "title": "How a Model Learns in Epidemiology",
+    "section": "Slide presentation",
+    "text": "Slide presentation\nOpen the Part 1 presentation Download the PDF\nThe slide deck introduces the broader multi-model workflow. The model-performance and variable-importance values shown in the deck are illustrative. The executable notebook below contains the observed results.\nBy the end, we should be able to answer four questions:\n\nWhat is the model?\nWhat is the loss?\nWhat is the optimisation procedure?\nWhat is learned?\n\nThe central message is:\n\nLearning means using data to determine a model’s parameters or structure. Optimisation is the procedure used to find useful values or structures according to an objective.",
+    "crumbs": [
+      "Home",
+      "Part 1",
+      "Teaching notebook"
+    ]
+  },
+  {
+    "objectID": "part2/references/replication-notes.html",
+    "href": "part2/references/replication-notes.html",
+    "title": "Part 2 — Source and replication record",
+    "section": "",
+    "text": "Wright et al. (2026), Machine Learning in Epidemiology, arXiv v1.\nOpenML dataset 53, version 1; saved metadata and raw data are in data/raw/.\nThe scripts retain the article’s published examples and model settings. The main lesson uses a student-facing order: read saved random forest results, then fit a neural network with Keras and evaluate its predictions with mlr3. Tree fitting, resampling, tuning and synthetic data remain separate extensions. Rendering the notebook reads saved results without refitting either model.",
+    "crumbs": [
+      "Home",
+      "Part 2",
+      "Replication record"
+    ]
+  },
+  {
+    "objectID": "part2/references/replication-notes.html#workshop-implementation",
+    "href": "part2/references/replication-notes.html#workshop-implementation",
+    "title": "Part 2 — Source and replication record",
+    "section": "Workshop implementation",
+    "text": "Workshop implementation\nThe scripts define data preparation, train/test objects and tuning code, use heart_task consistently and set explicit seeds. Keras uses keras3 instead of the article’s older keras interface, retaining the architecture and training settings. The network now reads outputs/split.csv to reuse the forest’s saved training/test patients explicitly. Keras predictions are wrapped in an mlr3 PredictionClassif object to evaluate both models using the same measures. Data encoding/scaling choices are recorded in the data guide. Random-forest threading is fixed to one for reproducibility. The initial forest uses the learner default; the resampling examples use 100 trees, as printed. Tuning is restricted to the training task; nested CV uses an outer and inner 10-fold design. The article’s full grid has up to 10,000 configurations and is not run during a normal notebook render.\nThe article reports a 100% neural-network test accuracy. That is a reported result for its run, not an expected or guaranteed workshop result. Our outputs are saved separately. Results depend on the random seed, data split, preprocessing and software versions.",
+    "crumbs": [
+      "Home",
+      "Part 2",
+      "Replication record"
+    ]
+  },
+  {
+    "objectID": "part2/references/replication-notes.html#validation",
+    "href": "part2/references/replication-notes.html#validation",
+    "title": "Part 2 — Source and replication record",
+    "section": "Validation",
+    "text": "Validation\nSee the validation record for completed runs, observed scores, environment warnings and the two full-budget runs still outstanding.",
+    "crumbs": [
+      "Home",
+      "Part 2",
+      "Replication record"
+    ]
+  },
+  {
+    "objectID": "part2/guide.html",
+    "href": "part2/guide.html",
+    "title": "Part 2 — Session guide",
+    "section": "",
+    "text": "We use clinical measurements from 270 patients to distinguish heart disease from its absence. During the session, we will read the saved random forest results, fit a neural network with Keras, and evaluate its predictions with mlr3. We will not fit another random forest.",
+    "crumbs": [
+      "Home",
+      "Part 2",
+      "Session guide"
+    ]
+  },
+  {
+    "objectID": "part2/guide.html#before-the-session",
+    "href": "part2/guide.html#before-the-session",
+    "title": "Part 2 — Session guide",
+    "section": "Before the session",
+    "text": "Before the session\n\nOpen machine-learning-in-epidemiology-with-r.Rproj in RStudio.\nIn a fresh project session, run setwd(\"part2\") in the Console.\nInstall the workshop packages once:\nsource(\"install-packages.R\")\ninstall.packages(\"keras3\")\nIn a fresh R session, configure Keras with keras3::install_keras(). This sets up the Python software Keras uses for training. If you already have a compatible environment, use that instead. Follow the Keras for R setup guide.\nRun source(\"check-setup.R\") to check the core packages and data. This check does not test the Keras backend. Before the session, also check that library(keras3) and keras3::keras_model_sequential(input_shape = c(22)) work in your selected environment.\n\nInstallation is preparation for the session; it does not need to interrupt the lesson.",
+    "crumbs": [
+      "Home",
+      "Part 2",
+      "Session guide"
+    ]
+  },
+  {
+    "objectID": "part2/guide.html#during-the-session",
+    "href": "part2/guide.html#during-the-session",
+    "title": "Part 2 — Session guide",
+    "section": "During the session",
+    "text": "During the session\nOpen the teaching notebook and follow sections 1–7:\n\nMeet the heart data.\nExplain the saved random forest predictions and mistakes.\nUse mlr3 to define the task and reuse the saved training/test groups.\nPrepare numerical inputs for the network.\nBuild the network with Keras.\nFit it and examine training and validation loss.\nEvaluate its predictions with mlr3 and compare with the forest.\n\nRun the code blocks in order in RStudio. Network fitting is a live activity; rendering the webpage uses saved results and does not train either model. The saved comparison remains a reference when your own results differ.\nThe complete neural-network script contains the same steps, followed by code to save a new run’s results. Running that complete script replaces the saved neural-network CSV files and loss figure. Use the notebook blocks during the lesson if you want to keep the recorded results.",
+    "crumbs": [
+      "Home",
+      "Part 2",
+      "Session guide"
+    ]
+  },
+  {
+    "objectID": "part2/guide.html#after-the-session",
+    "href": "part2/guide.html#after-the-session",
+    "title": "Part 2 — Session guide",
+    "section": "After the session",
+    "text": "After the session\nChoose a question to explore further:\n\n\n\nQuestion\nScript\n\n\n\n\nHow do trees and pruning work? How stable are the scores across samples?\nTrees, evaluation and resampling\n\n\nCan we improve predictions by changing model settings?\nTuning\n\n\nCan generated records resemble the original patients?\nSynthetic data\n\n\n\nTo run the tuning script in RStudio, use the Console from the part2 folder: source(\"R/04-tuning.R\"). Choose a method from the prompt. Full grid and nested searches can take a long time.\nThe tree/evaluation script refits the forest and runs resampling; it is separate from the main lesson. Full tuning can take much longer than the workshop. Install extra packages only when you choose an extension:\nRscript install-optional-packages.R tuning\nRscript install-optional-packages.R synthetic\n\nHow to run the tuning script\nThe tuning script needs a mode: the search method you want to use.\nIn RStudio (Console or Source)\nOpen the workshop .Rproj file. From the repository’s main folder, run this in the Console:\nsetwd(\"part2\")\nsource(\"R/04-tuning.R\")\nIf your working directory is already part2, skip setwd(\"part2\"). Use getwd() to check. The script will prompt you to choose grid_search, random_search, mbo, or nested. Select one method to start the search. Alternatively, open R/04-tuning.R in the editor and click Source to run the whole script and display the same selection prompt. The optional tuning packages must already be installed.\nIn the Terminal\nYou can also supply the mode directly in RStudio’s Terminal tab: The Console’s setwd(\"part2\") command does not change the Terminal’s folder.\n\nOpen the workshop .Rproj file in RStudio, then open Terminal. If the tab is not visible, choose Tools → Terminal → New Terminal.\nFrom the repository’s main folder, enter:\ncd part2\nIf your Terminal is already in part2, skip this command. You can check the current folder with pwd on macOS/Linux or Get-Location in Windows PowerShell; the path should end in part2.\nInstall the extra tuning packages once, if you have not already done so:\nRscript install-optional-packages.R tuning\nChoose one of the following commands, paste it into the Terminal, and press Enter:\nRscript R/04-tuning.R grid_search\nRscript R/04-tuning.R random_search\nRscript R/04-tuning.R mbo\nRscript R/04-tuning.R nested\n\nRscript runs an R script from the Terminal. R/04-tuning.R is the script’s path relative to part2, and the final word selects the mode:\n\n\n\n\n\n\n\nMode\nWhat it does\n\n\n\n\ngrid_search\nTries a fixed grid of model settings.\n\n\nrandom_search\nTries randomly sampled model settings.\n\n\nmbo\nUses model-based optimisation: earlier trials guide the next settings to try.\n\n\nnested\nTunes settings inside an inner cross-validation loop and evaluates the procedure in an outer loop.\n\n\n\nThese are optional extension activities. Full grid and nested searches can take a long time; wait for the Terminal prompt to return before entering another command. In the Console, wait for the &gt; prompt to return. If Rscript is not recognised, the Terminal cannot find your R installation; ask the instructor for help configuring it.",
+    "crumbs": [
+      "Home",
+      "Part 2",
+      "Session guide"
+    ]
+  },
+  {
+    "objectID": "part2/guide.html#sources-and-reproducibility",
+    "href": "part2/guide.html#sources-and-reproducibility",
+    "title": "Part 2 — Session guide",
+    "section": "Sources and reproducibility",
+    "text": "Sources and reproducibility\nThe examples draw on Wright et al. (2026). The data guide, replication record and validation results contain the source details, exact settings and recorded checks. Saved scores describe individual runs, rather than guaranteed performance.\nTo build the website, run quarto render from the repository root. The current output folder is _site/.\nSeries guide · Part 1",
+    "crumbs": [
+      "Home",
+      "Part 2",
+      "Session guide"
+    ]
+  },
+  {
+    "objectID": "part1/data/guide.html",
+    "href": "part1/data/guide.html",
+    "title": "Part 1 — Data guide",
+    "section": "",
+    "text": "raw/cdc_nndss_wnv_weekly_2022_2026.csv is a filtered snapshot of the CDC NNDSS Weekly Data table (x9gk-5huc), downloaded on 27 September 2026.\nFilter:\nlabel = \"Arboviral diseases, West Nile virus disease\"\nThe snapshot contains 17,220 data rows covering 2022 through MMWR week 37 of 2026. It includes states, territories, census regions and totals. advanced/R/01-data.R retains the 50 states, District of Columbia and New York City, then combines New York State and New York City.\nThe CDC metadata does not provide a licence identifier. The dataset is publicly readable and attributed to the CDC Office of Public Health Data, Surveillance, and Technology. Preserve that attribution and review CDC reuse policies before redistributing the raw file outside this teaching repository.",
+    "crumbs": [
+      "Home",
+      "Part 1",
+      "Data and sources"
+    ]
+  },
+  {
+    "objectID": "part1/data/guide.html#frozen-raw-snapshot",
+    "href": "part1/data/guide.html#frozen-raw-snapshot",
+    "title": "Part 1 — Data guide",
+    "section": "",
+    "text": "raw/cdc_nndss_wnv_weekly_2022_2026.csv is a filtered snapshot of the CDC NNDSS Weekly Data table (x9gk-5huc), downloaded on 27 September 2026.\nFilter:\nlabel = \"Arboviral diseases, West Nile virus disease\"\nThe snapshot contains 17,220 data rows covering 2022 through MMWR week 37 of 2026. It includes states, territories, census regions and totals. advanced/R/01-data.R retains the 50 states, District of Columbia and New York City, then combines New York State and New York City.\nThe CDC metadata does not provide a licence identifier. The dataset is publicly readable and attributed to the CDC Office of Public Health Data, Surveillance, and Technology. Preserve that attribution and review CDC reuse policies before redistributing the raw file outside this teaching repository.",
+    "crumbs": [
+      "Home",
+      "Part 1",
+      "Data and sources"
+    ]
+  },
+  {
+    "objectID": "part1/data/guide.html#flag-handling",
+    "href": "part1/data/guide.html#flag-handling",
+    "title": "Part 1 — Data guide",
+    "section": "Flag handling",
+    "text": "Flag handling\n\nNumeric m1: reported current-week cases.\nm1_flag = \"-\": no reported cases, converted to zero.\nm1_flag = \"U\": unavailable, retained as missing.\nOther non-numeric flags are also retained as missing.\n\nDo not convert unavailable reporting to zero.",
+    "crumbs": [
+      "Home",
+      "Part 1",
+      "Data and sources"
+    ]
+  },
+  {
+    "objectID": "part1/data/guide.html#processed-data",
+    "href": "part1/data/guide.html#processed-data",
+    "title": "Part 1 — Data guide",
+    "section": "Processed data",
+    "text": "Processed data\nprocessed/wnv_state_week.csv is the prepared teaching dataset read directly by R/workshop.R. Do not edit it by hand during the live workshop.\nThe optional advanced data-preparation code is preserved in advanced/R/01-data.R.\nSource: https://data.cdc.gov/NNDSS/NNDSS-Weekly-Data/x9gk-5huc",
+    "crumbs": [
+      "Home",
+      "Part 1",
+      "Data and sources"
+    ]
+  },
+  {
+    "objectID": "guide.html",
+    "href": "guide.html",
+    "title": "Series guide",
+    "section": "",
+    "text": "A two-part R-Ladies Rome workshop series led by Federica Gazzelloni."
+  },
+  {
+    "objectID": "guide.html#start-here",
+    "href": "guide.html#start-here",
+    "title": "Series guide",
+    "section": "Start here",
+    "text": "Start here\n\nPart 1 README\nPart 2 README\nRStudio project for both parts"
+  },
+  {
+    "objectID": "guide.html#repository-structure",
+    "href": "guide.html#repository-structure",
+    "title": "Series guide",
+    "section": "Repository structure",
+    "text": "Repository structure\n.\n├── machine-learning-in-epidemiology-with-r.Rproj\n├── index.qmd                     # workshop home\n├── about.qmd                    # instructor profile\n├── resources.qmd                 # source article and book\n├── part1/                       # Part 1 workshop\n│   ├── README.md\n│   ├── ml-workflow.qmd\n│   ├── R/\n│   ├── data/\n│   ├── presentation/\n│   ├── outputs/\n│   └── references/\n├── part2/                       # October workshop\n│   ├── README.md\n│   ├── ml-workflow-2.qmd\n│   ├── R/\n│   ├── data/\n│   ├── outputs/\n│   └── references/\n└── _site/                       # rendered Quarto output"
+  },
+  {
+    "objectID": "guide.html#notes",
+    "href": "guide.html#notes",
+    "title": "Series guide",
+    "section": "Notes",
+    "text": "Notes\n\nOpen machine-learning-in-epidemiology-with-r.Rproj in RStudio. This single project contains both parts.\nFrom a fresh project session, run setwd(\"part1\") or setwd(\"part2\") before running that part’s scripts; their paths are relative to the session folder.\nThe original Part 1 workshop repository and its published website remain separate.\nPart 1 preserves the Part 1 teaching materials; Part 2 retains the article workflow and validation notes for locally observed results."
+  },
+  {
+    "objectID": "guide.html#build-the-website",
+    "href": "guide.html#build-the-website",
+    "title": "Series guide",
+    "section": "Build the website",
+    "text": "Build the website\nRun quarto render from the repository root. The complete website is written to _site/, the folder used by the deployment workflow. Older docs/ and do/ outputs are not the current preview."
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "Federica Gazzelloni is an actuary, statistician, data scientist, author and instructor working across health metrics, actuarial modelling, R and Python, data visualisation and reproducible research. She leads R-Ladies Rome and the Rome R Users Group.\nThis workshop connects machine-learning concepts with practical epidemiological examples. We focus on clear modelling questions, reproducible code and careful interpretation.\n\nWorkshop home\nPart 1 materials\nPart 2 materials\nResources and references",
+    "crumbs": [
+      "Home",
+      "About"
+    ]
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Machine Learning in Epidemiology with R",
+    "section": "",
+    "text": "Learn machine learning through epidemiological examples, from model fundamentals to an article-based prediction workflow.\n\n\nPart 1 — 28 September 2026\nHow models learn, gradient descent, and West Nile virus prediction.\nExplore Part 1 · Open the notebook\n\n\nPart 2 — 23 October 2026\nRead heart-data random forest results, then fit and evaluate a neural network with Keras and mlr3.\nExplore Part 2 · Open the notebook\n\n\nBrowse the workshop resources, or start with a session above.",
+    "crumbs": [
+      "Home"
+    ]
+  },
+  {
+    "objectID": "resources.html",
+    "href": "resources.html",
+    "title": "Resources",
+    "section": "",
+    "text": "Authors: Wright et al. (2026)\nThis article provides the methodological foundation and heart-disease workflow used in Part 2, including the modelling choices and evaluation strategy behind the applied examples in this workshop.\nRead the article\n\n\n\nAuthor: Federica Gazzelloni\nThis book connects health metrics, infectious-disease research, machine learning and spatial modelling with R, offering a broader context for the methods used in the workshop.\nExplore the book",
+    "crumbs": [
+      "Home",
+      "Resources"
+    ]
+  },
+  {
+    "objectID": "resources.html#references",
+    "href": "resources.html#references",
+    "title": "Resources",
+    "section": "",
+    "text": "Authors: Wright et al. (2026)\nThis article provides the methodological foundation and heart-disease workflow used in Part 2, including the modelling choices and evaluation strategy behind the applied examples in this workshop.\nRead the article\n\n\n\nAuthor: Federica Gazzelloni\nThis book connects health metrics, infectious-disease research, machine learning and spatial modelling with R, offering a broader context for the methods used in the workshop.\nExplore the book",
+    "crumbs": [
+      "Home",
+      "Resources"
+    ]
+  },
+  {
+    "objectID": "resources.html#workshop-files",
+    "href": "resources.html#workshop-files",
+    "title": "Resources",
+    "section": "Workshop files",
+    "text": "Workshop files\n\nGitHub repository\nPart 1 session guide · Part 1 presentation · PDF\nPart 2 session guide · Part 2 presentation · PDF · Heart-disease data guide\nDownload the prepared heart-disease data · Original OpenML dataset\nReplication record · Validation record\n\nBack to the workshop home",
+    "crumbs": [
+      "Home",
+      "Resources"
+    ]
+  },
+  {
+    "objectID": "part1/guide.html",
+    "href": "part1/guide.html",
+    "title": "Part 1 — Session guide",
+    "section": "",
+    "text": "This session covers how a model learns, followed by a West Nile virus prediction workflow.",
+    "crumbs": [
+      "Home",
+      "Part 1",
+      "Session guide"
+    ]
+  },
+  {
+    "objectID": "part1/guide.html#follow-the-session",
+    "href": "part1/guide.html#follow-the-session",
+    "title": "Part 1 — Session guide",
+    "section": "Follow the session",
+    "text": "Follow the session\n\nOpen machine-learning-in-epidemiology-with-r.Rproj from the repository root in RStudio, then run setwd(\"part1\") in the Console. Open the project afresh before switching parts so the Console starts at the repository root.\nRun source(\"install-packages.R\"), then source(\"check-setup.R\").\nStart with the teaching notebook.\nWork through the student practice script.\nTry the exercise and compare it with the solution.\n\nSlide viewer · PDF · Rendered notebook\nThe gradient descent app is an optional interactive demonstration. See the data guide and sources for the evidence behind the teaching example.\nThe student practice requires rpart and rpart.plot. To run every section of the instructor notebook, also install ggplot2, dplyr, data.table, maps, pROC, mlr3, mlr3learners and ranger.\nRender the complete website with quarto render from the repository root. The current website output is _site/. The copied rendered files are the original workshop snapshot; copying them does not rerun the models.\nSeries guide · Part 2",
+    "crumbs": [
+      "Home",
+      "Part 1",
+      "Session guide"
+    ]
+  },
+  {
+    "objectID": "part1/references/sources.html",
+    "href": "part1/references/sources.html",
+    "title": "Part 1 — Sources and further reading",
+    "section": "",
+    "text": "Accessed 27 September 2026 unless otherwise noted."
+  },
+  {
+    "objectID": "part1/references/sources.html#data",
+    "href": "part1/references/sources.html#data",
+    "title": "Part 1 — Sources and further reading",
+    "section": "Data",
+    "text": "Data\n\nCenters for Disease Control and Prevention. NNDSS Weekly Data. Dataset identifier x9gk-5huc.\nCenters for Disease Control and Prevention. Notifiable Infectious Disease Data Tables. Explains that weekly data are provisional and annual data are finalized.\nCenters for Disease Control and Prevention. Notice to Data Users and Publication Criteria.\nCenters for Disease Control and Prevention. Historic West Nile Virus Data. Describes ArboNET and limitations of surveillance data."
+  },
+  {
+    "objectID": "part1/references/sources.html#methods",
+    "href": "part1/references/sources.html#methods",
+    "title": "Part 1 — Sources and further reading",
+    "section": "Methods",
+    "text": "Methods\n\nWright MN, Burk L, Golchian P, Kapar J, Koenen N, Langbein SH. Machine Learning in Epidemiology. 2026.\nmlr3 documentation.\nmlr3 custom resampling.\nApplied Machine Learning Using mlr3 in R.\nGazzelloni F. Health Metrics and the Spread of Infectious Diseases: Machine Learning Applications and Spatial Modelling Analysis with R. CRC Press; 2025."
+  },
+  {
+    "objectID": "part1/references/sources.html#dataset-alternatives",
+    "href": "part1/references/sources.html#dataset-alternatives",
+    "title": "Part 1 — Sources and further reading",
+    "section": "Dataset alternatives",
+    "text": "Dataset alternatives\n\nHeart Disease, UCI Machine Learning Repository.\nEbola outbreak data collection tools, WHO."
+  },
+  {
+    "objectID": "part2/data/guide.html",
+    "href": "part2/data/guide.html",
+    "title": "Part 2 — Heart-disease data",
+    "section": "",
+    "text": "Source: OpenML heart-statlog, ID 53, version 1. Downloaded 12 October 2026 from the URL in the saved OpenML metadata. The metadata lists the licence as Public. The original data are attributed to Janosi, Steinbrunn, Pfisterer and Detrano (1988), as cited by the article.\nThe snapshot has 270 patients, 13 predictors and a binary target: 150 absent, 120 present. It is the OpenML Statlog heart dataset matching the article’s sample size, predictor definitions and outcome.\nraw/heart-statlog.arff is unchanged. SHA-256: e16082cc6158f29be2e7b081953cd6edf342760d135bccdb64e191d0834d6300. raw/openml-53-metadata.json preserves the source metadata. processed/heart.csv is regenerated by R/01-data.R.\nARFF (Attribute–Relation File Format) is a text format with a section describing column names and types, followed by the data, with one patient per row. The raw file is the original download before workshop preparation. The preparation script reads it, assigns readable column names and categories, and saves the prepared data as processed/heart.csv.",
+    "crumbs": [
+      "Home",
+      "Part 2",
+      "Data guide"
+    ]
+  },
+  {
+    "objectID": "part2/data/guide.html#preprocessing",
+    "href": "part2/data/guide.html#preprocessing",
+    "title": "Part 2 — Heart-disease data",
+    "section": "Preprocessing",
+    "text": "Preprocessing\nThe ARFF target already uses absent/present. The preparation script renames predictors to the article’s appendix names and applies its category definitions. No rows are removed and no imputation is needed. The seven categorical fields are sex, chest_pain, fasting_blood_sugar, resting_ecg, exercise_induced_angina, ST_slope and thal. The other six are explicitly numeric, including the vessel count, as in the appendix.\nFor the neural network, the three binary predictors use 0/1 and the four other categorical predictors use full indicator encoding, giving 22 columns. Full indicator encoding of all seven categorical predictors would give 25 columns. The article states 22 inputs but does not publish the encoding implementation. Our 22-column construction is therefore an explicit reconstruction. Numeric scaling is fitted on the inner training portion, excluding validation and test rows; scaling details are not specified in the published example. For XGBoost, fixed categorical contrasts produce a numeric design matrix.\nThe outcome describes heart disease in this teaching sample. It is not a population cardiovascular risk score or a future-event endpoint.",
+    "crumbs": [
+      "Home",
+      "Part 2",
+      "Data guide"
+    ]
+  },
+  {
+    "objectID": "part2/outputs/validation.html",
+    "href": "part2/outputs/validation.html",
+    "title": "Part 2 — Validation record",
+    "section": "",
+    "text": "The original data file uses ARFF (Attribute–Relation File Format), a text format that describes column names and types, followed by one patient per row. “Raw” means the downloaded file before workshop preparation. Its checksum (a fingerprint of the file contents) matches the saved OpenML metadata, confirming that the file has not changed.\n270 complete rows; 13 predictors; target counts 150 absent and 120 present.\nTrain/test split: 180/90 disjoint rows covering all patients.\nDefault/deep/pruned trees, confusion matrix, five classification measures and three evaluation plots.\nThree-fold CV, 100 subsampling repetitions and 40 bootstrap repetitions at the article’s settings.\nNeural network with 22 inputs and the article’s architecture/training settings: early stopping after 27 epochs; test accuracy 0.8556. TensorFlow 2.21.0, Python Keras 3.12.4, R keras3 1.5.1.\nBayesian tuning: all 30 configurations, ten-fold inner CV; held-out accuracy 0.7889.\nRandom search: all 500 configurations, ten-fold inner CV; held-out accuracy 0.8111.\nGrid and nested-CV execution paths: reduced smoke runs (grid resolution 2, two folds; nested two evaluations and two inner/outer folds).\nARF/FORDE/FORGE: 270 synthetic observations, saved separately from real data.\nR scripts parse, notebook executes and renders with its results and figures.\n\nThese are locally observed results, not replacements for the article’s reported results. The original notebook reran the core workflow; saved network and tuning outputs came from separate runs. The teaching route was revised on 23 October 2026: the current notebook reads saved forest and network results when rendered. Students fit the network interactively; the tree, forest and resampling script remains a separate extension. Package versions for the completed full runs are in the accompanying session-info files.",
+    "crumbs": [
+      "Home",
+      "Part 2",
+      "Validation"
+    ]
+  },
+  {
+    "objectID": "part2/outputs/validation.html#completed",
+    "href": "part2/outputs/validation.html#completed",
+    "title": "Part 2 — Validation record",
+    "section": "",
+    "text": "The original data file uses ARFF (Attribute–Relation File Format), a text format that describes column names and types, followed by one patient per row. “Raw” means the downloaded file before workshop preparation. Its checksum (a fingerprint of the file contents) matches the saved OpenML metadata, confirming that the file has not changed.\n270 complete rows; 13 predictors; target counts 150 absent and 120 present.\nTrain/test split: 180/90 disjoint rows covering all patients.\nDefault/deep/pruned trees, confusion matrix, five classification measures and three evaluation plots.\nThree-fold CV, 100 subsampling repetitions and 40 bootstrap repetitions at the article’s settings.\nNeural network with 22 inputs and the article’s architecture/training settings: early stopping after 27 epochs; test accuracy 0.8556. TensorFlow 2.21.0, Python Keras 3.12.4, R keras3 1.5.1.\nBayesian tuning: all 30 configurations, ten-fold inner CV; held-out accuracy 0.7889.\nRandom search: all 500 configurations, ten-fold inner CV; held-out accuracy 0.8111.\nGrid and nested-CV execution paths: reduced smoke runs (grid resolution 2, two folds; nested two evaluations and two inner/outer folds).\nARF/FORDE/FORGE: 270 synthetic observations, saved separately from real data.\nR scripts parse, notebook executes and renders with its results and figures.\n\nThese are locally observed results, not replacements for the article’s reported results. The original notebook reran the core workflow; saved network and tuning outputs came from separate runs. The teaching route was revised on 23 October 2026: the current notebook reads saved forest and network results when rendered. Students fit the network interactively; the tree, forest and resampling script remains a separate extension. Package versions for the completed full runs are in the accompanying session-info files.",
+    "crumbs": [
+      "Home",
+      "Part 2",
+      "Validation"
+    ]
+  },
+  {
+    "objectID": "part2/outputs/validation.html#not-executed-at-full-budget",
+    "href": "part2/outputs/validation.html#not-executed-at-full-budget",
+    "title": "Part 2 — Validation record",
+    "section": "Not executed at full budget",
+    "text": "Not executed at full budget\nThe resolution-10 grid (up to 10,000 configurations) and the 10 x 10 nested-CV workflow with 100 evaluations per inner search remain available in the script. Only their smaller smoke runs were executed. They are not reported as complete replications.",
+    "crumbs": [
+      "Home",
+      "Part 2",
+      "Validation"
+    ]
+  },
+  {
+    "objectID": "part2/outputs/validation.html#environment-notes",
+    "href": "part2/outputs/validation.html#environment-notes",
+    "title": "Part 2 — Validation record",
+    "section": "Environment notes",
+    "text": "Environment notes\nThe installed mlr3learners/XGBoost combination completed the runs but emitted XGBoost deprecation warnings about legacy parameter passing. MBO invoked its built-in random-forest surrogate fallback during this run. ARF ran sequentially without a registered parallel backend.",
+    "crumbs": [
+      "Home",
+      "Part 2",
+      "Validation"
+    ]
+  },
+  {
+    "objectID": "part2/outputs/validation.html#teaching-route-checks-23-october-2026",
+    "href": "part2/outputs/validation.html#teaching-route-checks-23-october-2026",
+    "title": "Part 2 — Validation record",
+    "section": "Teaching-route checks — 23 October 2026",
+    "text": "Teaching-route checks — 23 October 2026\n\nThe revised notebook and supporting pages render successfully using saved results; no forest or network is trained during rendering.\nThe live notebook blocks match the corresponding sections of R/03-neural-network.R.\nThe saved split contains 180 training patients and 90 test patients, with no overlap. Both models use these same test patients.\nNeural-network preparation produces 22 numerical inputs. Scaling uses only the 144 fitting patients, keeping the 36 validation patients and 90 test patients separate.\nSaved Keras predictions can be evaluated with mlr3::PredictionClassif: accuracy 85.6%, sensitivity 78.4%, specificity 90.6%. Forest accuracy is 83.3%, sensitivity 81.1%, specificity 84.9%.\nThe revised live training path has not been retrained during this review. The current command-line R session did not locate a configured Keras Python backend. Confirm Keras setup before the live session; the historical training results above remain saved-run results.",
+    "crumbs": [
+      "Home",
+      "Part 2",
+      "Validation"
+    ]
+  },
+  {
     "objectID": "part2/workshop-part-2-trees-to-neural-networks.html",
     "href": "part2/workshop-part-2-trees-to-neural-networks.html",
     "title": "Machine Learning in Epidemiology with R — Part 2",
@@ -120,6 +567,18 @@
     ]
   },
   {
+    "objectID": "part2/workshop-part-2-trees-to-neural-networks.html#what-have-we-learned-about-machine-learning",
+    "href": "part2/workshop-part-2-trees-to-neural-networks.html#what-have-we-learned-about-machine-learning",
+    "title": "Machine Learning in Epidemiology with R — Part 2",
+    "section": "What have we learned about machine learning?",
+    "text": "What have we learned about machine learning?\nMachine learning uses examples to learn a rule for making predictions. We choose the outcome, available inputs, model structure and learning procedure; the algorithm uses fitting data to determine its internal rules or values. A tree learns splits, a forest combines many trees, and a neural network learns connection weights.\nThe full workflow is to prepare inputs, fit the model, monitor validation and assess predictions on patients outside fitting. A lower training error alone is insufficient. We consider accuracy alongside the kinds of mistake, and keep our conclusions within the limits of one small dataset and one test split.\nThe main session can end here. Resampling would next ask how stable the results are when the patients used for fitting and evaluation change.",
+    "crumbs": [
+      "Home",
+      "Part 2",
+      "Teaching notebook"
+    ]
+  },
+  {
     "objectID": "part2/workshop-part-2-trees-to-neural-networks.html#where-to-go-next",
     "href": "part2/workshop-part-2-trees-to-neural-networks.html#where-to-go-next",
     "title": "Machine Learning in Epidemiology with R — Part 2",
@@ -142,464 +601,5 @@
       "Part 2",
       "Teaching notebook"
     ]
-  },
-  {
-    "objectID": "part2/outputs/validation.html",
-    "href": "part2/outputs/validation.html",
-    "title": "Part 2 — Validation record",
-    "section": "",
-    "text": "The original data file uses ARFF (Attribute–Relation File Format), a text format that describes column names and types, followed by one patient per row. “Raw” means the downloaded file before workshop preparation. Its checksum (a fingerprint of the file contents) matches the saved OpenML metadata, confirming that the file has not changed.\n270 complete rows; 13 predictors; target counts 150 absent and 120 present.\nTrain/test split: 180/90 disjoint rows covering all patients.\nDefault/deep/pruned trees, confusion matrix, five classification measures and three evaluation plots.\nThree-fold CV, 100 subsampling repetitions and 40 bootstrap repetitions at the article’s settings.\nNeural network with 22 inputs and the article’s architecture/training settings: early stopping after 27 epochs; test accuracy 0.8556. TensorFlow 2.21.0, Python Keras 3.12.4, R keras3 1.5.1.\nBayesian tuning: all 30 configurations, ten-fold inner CV; held-out accuracy 0.7889.\nRandom search: all 500 configurations, ten-fold inner CV; held-out accuracy 0.8111.\nGrid and nested-CV execution paths: reduced smoke runs (grid resolution 2, two folds; nested two evaluations and two inner/outer folds).\nARF/FORDE/FORGE: 270 synthetic observations, saved separately from real data.\nR scripts parse, notebook executes and renders with its results and figures.\n\nThese are locally observed results, not replacements for the article’s reported results. The original notebook reran the core workflow; saved network and tuning outputs came from separate runs. The teaching route was revised on 23 October 2026: the current notebook reads saved forest and network results when rendered. Students fit the network interactively; the tree, forest and resampling script remains a separate extension. Package versions for the completed full runs are in the accompanying session-info files.",
-    "crumbs": [
-      "Home",
-      "Part 2",
-      "Validation"
-    ]
-  },
-  {
-    "objectID": "part2/outputs/validation.html#completed",
-    "href": "part2/outputs/validation.html#completed",
-    "title": "Part 2 — Validation record",
-    "section": "",
-    "text": "The original data file uses ARFF (Attribute–Relation File Format), a text format that describes column names and types, followed by one patient per row. “Raw” means the downloaded file before workshop preparation. Its checksum (a fingerprint of the file contents) matches the saved OpenML metadata, confirming that the file has not changed.\n270 complete rows; 13 predictors; target counts 150 absent and 120 present.\nTrain/test split: 180/90 disjoint rows covering all patients.\nDefault/deep/pruned trees, confusion matrix, five classification measures and three evaluation plots.\nThree-fold CV, 100 subsampling repetitions and 40 bootstrap repetitions at the article’s settings.\nNeural network with 22 inputs and the article’s architecture/training settings: early stopping after 27 epochs; test accuracy 0.8556. TensorFlow 2.21.0, Python Keras 3.12.4, R keras3 1.5.1.\nBayesian tuning: all 30 configurations, ten-fold inner CV; held-out accuracy 0.7889.\nRandom search: all 500 configurations, ten-fold inner CV; held-out accuracy 0.8111.\nGrid and nested-CV execution paths: reduced smoke runs (grid resolution 2, two folds; nested two evaluations and two inner/outer folds).\nARF/FORDE/FORGE: 270 synthetic observations, saved separately from real data.\nR scripts parse, notebook executes and renders with its results and figures.\n\nThese are locally observed results, not replacements for the article’s reported results. The original notebook reran the core workflow; saved network and tuning outputs came from separate runs. The teaching route was revised on 23 October 2026: the current notebook reads saved forest and network results when rendered. Students fit the network interactively; the tree, forest and resampling script remains a separate extension. Package versions for the completed full runs are in the accompanying session-info files.",
-    "crumbs": [
-      "Home",
-      "Part 2",
-      "Validation"
-    ]
-  },
-  {
-    "objectID": "part2/outputs/validation.html#not-executed-at-full-budget",
-    "href": "part2/outputs/validation.html#not-executed-at-full-budget",
-    "title": "Part 2 — Validation record",
-    "section": "Not executed at full budget",
-    "text": "Not executed at full budget\nThe resolution-10 grid (up to 10,000 configurations) and the 10 x 10 nested-CV workflow with 100 evaluations per inner search remain available in the script. Only their smaller smoke runs were executed. They are not reported as complete replications.",
-    "crumbs": [
-      "Home",
-      "Part 2",
-      "Validation"
-    ]
-  },
-  {
-    "objectID": "part2/outputs/validation.html#environment-notes",
-    "href": "part2/outputs/validation.html#environment-notes",
-    "title": "Part 2 — Validation record",
-    "section": "Environment notes",
-    "text": "Environment notes\nThe installed mlr3learners/XGBoost combination completed the runs but emitted XGBoost deprecation warnings about legacy parameter passing. MBO invoked its built-in random-forest surrogate fallback during this run. ARF ran sequentially without a registered parallel backend.",
-    "crumbs": [
-      "Home",
-      "Part 2",
-      "Validation"
-    ]
-  },
-  {
-    "objectID": "part2/outputs/validation.html#teaching-route-checks-23-october-2026",
-    "href": "part2/outputs/validation.html#teaching-route-checks-23-october-2026",
-    "title": "Part 2 — Validation record",
-    "section": "Teaching-route checks — 23 October 2026",
-    "text": "Teaching-route checks — 23 October 2026\n\nThe revised notebook and supporting pages render successfully using saved results; no forest or network is trained during rendering.\nThe live notebook blocks match the corresponding sections of R/03-neural-network.R.\nThe saved split contains 180 training patients and 90 test patients, with no overlap. Both models use these same test patients.\nNeural-network preparation produces 22 numerical inputs. Scaling uses only the 144 fitting patients, keeping the 36 validation patients and 90 test patients separate.\nSaved Keras predictions can be evaluated with mlr3::PredictionClassif: accuracy 85.6%, sensitivity 78.4%, specificity 90.6%. Forest accuracy is 83.3%, sensitivity 81.1%, specificity 84.9%.\nThe revised live training path has not been retrained during this review. The current command-line R session did not locate a configured Keras Python backend. Confirm Keras setup before the live session; the historical training results above remain saved-run results.",
-    "crumbs": [
-      "Home",
-      "Part 2",
-      "Validation"
-    ]
-  },
-  {
-    "objectID": "part2/data/guide.html",
-    "href": "part2/data/guide.html",
-    "title": "Part 2 — Heart-disease data",
-    "section": "",
-    "text": "Source: OpenML heart-statlog, ID 53, version 1. Downloaded 12 October 2026 from the URL in the saved OpenML metadata. The metadata lists the licence as Public. The original data are attributed to Janosi, Steinbrunn, Pfisterer and Detrano (1988), as cited by the article.\nThe snapshot has 270 patients, 13 predictors and a binary target: 150 absent, 120 present. It is the OpenML Statlog heart dataset matching the article’s sample size, predictor definitions and outcome.\nraw/heart-statlog.arff is unchanged. SHA-256: e16082cc6158f29be2e7b081953cd6edf342760d135bccdb64e191d0834d6300. raw/openml-53-metadata.json preserves the source metadata. processed/heart.csv is regenerated by R/01-data.R.\nARFF (Attribute–Relation File Format) is a text format with a section describing column names and types, followed by the data, with one patient per row. The raw file is the original download before workshop preparation. The preparation script reads it, assigns readable column names and categories, and saves the prepared data as processed/heart.csv.",
-    "crumbs": [
-      "Home",
-      "Part 2",
-      "Data guide"
-    ]
-  },
-  {
-    "objectID": "part2/data/guide.html#preprocessing",
-    "href": "part2/data/guide.html#preprocessing",
-    "title": "Part 2 — Heart-disease data",
-    "section": "Preprocessing",
-    "text": "Preprocessing\nThe ARFF target already uses absent/present. The preparation script renames predictors to the article’s appendix names and applies its category definitions. No rows are removed and no imputation is needed. The seven categorical fields are sex, chest_pain, fasting_blood_sugar, resting_ecg, exercise_induced_angina, ST_slope and thal. The other six are explicitly numeric, including the vessel count, as in the appendix.\nFor the neural network, the three binary predictors use 0/1 and the four other categorical predictors use full indicator encoding, giving 22 columns. Full indicator encoding of all seven categorical predictors would give 25 columns. The article states 22 inputs but does not publish the encoding implementation. Our 22-column construction is therefore an explicit reconstruction. Numeric scaling is fitted on the inner training portion, excluding validation and test rows; scaling details are not specified in the published example. For XGBoost, fixed categorical contrasts produce a numeric design matrix.\nThe outcome describes heart disease in this teaching sample. It is not a population cardiovascular risk score or a future-event endpoint.",
-    "crumbs": [
-      "Home",
-      "Part 2",
-      "Data guide"
-    ]
-  },
-  {
-    "objectID": "part1/references/sources.html",
-    "href": "part1/references/sources.html",
-    "title": "Part 1 — Sources and further reading",
-    "section": "",
-    "text": "Accessed 27 September 2026 unless otherwise noted."
-  },
-  {
-    "objectID": "part1/references/sources.html#data",
-    "href": "part1/references/sources.html#data",
-    "title": "Part 1 — Sources and further reading",
-    "section": "Data",
-    "text": "Data\n\nCenters for Disease Control and Prevention. NNDSS Weekly Data. Dataset identifier x9gk-5huc.\nCenters for Disease Control and Prevention. Notifiable Infectious Disease Data Tables. Explains that weekly data are provisional and annual data are finalized.\nCenters for Disease Control and Prevention. Notice to Data Users and Publication Criteria.\nCenters for Disease Control and Prevention. Historic West Nile Virus Data. Describes ArboNET and limitations of surveillance data."
-  },
-  {
-    "objectID": "part1/references/sources.html#methods",
-    "href": "part1/references/sources.html#methods",
-    "title": "Part 1 — Sources and further reading",
-    "section": "Methods",
-    "text": "Methods\n\nWright MN, Burk L, Golchian P, Kapar J, Koenen N, Langbein SH. Machine Learning in Epidemiology. 2026.\nmlr3 documentation.\nmlr3 custom resampling.\nApplied Machine Learning Using mlr3 in R.\nGazzelloni F. Health Metrics and the Spread of Infectious Diseases: Machine Learning Applications and Spatial Modelling Analysis with R. CRC Press; 2025."
-  },
-  {
-    "objectID": "part1/references/sources.html#dataset-alternatives",
-    "href": "part1/references/sources.html#dataset-alternatives",
-    "title": "Part 1 — Sources and further reading",
-    "section": "Dataset alternatives",
-    "text": "Dataset alternatives\n\nHeart Disease, UCI Machine Learning Repository.\nEbola outbreak data collection tools, WHO."
-  },
-  {
-    "objectID": "part1/guide.html",
-    "href": "part1/guide.html",
-    "title": "Part 1 — Session guide",
-    "section": "",
-    "text": "This session covers how a model learns, followed by a West Nile virus prediction workflow.",
-    "crumbs": [
-      "Home",
-      "Part 1",
-      "Session guide"
-    ]
-  },
-  {
-    "objectID": "part1/guide.html#follow-the-session",
-    "href": "part1/guide.html#follow-the-session",
-    "title": "Part 1 — Session guide",
-    "section": "Follow the session",
-    "text": "Follow the session\n\nOpen machine-learning-in-epidemiology-with-r.Rproj from the repository root in RStudio, then run setwd(\"part1\") in the Console. Open the project afresh before switching parts so the Console starts at the repository root.\nRun source(\"install-packages.R\"), then source(\"check-setup.R\").\nStart with the teaching notebook.\nWork through the student practice script.\nTry the exercise and compare it with the solution.\n\nSlide viewer · PDF · Rendered notebook\nThe gradient descent app is an optional interactive demonstration. See the data guide and sources for the evidence behind the teaching example.\nThe student practice requires rpart and rpart.plot. To run every section of the instructor notebook, also install ggplot2, dplyr, data.table, maps, pROC, mlr3, mlr3learners and ranger.\nRender the complete website with quarto render from the repository root. The current website output is _site/. The copied rendered files are the original workshop snapshot; copying them does not rerun the models.\nSeries guide · Part 2",
-    "crumbs": [
-      "Home",
-      "Part 1",
-      "Session guide"
-    ]
-  },
-  {
-    "objectID": "resources.html",
-    "href": "resources.html",
-    "title": "Resources",
-    "section": "",
-    "text": "Authors: Wright et al. (2026)\nThis article provides the methodological foundation and heart-disease workflow used in Part 2, including the modelling choices and evaluation strategy behind the applied examples in this workshop.\nRead the article\n\n\n\nAuthor: Federica Gazzelloni\nThis book connects health metrics, infectious-disease research, machine learning and spatial modelling with R, offering a broader context for the methods used in the workshop.\nExplore the book",
-    "crumbs": [
-      "Home",
-      "Resources"
-    ]
-  },
-  {
-    "objectID": "resources.html#references",
-    "href": "resources.html#references",
-    "title": "Resources",
-    "section": "",
-    "text": "Authors: Wright et al. (2026)\nThis article provides the methodological foundation and heart-disease workflow used in Part 2, including the modelling choices and evaluation strategy behind the applied examples in this workshop.\nRead the article\n\n\n\nAuthor: Federica Gazzelloni\nThis book connects health metrics, infectious-disease research, machine learning and spatial modelling with R, offering a broader context for the methods used in the workshop.\nExplore the book",
-    "crumbs": [
-      "Home",
-      "Resources"
-    ]
-  },
-  {
-    "objectID": "resources.html#workshop-files",
-    "href": "resources.html#workshop-files",
-    "title": "Resources",
-    "section": "Workshop files",
-    "text": "Workshop files\n\nGitHub repository\nPart 1 session guide · Part 1 presentation · PDF\nPart 2 session guide · Part 2 presentation · PDF · Heart-disease data guide\nDownload the prepared heart-disease data · Original OpenML dataset\nReplication record · Validation record\n\nBack to the workshop home",
-    "crumbs": [
-      "Home",
-      "Resources"
-    ]
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Machine Learning in Epidemiology with R",
-    "section": "",
-    "text": "Learn machine learning through epidemiological examples, from model fundamentals to an article-based prediction workflow.\n\n\nPart 1 — 28 September 2026\nHow models learn, gradient descent, and West Nile virus prediction.\nExplore Part 1 · Open the notebook\n\n\nPart 2 — 23 October 2026\nRead heart-data random forest results, then fit and evaluate a neural network with Keras and mlr3.\nExplore Part 2 · Open the notebook\n\n\nBrowse the workshop resources, or start with a session above.",
-    "crumbs": [
-      "Home"
-    ]
-  },
-  {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "About",
-    "section": "",
-    "text": "Federica Gazzelloni is an actuary, statistician, data scientist, author and instructor working across health metrics, actuarial modelling, R and Python, data visualisation and reproducible research. She leads R-Ladies Rome and the Rome R Users Group.\nThis workshop connects machine-learning concepts with practical epidemiological examples. We focus on clear modelling questions, reproducible code and careful interpretation.\n\nWorkshop home\nPart 1 materials\nPart 2 materials\nResources and references",
-    "crumbs": [
-      "Home",
-      "About"
-    ]
-  },
-  {
-    "objectID": "guide.html",
-    "href": "guide.html",
-    "title": "Series guide",
-    "section": "",
-    "text": "A two-part R-Ladies Rome workshop series led by Federica Gazzelloni."
-  },
-  {
-    "objectID": "guide.html#start-here",
-    "href": "guide.html#start-here",
-    "title": "Series guide",
-    "section": "Start here",
-    "text": "Start here\n\nPart 1 README\nPart 2 README\nRStudio project for both parts"
-  },
-  {
-    "objectID": "guide.html#repository-structure",
-    "href": "guide.html#repository-structure",
-    "title": "Series guide",
-    "section": "Repository structure",
-    "text": "Repository structure\n.\n├── machine-learning-in-epidemiology-with-r.Rproj\n├── index.qmd                     # workshop home\n├── about.qmd                    # instructor profile\n├── resources.qmd                 # source article and book\n├── part1/                       # Part 1 workshop\n│   ├── README.md\n│   ├── ml-workflow.qmd\n│   ├── R/\n│   ├── data/\n│   ├── presentation/\n│   ├── outputs/\n│   └── references/\n├── part2/                       # October workshop\n│   ├── README.md\n│   ├── ml-workflow-2.qmd\n│   ├── R/\n│   ├── data/\n│   ├── outputs/\n│   └── references/\n└── _site/                       # rendered Quarto output"
-  },
-  {
-    "objectID": "guide.html#notes",
-    "href": "guide.html#notes",
-    "title": "Series guide",
-    "section": "Notes",
-    "text": "Notes\n\nOpen machine-learning-in-epidemiology-with-r.Rproj in RStudio. This single project contains both parts.\nFrom a fresh project session, run setwd(\"part1\") or setwd(\"part2\") before running that part’s scripts; their paths are relative to the session folder.\nThe original Part 1 workshop repository and its published website remain separate.\nPart 1 preserves the Part 1 teaching materials; Part 2 retains the article workflow and validation notes for locally observed results."
-  },
-  {
-    "objectID": "guide.html#build-the-website",
-    "href": "guide.html#build-the-website",
-    "title": "Series guide",
-    "section": "Build the website",
-    "text": "Build the website\nRun quarto render from the repository root. The complete website is written to _site/, the folder used by the deployment workflow. Older docs/ and do/ outputs are not the current preview."
-  },
-  {
-    "objectID": "part1/data/guide.html",
-    "href": "part1/data/guide.html",
-    "title": "Part 1 — Data guide",
-    "section": "",
-    "text": "raw/cdc_nndss_wnv_weekly_2022_2026.csv is a filtered snapshot of the CDC NNDSS Weekly Data table (x9gk-5huc), downloaded on 27 September 2026.\nFilter:\nlabel = \"Arboviral diseases, West Nile virus disease\"\nThe snapshot contains 17,220 data rows covering 2022 through MMWR week 37 of 2026. It includes states, territories, census regions and totals. advanced/R/01-data.R retains the 50 states, District of Columbia and New York City, then combines New York State and New York City.\nThe CDC metadata does not provide a licence identifier. The dataset is publicly readable and attributed to the CDC Office of Public Health Data, Surveillance, and Technology. Preserve that attribution and review CDC reuse policies before redistributing the raw file outside this teaching repository.",
-    "crumbs": [
-      "Home",
-      "Part 1",
-      "Data and sources"
-    ]
-  },
-  {
-    "objectID": "part1/data/guide.html#frozen-raw-snapshot",
-    "href": "part1/data/guide.html#frozen-raw-snapshot",
-    "title": "Part 1 — Data guide",
-    "section": "",
-    "text": "raw/cdc_nndss_wnv_weekly_2022_2026.csv is a filtered snapshot of the CDC NNDSS Weekly Data table (x9gk-5huc), downloaded on 27 September 2026.\nFilter:\nlabel = \"Arboviral diseases, West Nile virus disease\"\nThe snapshot contains 17,220 data rows covering 2022 through MMWR week 37 of 2026. It includes states, territories, census regions and totals. advanced/R/01-data.R retains the 50 states, District of Columbia and New York City, then combines New York State and New York City.\nThe CDC metadata does not provide a licence identifier. The dataset is publicly readable and attributed to the CDC Office of Public Health Data, Surveillance, and Technology. Preserve that attribution and review CDC reuse policies before redistributing the raw file outside this teaching repository.",
-    "crumbs": [
-      "Home",
-      "Part 1",
-      "Data and sources"
-    ]
-  },
-  {
-    "objectID": "part1/data/guide.html#flag-handling",
-    "href": "part1/data/guide.html#flag-handling",
-    "title": "Part 1 — Data guide",
-    "section": "Flag handling",
-    "text": "Flag handling\n\nNumeric m1: reported current-week cases.\nm1_flag = \"-\": no reported cases, converted to zero.\nm1_flag = \"U\": unavailable, retained as missing.\nOther non-numeric flags are also retained as missing.\n\nDo not convert unavailable reporting to zero.",
-    "crumbs": [
-      "Home",
-      "Part 1",
-      "Data and sources"
-    ]
-  },
-  {
-    "objectID": "part1/data/guide.html#processed-data",
-    "href": "part1/data/guide.html#processed-data",
-    "title": "Part 1 — Data guide",
-    "section": "Processed data",
-    "text": "Processed data\nprocessed/wnv_state_week.csv is the prepared teaching dataset read directly by R/workshop.R. Do not edit it by hand during the live workshop.\nThe optional advanced data-preparation code is preserved in advanced/R/01-data.R.\nSource: https://data.cdc.gov/NNDSS/NNDSS-Weekly-Data/x9gk-5huc",
-    "crumbs": [
-      "Home",
-      "Part 1",
-      "Data and sources"
-    ]
-  },
-  {
-    "objectID": "part2/guide.html",
-    "href": "part2/guide.html",
-    "title": "Part 2 — Session guide",
-    "section": "",
-    "text": "We use clinical measurements from 270 patients to distinguish heart disease from its absence. During the session, we will read the saved random forest results, fit a neural network with Keras, and evaluate its predictions with mlr3. We will not fit another random forest.",
-    "crumbs": [
-      "Home",
-      "Part 2",
-      "Session guide"
-    ]
-  },
-  {
-    "objectID": "part2/guide.html#before-the-session",
-    "href": "part2/guide.html#before-the-session",
-    "title": "Part 2 — Session guide",
-    "section": "Before the session",
-    "text": "Before the session\n\nOpen machine-learning-in-epidemiology-with-r.Rproj in RStudio.\nIn a fresh project session, run setwd(\"part2\") in the Console.\nInstall the workshop packages once:\nsource(\"install-packages.R\")\ninstall.packages(\"keras3\")\nIn a fresh R session, configure Keras with keras3::install_keras(). This sets up the Python software Keras uses for training. If you already have a compatible environment, use that instead. Follow the Keras for R setup guide.\nRun source(\"check-setup.R\") to check the core packages and data. This check does not test the Keras backend. Before the session, also check that library(keras3) and keras3::keras_model_sequential(input_shape = c(22)) work in your selected environment.\n\nInstallation is preparation for the session; it does not need to interrupt the lesson.",
-    "crumbs": [
-      "Home",
-      "Part 2",
-      "Session guide"
-    ]
-  },
-  {
-    "objectID": "part2/guide.html#during-the-session",
-    "href": "part2/guide.html#during-the-session",
-    "title": "Part 2 — Session guide",
-    "section": "During the session",
-    "text": "During the session\nOpen the teaching notebook and follow sections 1–7:\n\nMeet the heart data.\nExplain the saved random forest predictions and mistakes.\nUse mlr3 to define the task and reuse the saved training/test groups.\nPrepare numerical inputs for the network.\nBuild the network with Keras.\nFit it and examine training and validation loss.\nEvaluate its predictions with mlr3 and compare with the forest.\n\nRun the code blocks in order in RStudio. Network fitting is a live activity; rendering the webpage uses saved results and does not train either model. The saved comparison remains a reference when your own results differ.\nThe complete neural-network script contains the same steps, followed by code to save a new run’s results. Running that complete script replaces the saved neural-network CSV files and loss figure. Use the notebook blocks during the lesson if you want to keep the recorded results.",
-    "crumbs": [
-      "Home",
-      "Part 2",
-      "Session guide"
-    ]
-  },
-  {
-    "objectID": "part2/guide.html#after-the-session",
-    "href": "part2/guide.html#after-the-session",
-    "title": "Part 2 — Session guide",
-    "section": "After the session",
-    "text": "After the session\nChoose a question to explore further:\n\n\n\nQuestion\nScript\n\n\n\n\nHow do trees and pruning work? How stable are the scores across samples?\nTrees, evaluation and resampling\n\n\nCan we improve predictions by changing model settings?\nTuning\n\n\nCan generated records resemble the original patients?\nSynthetic data\n\n\n\nThe tree/evaluation script refits the forest and runs resampling; it is separate from the main lesson. Full tuning can take much longer than the workshop. Install extra packages only when you choose an extension:\nRscript install-optional-packages.R tuning\nRscript install-optional-packages.R synthetic",
-    "crumbs": [
-      "Home",
-      "Part 2",
-      "Session guide"
-    ]
-  },
-  {
-    "objectID": "part2/guide.html#sources-and-reproducibility",
-    "href": "part2/guide.html#sources-and-reproducibility",
-    "title": "Part 2 — Session guide",
-    "section": "Sources and reproducibility",
-    "text": "Sources and reproducibility\nThe examples draw on Wright et al. (2026). The data guide, replication record and validation results contain the source details, exact settings and recorded checks. Saved scores describe individual runs, rather than guaranteed performance.\nTo build the website, run quarto render from the repository root. The current output folder is _site/.\nSeries guide · Part 1",
-    "crumbs": [
-      "Home",
-      "Part 2",
-      "Session guide"
-    ]
-  },
-  {
-    "objectID": "part2/references/replication-notes.html",
-    "href": "part2/references/replication-notes.html",
-    "title": "Part 2 — Source and replication record",
-    "section": "",
-    "text": "Wright et al. (2026), Machine Learning in Epidemiology, arXiv v1.\nOpenML dataset 53, version 1; saved metadata and raw data are in data/raw/.\nThe scripts retain the article’s published examples and model settings. The main lesson uses a student-facing order: read saved random forest results, then fit a neural network with Keras and evaluate its predictions with mlr3. Tree fitting, resampling, tuning and synthetic data remain separate extensions. Rendering the notebook reads saved results without refitting either model.",
-    "crumbs": [
-      "Home",
-      "Part 2",
-      "Replication record"
-    ]
-  },
-  {
-    "objectID": "part2/references/replication-notes.html#workshop-implementation",
-    "href": "part2/references/replication-notes.html#workshop-implementation",
-    "title": "Part 2 — Source and replication record",
-    "section": "Workshop implementation",
-    "text": "Workshop implementation\nThe scripts define data preparation, train/test objects and tuning code, use heart_task consistently and set explicit seeds. Keras uses keras3 instead of the article’s older keras interface, retaining the architecture and training settings. The network now reads outputs/split.csv to reuse the forest’s saved training/test patients explicitly. Keras predictions are wrapped in an mlr3 PredictionClassif object to evaluate both models using the same measures. Data encoding/scaling choices are recorded in the data guide. Random-forest threading is fixed to one for reproducibility. The initial forest uses the learner default; the resampling examples use 100 trees, as printed. Tuning is restricted to the training task; nested CV uses an outer and inner 10-fold design. The article’s full grid has up to 10,000 configurations and is not run during a normal notebook render.\nThe article reports a 100% neural-network test accuracy. That is a reported result for its run, not an expected or guaranteed workshop result. Our outputs are saved separately. Results depend on the random seed, data split, preprocessing and software versions.",
-    "crumbs": [
-      "Home",
-      "Part 2",
-      "Replication record"
-    ]
-  },
-  {
-    "objectID": "part2/references/replication-notes.html#validation",
-    "href": "part2/references/replication-notes.html#validation",
-    "title": "Part 2 — Source and replication record",
-    "section": "Validation",
-    "text": "Validation\nSee the validation record for completed runs, observed scores, environment warnings and the two full-budget runs still outstanding.",
-    "crumbs": [
-      "Home",
-      "Part 2",
-      "Replication record"
-    ]
-  },
-  {
-    "objectID": "part1/index.html",
-    "href": "part1/index.html",
-    "title": "How a Model Learns in Epidemiology",
-    "section": "",
-    "text": "Perspectives:\n\na conceptual explanation of how machine learning models learn;\na realistic epidemiology workflow for predicting West Nile virus (WNV) activity.\n\nThe goal is to understand both the mathematical idea of learning and the practical pipeline used in applied work.",
-    "crumbs": [
-      "Home",
-      "Part 1",
-      "Teaching notebook"
-    ]
-  },
-  {
-    "objectID": "part1/index.html#workshop-notebook",
-    "href": "part1/index.html#workshop-notebook",
-    "title": "How a Model Learns in Epidemiology",
-    "section": "",
-    "text": "Perspectives:\n\na conceptual explanation of how machine learning models learn;\na realistic epidemiology workflow for predicting West Nile virus (WNV) activity.\n\nThe goal is to understand both the mathematical idea of learning and the practical pipeline used in applied work.",
-    "crumbs": [
-      "Home",
-      "Part 1",
-      "Teaching notebook"
-    ]
-  },
-  {
-    "objectID": "part1/index.html#slide-presentation",
-    "href": "part1/index.html#slide-presentation",
-    "title": "How a Model Learns in Epidemiology",
-    "section": "Slide presentation",
-    "text": "Slide presentation\nOpen the Part 1 presentation Download the PDF\nThe slide deck introduces the broader multi-model workflow. The model-performance and variable-importance values shown in the deck are illustrative. The executable notebook below contains the observed results.\nBy the end, we should be able to answer four questions:\n\nWhat is the model?\nWhat is the loss?\nWhat is the optimisation procedure?\nWhat is learned?\n\nThe central message is:\n\nLearning means using data to determine a model’s parameters or structure. Optimisation is the procedure used to find useful values or structures according to an objective.",
-    "crumbs": [
-      "Home",
-      "Part 1",
-      "Teaching notebook"
-    ]
-  },
-  {
-    "objectID": "part2/workshop-part-2-trees-to-neural-networks.html#what-have-we-learned-about-machine-learning",
-    "href": "part2/workshop-part-2-trees-to-neural-networks.html#what-have-we-learned-about-machine-learning",
-    "title": "Machine Learning in Epidemiology with R — Part 2",
-    "section": "What have we learned about machine learning?",
-    "text": "What have we learned about machine learning?\nMachine learning uses examples to learn a rule for making predictions. We choose the outcome, available inputs, model structure and learning procedure; the algorithm uses fitting data to determine its internal rules or values. A tree learns splits, a forest combines many trees, and a neural network learns connection weights.\nThe full workflow is to prepare inputs, fit the model, monitor validation and assess predictions on patients outside fitting. A lower training error alone is insufficient. We consider accuracy alongside the kinds of mistake, and keep our conclusions within the limits of one small dataset and one test split.\nThe main session can end here. Resampling would next ask how stable the results are when the patients used for fitting and evaluation change.",
-    "crumbs": [
-      "Home",
-      "Part 2",
-      "Teaching notebook"
-    ]
-  },
-  {
-    "objectID": "part2/trees-and-pruning.html",
-    "href": "part2/trees-and-pruning.html",
-    "title": "Part 2 — Trees and pruning",
-    "section": "",
-    "text": "Return to the Part 2 teaching notebook\nThis optional companion explains the figures produced by R/02-trees-and-evaluation.R. The main session reads saved forest results and then builds a neural network. You do not need to run this extension script during that lesson: it also refits the forest and runs resampling, replacing its saved outputs."
-  },
-  {
-    "objectID": "part2/trees-and-pruning.html#figure-1-how-the-default-tree-divides-patients",
-    "href": "part2/trees-and-pruning.html#figure-1-how-the-default-tree-divides-patients",
-    "title": "Part 2 — Trees and pruning",
-    "section": "Figure 1: how the default tree divides patients",
-    "text": "Figure 1: how the default tree divides patients\n\n\n\nFigure 1. Default classification tree fitted to all 270 patients.\n\n\nRead the tree from top to bottom. Each split asks a question about a measurement. Follow the branch that matches the patient’s value until reaching a terminal node, or leaf, which supplies the prediction.\nThe first split uses the thal test result. A normal result follows the left branch; the other results follow the right branch. Later splits use chest-pain type, number of major vessels, exercise-induced angina and age.\nEach node shows the predicted class (absent or present), the proportion with disease among patients reaching that node, and the percentage of all patients reaching it. At the top, 0.44 means about 44% of the 270 patients have disease. The predicted class there is absent, the majority group. Blue leaves predict absence and green leaves predict presence; the displayed proportions indicate that the groups are not necessarily pure.\nCheckpoint: Follow one path from the top to a leaf. Which combination of measurements determines its prediction?\nThe tree uses all 270 patients to illustrate fitted structure. The apparent separation in its leaves is not a held-out estimate of performance on new patients."
-  },
-  {
-    "objectID": "part2/trees-and-pruning.html#figure-2-complexity-and-cross-validation-error",
-    "href": "part2/trees-and-pruning.html#figure-2-complexity-and-cross-validation-error",
-    "title": "Part 2 — Trees and pruning",
-    "section": "Figure 2: complexity and cross-validation error",
-    "text": "Figure 2: complexity and cross-validation error\n\n\n\nFigure 2. Relative cross-validation error as the larger tree becomes more complex.\n\n\nThe bottom axis shows the complexity parameter, cp. Moving right permits smaller values of cp and more splits. The top axis shows the number of terminal leaves. The vertical axis shows relative cross-validation error: lower values indicate smaller estimated error. It is a relative error, not an accuracy percentage. The vertical bars show one standard error on either side of each estimate.\nError falls sharply after the first few splits and then changes relatively little as the tree gains branches. This suggests that a simpler tree may retain much of the useful structure.\nThe dotted line marks one standard error above the lowest estimated error. A common rule chooses the smallest tree whose error falls below that line, accepting similar estimated performance with less complexity. In this workshop, cp = 0.031 retains the article’s setting; we should distinguish that replication choice from selecting a value using this plot.\nCheckpoint: Would adding branches be persuasive if cross-validation error barely changes?"
-  },
-  {
-    "objectID": "part2/trees-and-pruning.html#figure-3-what-pruning-actually-removed",
-    "href": "part2/trees-and-pruning.html#figure-3-what-pruning-actually-removed",
-    "title": "Part 2 — Trees and pruning",
-    "section": "Figure 3: what pruning actually removed",
-    "text": "Figure 3: what pruning actually removed\n\n\n\nFigure 3. Tree obtained by pruning the larger tree at cp = 0.031.\n\n\nWe did prune the tree. Figures 1 and 3 look similar because they retain the same main branches, but they represent different trees:\n\n\n\nTree\nSplits\nLeaves\n\n\n\n\nFigure 1: default\n6\n7\n\n\nLarger tree, before pruning\n15\n16\n\n\nFigure 3: pruned\n5\n6\n\n\n\nThe default tree uses rpart() with its default controls. The larger tree uses rpart.control(minsplit = 2). We then call prune(deep_cart, cp = 0.031) to obtain Figure 3.\nPruning starts from the larger tree with 15 splits and 16 terminal nodes, not from the default tree in Figure 1. The displayed comparison therefore makes the reduction look smaller than it is.\nCompared with Figure 1, the age &gt;= 51 split on the right has disappeared. Those patients now share a single leaf. The main splits on thal, chest pain, vessel count and exercise-induced angina remain.\nPruning limits complexity by removing branches that may fit details of this sample. A simpler tree is easier to follow and may generalise better, but the act of pruning does not establish that it predicts new patients more accurately.\n\n\n\n\n\n\nNoteCheck the tree sizes in R\n\n\n\n\n\nRun this only after creating cart, deep_cart and pruned_cart in the tree section of script 2. It inspects the fitted objects without running the later forest/resampling sections.\nmodels &lt;- list(default = cart, larger = deep_cart, pruned = pruned_cart)\ndata.frame(\n  tree = names(models),\n  splits = vapply(models, function(m) sum(m$frame$var != \"&lt;leaf&gt;\"), integer(1)),\n  leaves = vapply(models, function(m) sum(m$frame$var == \"&lt;leaf&gt;\"), integer(1))\n)"
-  },
-  {
-    "objectID": "part2/trees-and-pruning.html#from-tree-plots-to-mlr3-evaluation",
-    "href": "part2/trees-and-pruning.html#from-tree-plots-to-mlr3-evaluation",
-    "title": "Part 2 — Trees and pruning",
-    "section": "From tree plots to mlr3 evaluation",
-    "text": "From tree plots to mlr3 evaluation\nThe plots ask how a fitted model makes decisions. The next question is how well a model predicts patients it did not learn from.\nIn script 2, mlr3 defines a classification task with heart_disease as the outcome and present as the positive class. A learner specifies the method: classif.ranger is a random forest that combines many trees. It does not reuse the single plotted tree.\nThe saved split assigns 180 patients to training and 90 to testing. Fitting the forest on the training rows and predicting the test rows gives a held-out assessment. The saved forest correctly classified 75 of 90 test patients, missed 7 disease cases and raised 8 false alarms. These are forest results, not test scores for the default or pruned single trees.\nThe main notebook then introduces Keras as another learning method and evaluates its predictions on the same 90 test patients. Pruning and the network’s early stopping are different ways to control complexity. Resampling is a further step for examining how stable results are across samples.\nContinue with the saved forest results"
-  },
-  {
-    "objectID": "part2/trees-and-pruning.html#sources-and-scope",
-    "href": "part2/trees-and-pruning.html#sources-and-scope",
-    "title": "Part 2 — Trees and pruning",
-    "section": "Sources and scope",
-    "text": "Sources and scope\nThe tree expressions are in R/02-trees-and-evaluation.R; the three saved images are under figures/. The counts above were checked against trees fitted with those expressions using the prepared heart data. No forest, Keras model or tuning search was rerun for this explanation, and saved workshop outputs were preserved.\nModel settings follow the workshop’s replication record. For the R functions, see ?rpart::rpart, ?rpart::plotcp and ?rpart::prune. The validation record distinguishes saved local runs from unfinished full-budget extensions."
   }
 ]
